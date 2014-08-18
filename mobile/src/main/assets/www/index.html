@@ -1,0 +1,104 @@
+<!doctype html>
+<!--android:versionCode="13" android:versionName="2.6.1"-->
+<!-- updates:
+	- prevent all drag and button actions while looking for position on adding gps position
+	- changed UI on element drag
+	- loader optimized for retina displays
+	TODO: - Add group button animation!!!
+	TODO: - refresh loc dist automatically
+	TODO: - Open Mylo from url of loc "shared from Mylo" 
+-->
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, height=device-height" />
+<!--CSS IMPORT-->
+<link rel="stylesheet" href="css/roboto.css" />
+<link rel="stylesheet" href="css/style.css" />
+<!--JS IMPORT-->
+<script src="js-script/jquery/jquery-2.1.0.min.js"></script>
+<script src="js-script/jquery/minimit-anima.min.js"></script>
+<!--script type="text/javascript" src="cordova.js"></script-->
+<script src="js-script/device_events.js"></script>
+<script src="js-script/init.js"></script>
+<script src="js-script/display.js"></script>
+<script src="js-script/file.js"></script>
+<script src="js-script/storage.js"></script>
+<script src="js-script/script.js"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+
+</head>
+<!--body onload="onLoad()"-->
+<body>
+	<div id='header'>
+		<IMG id="logo" SRC="png/Mylo-Logo-decli-fond-transparent.png">
+		<p>Mylo</p>
+	</div>
+	<div id='groupsDiv'>
+		<div id='groupsDivContainer'>
+			<div id='groupsContainer'>
+				<div class="group default currentGroup droppable" name="0" id="g0">
+					<p class="centered"></p>
+				</div>
+			</div>
+			<div id="addGroup">
+				<input type="text" placeholder="" class="textInput" id="groupnameField"></input>
+				<div id="validateGroup"></div>
+			</div>
+		</div>
+	</div>
+	<div class='addPlace'>
+		<div class="text"></div>
+		<div id="close_txt" class=""></div>
+		<IMG id="close_add_loc" class="" SRC="./png/mylo-icon-V2_add-loc-close.png">
+		<IMG id="add_place" class="icon" SRC="./png/mylo-icon-V2_add-place.png">
+		<IMG id="add_gps" class="icon" SRC="./png/mylo-icon-V2_add-gps.png">
+		<!--IMG class="icon" SRC="./png/mylo-icon-V2_add-pic.png"-->
+	</div>
+	<div id='locContainer'>
+		<div id="shadow"></div>
+		<div id="loader_container">
+			<!--IMG id="loader" SRC="./png/mylo-asset_loader.png" width="100" height="100"-->
+			<canvas id="loader" width="" height=""></canvas>
+			<IMG id="loader_end" SRC="./png/mylo-asset_loader-end.png" width="100" height="100">
+		</div>
+		<div id='locsDiv'>
+			<div class="" id="firstTimeGroup">
+				<p id="title"></p>
+				<div class="GroupPin">
+					<div class="GroupPinShadow"></div>
+					<IMG id="" SRC="./png/mylo-asset_pin-mask.png" width="" height="">
+				</div>
+			</div>
+			<div class="" id="firstTimeAll">
+				<p id="title"></p>
+				<p id="text"></p>
+				<IMG id="icon" SRC="./png/mylo-icon_paper-star-yellow.png" width="" height="">
+				<IMG id="arrow" SRC="./png/mylo-asset_pencil-arrow.png" width="" height="">
+			</div>
+		</div>
+		<form id='addPlace'>
+			<div id="input_container">
+				<!--IMG id="place_search_img" SRC="./png/mylo-icon-V2_add-place.png"-->
+				<input type="text" class='textInput' placeholder="" id="addressField"></input>
+				<IMG id="google_logo" SRC="./png/powered-by-google-on-white.png" width="104" height="16">
+			</div>
+			<div id="table">
+				<div class="table_cell" ><IMG id="gps_img" SRC="./png/go_dark_filled.png"></div>
+				<div class="table_cell" ><p id="gps_txt"></p></div>
+			</div>
+			
+			<input type="text" class='textInput' placeholder="" id="nameField"></input>
+			<a class="formButton" id="validateButton"></a>
+			<a class="formButton" id="saveButton"></a>
+		</form>
+	</div>
+	<div id='trash' name="trash" class='trash droppable'>
+		<div id="trash_bouncer"></div>
+		<IMG id="off" SRC="png/delete_dark.png">
+		<IMG id="focus" SRC="png/delete_OFF_white.png">
+	</div>
+</body>
+</html>

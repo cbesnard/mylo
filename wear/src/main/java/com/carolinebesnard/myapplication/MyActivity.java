@@ -1,0 +1,178 @@
+package com.carolinebesnard.myapplication;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.wearable.view.CircledImageView;
+import android.support.wearable.view.WatchViewStub;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+
+import java.util.List;
+
+public class MyActivity extends Activity {
+
+    //private TextView mTextView;
+    //private ImageButton addButton;
+    private CircledImageView addButton;
+    static public CircledImageView endLoader;
+    private GoogleApiClient mGoogleApiClient;
+    public AnimatedView animatedview;
+    public LinearLayout container;
+    private Context context;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MyloWearServiceListener.activity=this;
+        context = this;
+        //View view = this.getWindow().getDecorView();
+        //view.setBackgroundColor(Color.GREEN);
+        TextView titleview = new TextView(this);
+        titleview.setText("Quick Add");
+        titleview.setTextColor(Color.BLACK);
+        titleview.setTextSize(26);
+        titleview.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        titleview.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        /*addButton = new ImageButton(this);
+        //addButton.setImageResource(R.drawable.ic_launcher);android_wear_addButton
+        addButton.setImageResource(R.drawable.android_wear_addbutton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("in on click","add button clicked");
+                onButtonClicked();
+            }
+        });*/
+        addButton = new CircledImageView(this);
+        addButton.setImageResource(R.drawable.android_wear_addbutton);
+        addButton.setCircleRadius(150);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("in on click","add button clicked");
+                onButtonClicked();
+            }
+        });
+
+        animatedview = new AnimatedView(this);
+        //animatedview.startAnimating(0f,360f);
+        animatedview.setVisibility(View.INVISIBLE);
+
+        endLoader = new CircledImageView(this);
+        endLoader.setImageResource(R.drawable.android_wear_loader_end);
+        endLoader.setCircleRadius(150);
+        endLoader.setVisibility(View.INVISIBLE);
+
+        container = new LinearLayout(this);
+        container.setBackgroundColor(Color.WHITE);
+        container.setOrientation(LinearLayout.VERTICAL);
+
+        container.addView(titleview);
+        container.addView(addButton);
+        container.addView(animatedview);
+        container.addView(endLoader);
+        setContentView(container);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .build();
+        mGoogleApiClient.connect();
+
+        //TEST
+        /*Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                animatedview.doneLoading=true;
+                //android_wear_loader_end
+                endLoader.setVisibility(View.VISIBLE);
+                container.invalidate();
+            }
+        }, 10000);*/
+
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        MyloWearServiceListener.activity = null;
+    }
+
+    public void endOfLoad(){
+        animatedview.setVisibility(View.GONE);
+        endLoader.setVisibility(View.VISIBLE);
+        //
+        Handler h = new Handler();
+        h.postDelayed(new Runnable(){
+
+            @Override
+            public void run() {
+                endLoader.setVisibility(View.GONE);
+                addButton.setVisibility(View.VISIBLE);
+            }
+        },1000);
+    }
+
+    public void onButtonClicked() {
+        Log.i("in onButtonClicked","youhou");
+        try{
+            if(mGoogleApiClient == null){
+                return;
+            }
+            Log.i("mGoogleApiClient","="+mGoogleApiClient.toString());
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
+            //launch loader
+            addButton.setVisibility(View.GONE);
+            animatedview.doneLoading=false;
+            animatedview.setVisibility(View.VISIBLE);
+            animatedview.startAnimating(0f,360f);
+
+            /*Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    animatedview.doneLoading=true;
+                    //android_wear_loader_end
+                    animatedview.setVisibility(View.GONE);
+                    endLoader.setVisibility(View.VISIBLE);
+                    //
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            endLoader.setVisibility(View.GONE);
+                            addButton.setVisibility(View.VISIBLE);
+                        }
+                    },1000);
+                }
+            }, 10000);*/
+        } catch(Exception e) { // or your specific exception
+            Log.i("Exception catched","error: "+e.getMessage());
+        }
+        /*Intent intent = new Intent();
+        intent.setClass(this,loaderActivity.class);
+        startActivity(intent);*/
+        //Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
+    }
+}
