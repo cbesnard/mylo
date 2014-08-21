@@ -558,6 +558,7 @@ $(document).ready(function(){
 
 	$('#saveButton').click(function() {
 		console.log('in edit place: save Button pressed');
+		//hideAndroidSoftwareKeyboard();
 		//GA
 		//analytics.trackEvent("Button_click", "Validate_place", "", 1);
 		if(checkFields()){

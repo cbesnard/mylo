@@ -81,6 +81,13 @@ function successHandler() {
 function errorHandler() {
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	HIDE SOFTWARE KEYBOARD
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function hideAndroidSoftwareKeyboard(){
+	console.log("in JAVASCRIPT hideAndroidSoftwareKeyboard function");
+	Android.hideKeyboard();
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	CHANGE ANDOIRD APP STATE TO HANDLE BACKBUTTON PRESSED
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function changeAndroidAppState(state){

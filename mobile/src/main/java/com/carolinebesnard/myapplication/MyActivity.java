@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.view.Gravity;
@@ -37,11 +38,13 @@ public class MyActivity extends Activity {
     private LocationListener locationListener;
     public LocationManager locationManager;
     public static int appState;
+    private static final String TAG = MyActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_my);
+        myJsInterface.activity=this;
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
         w.setWebContentsDebuggingEnabled (true);
@@ -59,6 +62,7 @@ public class MyActivity extends Activity {
         w.addJavascriptInterface(new myJsInterface(this), "Android");
         setContentView(w);
         /**/
+        myJsInterface.webview = w;
         // Acquire a reference to the system Location Manager
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         //
@@ -285,6 +289,9 @@ public class MyActivity extends Activity {
 class myJsInterface {
 
     private Context con;
+    public static Activity activity;
+    public static WebView webview;
+    private static final String TAG = myJsInterface.class.getSimpleName();
 
     public myJsInterface(Context con) {
         this.con = con;
@@ -329,6 +336,13 @@ class myJsInterface {
     @JavascriptInterface
     public void setAppState(int state) {
         MyActivity.appState = state;
+    }
+
+    @JavascriptInterface
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(webview.getWindowToken(),0);
+        Log.v(TAG,"hide keyboard called");
     }
 
 

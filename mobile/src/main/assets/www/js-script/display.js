@@ -404,10 +404,10 @@ function getPositions(group){
 			}
 		}
 	}
-	console.log("locations length="+locations.length);
+	/*console.log("locations length="+locations.length);
 	logLocations(locations, "locations");
 	console.log("userLocs length="+userLocs.length);
-	logLocations(userLocs, "userLocs");
+	logLocations(userLocs, "userLocs");*/
 	userLocs.sort(function(a,b){
 		if(a.dist > b.dist){return 1;}
 		else if(a.dist < b.dist){return -1;}
@@ -430,8 +430,8 @@ function getPositions(group){
 			sortedLocs.push(userLocs[tata]);
 		}	
 	}
-	console.log("sortedLocs length="+sortedLocs.length);
-	logLocations(sortedLocs, "sortedLocs");
+	//console.log("sortedLocs length="+sortedLocs.length);
+	//logLocations(sortedLocs, "sortedLocs");
 
 	var t=0;
 	for(t=0;t<sortedLocs.length;t++){
@@ -492,7 +492,7 @@ function bindLocsEvents(){
 		clearTimeout(pressTimer);
 		return false;
 	}).mousedown(function(e){
-		if(!isDragging && !mylo_UI_init_variables[0].isAddingGroup&&!$(this).hasClass("new")){
+		if(!isDragging && !mylo_UI_init_variables[0].isAddingGroup){
 			selectedDraggable = $(this);
 			// Set timeout to check for longpress
 			pressTimer = window.setTimeout(function(){
@@ -614,7 +614,7 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 				});
 			}else{
 				$('#locsDiv')
-					.append('<div class="loc" id="'+userLocs[i].id+'"><IMG id="watchIcon" SRC="./png/mylo-icons_watch.png"><div class="container"><div id="centered"><p class="locname"></p><p class="locadr"></p><p class="locdist">'+userLocs[i].dist+'</p></div></div><!--div id="locButtons"--><IMG id="closeButton" SRC="./png/mylo-icon-V2_add-loc-close.png"><!--/div--></div>');
+					.append('<div class="loc" id="'+userLocs[i].id+'"><IMG id="watchIcon" SRC="./png/mylo-icons_watch.png"><div class="container"><div id="centered"><p class="locname"></p><p class="locadr"></p><p class="locdist"></p></div></div><!--div id="locButtons"--><!--IMG id="closeButton" SRC="./png/mylo-icon-V2_add-loc-close.png"--><!--/div--></div>');
 
 				$('#'+userLocs[i].id).find('.locname').text("New Location");
 				$('#'+userLocs[i].id).find('.locdist').text("");
@@ -927,15 +927,14 @@ function displayAddPlaceScreen(){
     mylo_UI_init_variables[0].isAddingPlace = !mylo_UI_init_variables[0].isAddingPlace;
 }
 function hideAddPlaceScreen(delay){
+	console.log('in JAVASCRIPT hideAddPlaceScreen function');
 	mylo_UI_init_variables[0].editPlace=null;
 	var timer = window.setTimeout(function(){
 		//LOADER: Hide loader
 		$('#loader_container').css({display:'none'});
 		$('#loader').css({display:'block'});
 		$('#loader_end').css({display:'none'});
-		//
-		$('#validateButton').css("display","block");
-		$('#saveButton').css("display","none");
+		
 		//make groups visible again
 		$('#groupWraper').children().css({
 			opacity: '1', 
@@ -984,6 +983,9 @@ function hideAddPlaceScreen(delay){
 					rotateX: '0deg',
 					rotateY: '0deg',
 				  	}, 150, 'linear');
+				//
+				$('#validateButton').css("display","block");
+				$('#saveButton').css("display","none");
 		  	}
 		});
 	},delay);

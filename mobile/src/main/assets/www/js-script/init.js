@@ -1,6 +1,6 @@
 var mylo_textes = new Array();
 mylo_textes.push({default_group_name:"All",
-add_button_txt:"Quick Add",
+add_button_txt:"Quick Add:",
 add_place_form_addr_field_helper:"Enter a place or an address",
 add_place_form_place_name_field_helper:"Choose a name",
 error_add_place_form_empty_fields:"Both name and address have to be completed to add a place!",
@@ -443,6 +443,7 @@ function dragStart(xpos, ypos){
     //change look of selected and dragged element color selected and draged item
     if(dragType=='loc'){
         if($('.currentGroup').attr('name')!="0"){$('.currentGroup').removeClass('droppable');}
+        if(selectedDraggable.hasClass("new")){$('.group').removeClass('droppable');}
         //clone selected loc
         clone=document.getElementById(selectedDraggable.attr('id')).cloneNode(true);
         
@@ -538,7 +539,7 @@ function drag(xpos, ypos){
     //if( (isInElement(point, $('.trash')) || isInElement(point, $('#groupsDiv'))) && !mylo_UI_init_variables[0].out_of_draggable){
     if(isInElement(point, $('#groupsDiv')) && !mylo_UI_init_variables[0].out_of_draggable){  
         //if( dragType=='loc' && !mylo_UI_init_variables[0].out_of_draggable){  
-            if(dragType=='loc'){
+            if(dragType=='loc'&& !selectedDraggable.hasClass("new")){
                 $('.clone').anima({scaleX:0.6, scaleY:0.6}, 150);
                 clone.style.opacity = "0.7";
                 mylo_UI_init_variables[0].out_of_draggable=1;
@@ -562,8 +563,13 @@ function afterDrag(){
     //console.log('in afterDrag function');
     //dragged loc css
     if(dragType=='loc'){
-        selectedDraggable.css('background-color','#ffffff');
-        $('.currentGroup').addClass('droppable');
+        if(selectedDraggable.hasClass("new")){
+            $('.group').addClass('droppable');
+            selectedDraggable.css('background-color','#f2f1f1');
+        }else{
+            selectedDraggable.css('background-color','#ffffff');
+            $('.currentGroup').addClass('droppable');
+        }
     }else{
         var groupID = parseInt(selectedDraggable.attr('name'));
         selectedDraggable.css({

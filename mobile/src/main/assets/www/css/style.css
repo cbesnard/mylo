@@ -6,6 +6,7 @@ body {
 	margin: 0px;
 	background-color:#fbfbfb;
 	background-color: #f2F1F1;
+	/*background-color: #FF0000;*/
 
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
@@ -413,7 +414,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 
 	background-color:#fbfbfb;
 	background-color:#ffffff;
-	border-top: 1px solid #fbfbfb;
+	border-top: 1px solid #f2f2f2;
 	/*border-bottom:1px solid #f2f1f1;*/
 	height:50px;
 	padding-left:10px;
