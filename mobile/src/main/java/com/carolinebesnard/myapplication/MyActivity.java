@@ -339,6 +339,14 @@ class myJsInterface {
     }
 
     @JavascriptInterface
+    public void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(webview, InputMethodManager.SHOW_IMPLICIT);
+        ((InputMethodManager) con.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(webview,0);
+        Log.v(TAG,"show keyboard called");
+    }
+
+    @JavascriptInterface
     public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(webview.getWindowToken(),0);

@@ -302,7 +302,7 @@ function sortLocsByIncreasingDistance(locs){
 		var k=0;
 		for(k=0;k<locs.length;k++){
 			if(locs[k].name==""){
-				console.log("locId="+locs[k].id+" loc name="+locs[k].name);
+				//console.log("locId="+locs[k].id+" loc name="+locs[k].name);
 				sortedLocs.unshift(locs[k]);
 			}
 		}
@@ -841,6 +841,7 @@ function displayNewGroup(id,name){
 }
 
 function displayAddPlaceScreen(){
+	logBodySize();
 	changeAndroidAppState(1);
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
@@ -927,6 +928,7 @@ function displayAddPlaceScreen(){
     mylo_UI_init_variables[0].isAddingPlace = !mylo_UI_init_variables[0].isAddingPlace;
 }
 function hideAddPlaceScreen(delay){
+	logBodySize();
 	console.log('in JAVASCRIPT hideAddPlaceScreen function');
 	mylo_UI_init_variables[0].editPlace=null;
 	var timer = window.setTimeout(function(){
@@ -986,6 +988,8 @@ function hideAddPlaceScreen(delay){
 				//
 				$('#validateButton').css("display","block");
 				$('#saveButton').css("display","none");
+				//
+				logBodySize();
 		  	}
 		});
 	},delay);

@@ -33,14 +33,16 @@ import java.util.List;
 
 public class MyActivity extends Activity {
 
-    //private TextView mTextView;
+    private TextView titleview;
     //private ImageButton addButton;
     private CircledImageView addButton;
     static public CircledImageView endLoader;
+    static public TextView errorTxtView;
     private GoogleApiClient mGoogleApiClient;
     public AnimatedView animatedview;
     public LinearLayout container;
     private Context context;
+    private static final String TAG = MyActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class MyActivity extends Activity {
         context = this;
         //View view = this.getWindow().getDecorView();
         //view.setBackgroundColor(Color.GREEN);
-        TextView titleview = new TextView(this);
+        titleview = new TextView(this);
         titleview.setText("Quick Add");
         titleview.setTextColor(Color.BLACK);
         titleview.setTextSize(26);
@@ -86,6 +88,15 @@ public class MyActivity extends Activity {
         endLoader.setCircleRadius(150);
         endLoader.setVisibility(View.INVISIBLE);
 
+        errorTxtView = new TextView(this);
+        errorTxtView.setText("\nSorry, your position couldn't be found!\nTry again later :)");
+        errorTxtView.setTextColor(Color.GRAY);
+        errorTxtView.setTextSize(18);
+        errorTxtView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        //errorTxtView.setGravity(Gravity.CENTER_HORIZONTAL);
+        errorTxtView.setGravity(Gravity.CENTER);
+        errorTxtView.setVisibility(View.INVISIBLE);
+
         container = new LinearLayout(this);
         container.setBackgroundColor(Color.WHITE);
         container.setOrientation(LinearLayout.VERTICAL);
@@ -94,6 +105,7 @@ public class MyActivity extends Activity {
         container.addView(addButton);
         container.addView(animatedview);
         container.addView(endLoader);
+        container.addView(errorTxtView);
         setContentView(container);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -132,6 +144,25 @@ public class MyActivity extends Activity {
                 addButton.setVisibility(View.VISIBLE);
             }
         },1000);
+    }
+
+    public void addErrorDisplay(){
+        titleview.setVisibility(View.VISIBLE);
+        addButton.setVisibility(View.GONE);
+        animatedview.setVisibility(View.GONE);
+        endLoader.setVisibility(View.GONE);
+        errorTxtView.setVisibility(View.VISIBLE);
+        //
+        Log.i(TAG, "In addErrorDisplay method");
+        Handler h = new Handler();
+        h.postDelayed(new Runnable(){
+
+            @Override
+            public void run() {
+                errorTxtView.setVisibility(View.GONE);
+                addButton.setVisibility(View.VISIBLE);
+            }
+        },4000);
     }
 
     public void onButtonClicked() {

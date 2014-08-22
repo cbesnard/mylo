@@ -26,6 +26,7 @@ public class AnimatedView extends View implements ValueAnimator.AnimatorUpdateLi
     private Boolean cycleState; //0=completing / 1=emptying
     public static Boolean doneLoading;
     public static Boolean success;
+    private static final String TAG = AnimatedView.class.getSimpleName();
 
     public AnimatedView(Context context) {
         super(context);
@@ -58,7 +59,7 @@ public class AnimatedView extends View implements ValueAnimator.AnimatorUpdateLi
         RectF boundingBox = new RectF((width-circleSize)/2,(height-circleSize)/2,(width-circleSize)/2+circleSize,(height-circleSize)/2+circleSize);
         //canvas.drawCircle(100,100,100,whitePaint);
         canvas.drawArc(boundingBox,0,360,false,whitePaint);
-        Log.i("on draw called: value=", value.toString()+"cycleState="+cycleState.toString());
+        //Log.i(TAG, "on draw called: value="+value.toString()+"cycleState="+cycleState.toString());
         if(cycleState){//emptying
            value=value-360;
             if(Math.abs(value)>360f){value=-360f;}

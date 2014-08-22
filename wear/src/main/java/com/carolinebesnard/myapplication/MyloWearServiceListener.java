@@ -12,26 +12,37 @@ import com.google.android.gms.wearable.WearableListenerService;
  */
 public class MyloWearServiceListener extends WearableListenerService {
     static public MyActivity activity;
+    private static final String TAG = MyloWearServiceListener.class.getSimpleName();
 
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.i("on create called", "in myloWearServiceListener");
+        Log.i(TAG, "On create called");
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent){
         super.onMessageReceived(messageEvent);
         //messageEvent.getData()[0] == 1
-        Log.i("in myloWearServiceListener onMessageReceived !!!","message:"+messageEvent);
+        Log.i(TAG,"In on messageReceived: message="+messageEvent);
         AnimatedView.doneLoading=true;
         //AnimatedView.success=true;
         if (activity!=null){
             if(messageEvent.getData()[0] == 1){
+                Log.i(TAG, "Add new loc SUCCESS");
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         activity.endOfLoad();
+                    }
+                });
+            }else {
+                Log.i(TAG, "ERROR: couldn't add new loc");
+                //Sorry, your position couldn't be found! Try again later :)
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.addErrorDisplay();
                     }
                 });
             }
