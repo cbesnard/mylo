@@ -26,6 +26,9 @@ import java.io.InputStreamReader;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class MyActivity extends Activity {
@@ -39,6 +42,7 @@ public class MyActivity extends Activity {
     public LocationManager locationManager;
     public static int appState;
     private static final String TAG = MyActivity.class.getSimpleName();
+    private static final String PROPERTY_ID = "UA-51649868-2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,13 @@ public class MyActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // Acquire a reference to the system Location Manager
+        //Tracker t = analytics.newTracker(UA-51649868-2);
+        Tracker t = getTracker();
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory("Flags")
+                .setAction("Launch_App")
+                .setLabel("")
+                .build());
         /**/
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
@@ -118,25 +129,6 @@ public class MyActivity extends Activity {
             super.onBackPressed();
         }
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
     /** Determines whether one Location reading is better than the current Location fix
      * @param location  The new Location that you want to evaluate
@@ -210,28 +202,6 @@ public class MyActivity extends Activity {
         Log.v("in read data method","in read data method");
         String FILENAME = "data.txt";
 
-        /*if(fileExistence(FILENAME)){
-            try{
-                FileInputStream fis = openFileInput(FILENAME);
-                InputStreamReader isr = new InputStreamReader(fis);
-                BufferedReader bufferedReader = new BufferedReader(isr);
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                isr.close();
-                Log.v("call javascript ","initUserDatas ");
-                w.loadUrl("javascript:initUserDatas('"+sb.toString()+"')");
-
-            }catch (java.io.IOException e){
-                Log.v("read file","error: ");
-                e.printStackTrace();
-            }
-        }else{
-            Log.v("file doesn't exist","file"+FILENAME+" doesn't exist");
-            w.loadUrl("javascript:initUserDatas('')");
-        }*/
         if(isExternalStorageReadable()){
             String root = Environment.getExternalStorageDirectory().toString();
             Log.v("external storage file ","root: "+root);
@@ -282,6 +252,12 @@ public class MyActivity extends Activity {
             return true;
         }
         return false;
+    }
+
+    synchronized Tracker getTracker() {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        Tracker t = analytics.newTracker(PROPERTY_ID);
+        return t;
     }
 
 }
