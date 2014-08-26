@@ -442,6 +442,9 @@ function dragStart(xpos, ypos){
 	var cloneBIS;
     //change look of selected and dragged element color selected and draged item
     if(dragType=='loc'){
+        //GA
+        GATrackerEvent("Drag", "loc_drag", selectedDraggable.attr('id'));
+        //
         if($('.currentGroup').attr('name')!="0"){$('.currentGroup').removeClass('droppable');}
         if(selectedDraggable.hasClass("new")){$('.group').removeClass('droppable');}
         //clone selected loc
@@ -468,6 +471,9 @@ function dragStart(xpos, ypos){
         
 
     }else if(dragType=='group'){
+        //GA
+        GATrackerEvent("Drag", "group_drag", selectedDraggable.attr('id'));
+        //
         $('.group').removeClass('droppable');
         //clone selected loc
         clone=document.getElementById(selectedDraggable.attr('id')).cloneNode(true);
@@ -593,13 +599,18 @@ function dragEnd(xpos, ypos){
     try {
         if(isDragging){
             //GA
-            //analytics.trackEvent("Drag_end", "drag_end");
+            GATrackerEvent("Drag_end", "Total", "");
+            //
             mylo_UI_init_variables[0].out_of_draggable=0;
             //console.log('in dragend and ready_to_delete:'+mylo_UI_init_variables[0].ready_to_delete);
             // IF drag is a location drag
             if(dragType=='loc'&& selectedDroppable){
+                
                 // If location was drop on a group => move/add location to group
                 if(selectedDroppable.hasClass('group')){
+                    //GA
+                    GATrackerEvent("Drag_end", "loc_drag_end", "change_group");
+                    //
                     var groupId = selectedDroppable.attr('name');
                     //Place draggedloc in selected group
                     changeLocGroup(selectedDraggable.attr('id'), groupId);
@@ -623,7 +634,11 @@ function dragEnd(xpos, ypos){
                     //analytics.trackEvent("Drag_end", "loc_drag_end", "change_group", 1);
                 //If location was drop on trash => delete location
                 }else if(selectedDroppable.hasClass('trash')){
+                    
                     if(mylo_UI_init_variables[0].ready_to_delete){
+                        //GA
+                        GATrackerEvent("Drag_end", "loc_drag_end", "delete_loc");
+                        //
                         //console.log('in if else and ready_to_delete:'+mylo_UI_init_variables[0].ready_to_delete);
                         //alert('delete location '+selectedDraggable.attr('id'));
                         deleteStoredLocation(selectedDraggable.attr('id'));
@@ -641,12 +656,22 @@ function dragEnd(xpos, ypos){
                         mylo_UI_init_variables[0].ready_to_delete=0;
                         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
                         $('#trash_bouncer').css('display','none');
-                    }else{myMouseLeave(selectedDroppable);afterDrag();}
+                    }else{
+                        //GA
+                        GATrackerEvent("Drag_end", "loc_drag_end", "delete_loc_not_ready");
+                        //
+                        myMouseLeave(selectedDroppable);
+                        afterDrag();
+                    }
                 }
             }else if(dragType=='group' && selectedDroppable){
                 
                 if(selectedDroppable.hasClass('trash')){
+                    
                     if(mylo_UI_init_variables[0].ready_to_delete){
+                        //GA
+                        GATrackerEvent("Drag_end", "group_drag_end", "delete_group");
+                        //
                         deleteGroup(selectedDraggable.attr('name'));
                         selectedDroppable.find('#off').css('display','block');
                         selectedDroppable.find('#focus').css('display','none');
@@ -676,9 +701,18 @@ function dragEnd(xpos, ypos){
                         mylo_UI_init_variables[0].ready_to_delete=0;
                         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
                         $('#trash_bouncer').css('display','none');
-                    }else{myMouseLeave(selectedDroppable);afterDrag();}
+                    }else{
+                        //GA
+                        GATrackerEvent("Drag_end", "group_drag_end", "delete_group_not_ready");
+                        //
+                        myMouseLeave(selectedDroppable);
+                        afterDrag();
+                    }
                 }
             }else{
+                //GA
+                GATrackerEvent("Drag_end", dragType+"_drag", selectedDraggable.attr('id'));
+                //
                 //console.log('yop?');
                 afterDrag();
             }

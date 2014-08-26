@@ -85,13 +85,7 @@ public class MyActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // Acquire a reference to the system Location Manager
-        //Tracker t = analytics.newTracker(UA-51649868-2);
-        Tracker t = getTracker();
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("Flags")
-                .setAction("Launch_App")
-                .setLabel("")
-                .build());
+        sendGATrackerEvent("Flags", "Launch_App", "");
         /**/
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
@@ -126,6 +120,7 @@ public class MyActivity extends Activity {
                 w.loadUrl("javascript:androidBackButtonPressed()");
             }
         }else {
+            sendGATrackerEvent("Button_click", "back_button", "close_app");
             super.onBackPressed();
         }
     }
@@ -229,6 +224,7 @@ public class MyActivity extends Activity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    sendGATrackerEvent("Action_fail", "read_data", "error while reading data");
                 }
             }else{
                 Log.v("file doesn't exist","file"+FILENAME+" doesn't exist");
@@ -236,6 +232,7 @@ public class MyActivity extends Activity {
             }
         }else{
             Log.v("error while reading file","external storage not readable");
+            sendGATrackerEvent("Action_fail", "read_data", "not_readable");
         }
 
     }
@@ -260,12 +257,25 @@ public class MyActivity extends Activity {
         return t;
     }
 
+    public void sendGATrackerEvent(String category, String action, String label){
+        Log.v(TAG,"In sendGATrackerEvent");
+        if (category != null && action != null && label != null) {
+            //Tracker t = analytics.newTracker(UA-51649868-2);
+            Tracker t = getTracker();
+            t.send(new HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label)
+                    .build());
+        }
+    }
+
 }
 
 class myJsInterface {
 
     private Context con;
-    public static Activity activity;
+    public static MyActivity activity;
     public static WebView webview;
     private static final String TAG = myJsInterface.class.getSimpleName();
 
@@ -305,6 +315,26 @@ class myJsInterface {
             sendIntent.putExtra(Intent.EXTRA_TEXT, mssg);
             sendIntent.setType("text/plain");
             con.startActivity(sendIntent);
+        }
+
+    }
+
+    @JavascriptInterface
+    public void addGAEvent(String category, String action, String label) {
+        Log.v(TAG,"In addGAEvent");
+        if (category != null && action != null && label != null) {
+            if (activity != null) {
+                final String categoryFinal = category;
+                final String actionFinal = action;
+                final String labelFinal = label;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.v(TAG,"Calling Activity sendGATrackerEvent method");
+                        activity.sendGATrackerEvent(categoryFinal, actionFinal, labelFinal);
+                    }
+                });
+            }
         }
 
     }
@@ -360,9 +390,11 @@ class myJsInterface {
             }catch (java.io.IOException e){
                 Log.v("error while writing file","error while writing file");
                 e.printStackTrace();
+                addGAEvent("Action_fail", "write_data", "error while writing file");
             }
         }else{
             Log.v("error while writing file","external storage not writable");
+            addGAEvent("Action_fail", "write_data", "not_writable");
         }
 
     }

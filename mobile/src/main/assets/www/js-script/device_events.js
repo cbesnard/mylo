@@ -24,7 +24,8 @@ function androidBackButtonPressed(){
 			filter: 'alpha(opacity=100)',
         });
         //GA
-		//analytics.trackEvent("Button_click", "back_button", "close_add_place", 1);
+        GATrackerEvent("Button_click", "back_button", "close_add_place");
+        //
 	}else if(mylo_UI_init_variables[0].isAddingGroup){
 		//close adding group
 		var deg = 0;
@@ -38,7 +39,8 @@ function androidBackButtonPressed(){
 	    div.style.transform       = 'rotate('+deg+'deg)';
 	    mylo_UI_init_variables[0].isAddingGroup = !mylo_UI_init_variables[0].isAddingGroup;
 	    //GA
-		//analytics.trackEvent("Button_click", "back_button", "close_add_group", 1);
+        GATrackerEvent("Button_click", "back_button", "close_add_group");
+        //
 
 	}else{
 		//GA
@@ -86,6 +88,13 @@ function errorHandler() {
 function hideAndroidSoftwareKeyboard(){
 	console.log("in JAVASCRIPT hideAndroidSoftwareKeyboard function");
 	Android.hideKeyboard();
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	SEND ANDROID GA TRACKER EVENT
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function GATrackerEvent(category, action, label){
+	console.log("in JAVASCRIPT GATrackerEvent function");
+	Android.addGAEvent(category, action, label);
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	CHANGE ANDOIRD APP STATE TO HANDLE BACKBUTTON PRESSED

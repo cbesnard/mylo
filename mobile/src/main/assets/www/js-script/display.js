@@ -56,7 +56,9 @@ function bindGroupEvents(){
 			$('#addGroup').stopAnima(true);
 			
 			if(mylo_UI_init_variables[0].isAddingGroup){//already adding group=> close addinggroup
-				
+				//GA
+		        GATrackerEvent("Button_click", "add_group", "close");
+		        //
 				hideAddGroupDiv();
 
 				deg = 0;
@@ -66,9 +68,11 @@ function bindGroupEvents(){
 			    div.style.oTransform      = 'rotate('+deg+'deg)'; 
 			    div.style.transform       = 'rotate('+deg+'deg)';
 			    mylo_UI_init_variables[0].isAddingGroup = !mylo_UI_init_variables[0].isAddingGroup;
-			    //GA
-			    //analytics.trackEvent("Button_click", "add_group", "close", 1);
+			    
 			}else{
+				//GA
+		        GATrackerEvent("Button_click", "add_group", "open");
+		        //
 				displayAddGroupDiv();
 				
 		        deg = 45;
@@ -78,8 +82,7 @@ function bindGroupEvents(){
 			    div.style.oTransform      = 'rotate('+deg+'deg)'; 
 			    div.style.transform       = 'rotate('+deg+'deg)';
 			    mylo_UI_init_variables[0].isAddingGroup = !mylo_UI_init_variables[0].isAddingGroup;
-			    //GA
-			    //analytics.trackEvent("Button_click", "add_group", "open", 1);
+			    
 			}
 		}
 		
@@ -310,47 +313,6 @@ function sortLocsByIncreasingDistance(locs){
 	return sortedLocs;
 }
 
-/*
-function sortLocsByIncreasingDistance(locs){
-	var sortedLocs = new Array();
-	if(locs.length>0){
-		//initialisation
-		sortedLocs[0]=locs[0];
-		if(locs.length>1){
-			//for each locs find the first upper dist and get 
-			//the index to insert the loc before this found upper dist loc
-			var i=1;
-			for(i=1;i<locs.length;i++)//for each loc
-			{	
-				var j=0;
-				var indexToSplice = -1;
-				for(j=0;j<sortedLocs.length;j++)//check the sortedlocs to find the upper dist
-				{
-					if(parseInt(locs[i].dist)<parseInt(sortedLocs[j].dist)){//find the upper dist
-						indexToSplice = j;//get the index of the upper dist to insert the loc before
-						break;
-					}
-				}
-				if(locs[i].name==""){
-					console.log("locId="+locs[i].id+" loc name="+locs[i].name);
-					sortedLocs.unshift(locs[i]);
-				}else{
-					if(indexToSplice!=-1){
-						sortedLocs.splice(indexToSplice, 0, locs[i]);
-						console.log("locId="+locs[i].id+" loc name="+locs[i].name+" locDist="+locs[i].dist);
-					}else{
-						sortedLocs.push(locs[i]);//if no index to insert is found => all sorted 
-												//array is below => loc dist is the max => push 
-												//it a the end of sorted loc
-						console.log("locId="+locs[i].id+" loc name="+locs[i].name+" locDist="+locs[i].dist);
-					}
-				}
-			}
-		}
-	}
-	return sortedLocs;
-}
-*/
 
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
 *	getPositions(): retourne toutes les positions 
@@ -506,6 +468,9 @@ function bindLocsEvents(){
 		return false; 
 	});
 	$('.loc').click(function(){
+		//GA
+        GATrackerEvent("Button_click", "edit_place", $(this).attr('id'));
+        //
 		mylo_UI_init_variables[0].editPlace=getLoc($(this).attr('id'));
 		var loc = getLoc($(this).attr('id'));
 		var adr = loc.adr;
@@ -665,6 +630,9 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 			*/
 			$('#'+userLocs[i].id).find('#shareLocButton').click(function(event){
 				event.stopPropagation();
+				//GA
+		        GATrackerEvent("Button_click", "share_loc", "");
+		        //
 				var loc = getLoc($(this).parent().parent('.loc').attr('id')); 
 				//var adressToEncode = loc.publicName+' '+loc.adr;
 				var adressToEncode="";
@@ -686,7 +654,9 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 			$('#'+userLocs[i].id).find('#goLocButton').click(function(event){
 				event.stopPropagation();
 				var loc = getLoc($(this).parent().parent('.loc').attr('id')); 
-
+				//GA
+		        GATrackerEvent("Button_click", "go_loc", "");
+		        //
 				//var adressToEncode = loc.publicName+' '+loc.adr;
 				var adressToEncode="";
 				if(loc.gps==1){
@@ -784,6 +754,9 @@ function displayNewGroup(id,name){
 	});
 
 	$('[name="'+id+'"]').click(function() {
+		//GA
+        GATrackerEvent("Button_click", "group", $(this).attr('name'));
+        //
 	  	var groupToDisplay = $(this).attr('name');
 		if(groupToDisplay==$('.currentGroup').attr('name') || groupToDisplay==$('.addGroup').attr('name') || mylo_UI_init_variables[0].isAddingPlace || mylo_UI_init_variables[0].isAddingGroup){
 			//innactive

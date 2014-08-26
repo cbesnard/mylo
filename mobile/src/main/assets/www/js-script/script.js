@@ -248,6 +248,9 @@ $(document).ready(function(){
 	*	BEHAVIOR : Bind droppable & Click behavior of groups !
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	$( ".group" ).click(function() {
+		//GA
+        GATrackerEvent("Button_click", "group", $(this).attr('name'));
+        //
 		//showAndroidToast('group click!!!');
 		if(mylo_UI_init_variables[0].loading){return 0;}
 	  	var groupToDisplay = $(this).attr('name');
@@ -267,6 +270,9 @@ $(document).ready(function(){
 		//analytics.trackEvent("Button_click", "group", groupToDisplay, 1);
 	});
 	$( "#add_place" ).click(function(){
+		//GA
+        GATrackerEvent("Button_click", "add_place", "open");
+        //
 		if(mylo_UI_init_variables[0].isAddingGroup || mylo_UI_init_variables[0].loading){}else{
 			//STOP ANY POSSIBLE ONGOING AND AWAITING ANIMATIONS
 			$('#locsWraper').stopAnima(true);
@@ -287,6 +293,9 @@ $(document).ready(function(){
 		
 	});
 	$('#close_add_loc').click(function(){
+		//GA
+        GATrackerEvent("Button_click", "close_add_loc", "close");
+        //
 		if(mylo_UI_init_variables[0].isAddingPlace){
 			//CLOSE ADDING PLACE
 			hideAddPlaceScreen(0);
@@ -315,6 +324,9 @@ $(document).ready(function(){
 	}*/
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	$('#add_gps').click(function(){
+		//GA
+        GATrackerEvent("Button_click", "add_gps", "open");
+        //
 		if(mylo_UI_init_variables[0].loading){return 0;}
 		if(mylo_UI_init_variables[0].isAddingPlace){
 			//hideAddPlaceScreen(0);
@@ -325,8 +337,6 @@ $(document).ready(function(){
 			mylo_UI_init_variables[0].loading=1;
 			animateLoader();
 			mylo_UI_init_variables[0].searching_position=1;
-			//ANALYTICS
-			//analytics.trackEvent("Button_click", "add_gps", "open", 1);
 			//GET USER LOCATION in lat lng
 			//var p = {lat:0,lon:0};
 			mylo_UI_init_variables[0].addingGPS=mylo_UI_init_variables[0].userpos;
@@ -352,6 +362,10 @@ $(document).ready(function(){
 			        //shortToast(function(){},function(err){},mylo_textes[0].error_add_place_form_location_not_found);
 					showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
 					//analytics.trackEvent("Action_fail", "find_location_err", status, 1);
+					//GA
+			        GATrackerEvent("Action_fail", "find_location_err", status);
+			        //
+
 			    }
 			  	//LOADER: hide loader
 			    mylo_UI_init_variables[0].searching_position=0;
@@ -361,97 +375,7 @@ $(document).ready(function(){
 				mylo_UI_init_variables[0].loading=0;
 				step=0;
 			});
-			/*navigator.geolocation.getCurrentPosition(function onSuccess(position) {
-			        p.lat = position.coords.latitude;
-			        p.lon = position.coords.longitude;
-			        mylo_UI_init_variables[0].userpos=p;
-			        mylo_UI_init_variables[0].addingGPS=p;
-			        //GET ADR of lat & lng
-			        var latlng = new google.maps.LatLng(p.lat,p.lon);
-					var geocoder = new google.maps.Geocoder();
-					geocoder.geocode( {'location': latlng}, function(results, status){
-					    if (status == google.maps.GeocoderStatus.OK) {
-					        //FILL the fields with data
-					  		var address = results[0].formatted_address;
-					   		//$('#gps_txt').text(address);
-							$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+address);
-					   		$('#gps_txt').css('display','block');
-					   		$('#gps_img').css('display','block');
-					   		//hide search field
-					   		$('#input_container').css('display','none');
-					   		validate();
-					   		//OPEN ADD PLACE SCREEN
-					   		step=0;
-							displayAddPlaceScreen();
-					    }else{
-					        //TOAST NOTIF ERROR LOCATION NOT FOUND
-					        //shortToast(function(){},function(err){},mylo_textes[0].error_add_place_form_location_not_found);
-							showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
-							//analytics.trackEvent("Action_fail", "find_location_err", status, 1);
-					    }
-					  	//LOADER: hide loader
-					    mylo_UI_init_variables[0].searching_position=0;
-					    $('#loader_container').css({display:'none'});
-						$('#loader').css({display:'block'});
-						$('#loader_end').css({display:'none'});
-						mylo_UI_init_variables[0].loading=0;
-						step=0;
-					});
-		        }, 
-				function onError(error) {
-					var d = new Date();
-					var n = d.getTime();
-					if(n-mylo_UI_init_variables[0].userpos_time<5000){
-						mylo_UI_init_variables[0].addingGPS=mylo_UI_init_variables[0].userpos;
-						//GET ADR of lat & lng
-				        var latlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
-						var geocoder = new google.maps.Geocoder();
-						geocoder.geocode( {'location': latlng}, function(results, status){
-						    if (status == google.maps.GeocoderStatus.OK) {
-						        //FILL the fields with data
-						  		var address = results[0].formatted_address;
-						   		//$('#gps_txt').text(address);
-								$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+address);
-						   		$('#gps_txt').css('display','block');
-						   		$('#gps_img').css('display','block');
-						   		//hide search field
-						   		$('#input_container').css('display','none');
-						   		validate();
-						   		//OPEN ADD PLACE SCREEN
-						   		step=0;
-								displayAddPlaceScreen();
-						    }else{
-						        //TOAST NOTIF ERROR LOCATION NOT FOUND
-						        //shortToast(function(){},function(err){},mylo_textes[0].error_add_place_form_location_not_found);
-								showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
-								//analytics.trackEvent("Action_fail", "find_location_err", status, 1);
-						    }
-						  	//LOADER: hide loader
-						    mylo_UI_init_variables[0].searching_position=0;
-						    $('#loader_container').css({display:'none'});
-							$('#loader').css({display:'block'});
-							$('#loader_end').css({display:'none'});
-							mylo_UI_init_variables[0].loading=0;
-							step=0;
-						});
-					}else{
-						//TOAST NOTIF ERROR LOCATION NOT FOUND
-						//shortToast(function(){},function(err){
-						//	alert(err);
-						//},mylo_textes[0].error_add_place_form_location_not_found);
-						showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
-						//LOADER: hide loader
-					    mylo_UI_init_variables[0].searching_position=0;
-					    $('#loader_container').css({display:'none'});
-						$('#loader').css({display:'block'});
-						$('#loader_end').css({display:'none'});
-						mylo_UI_init_variables[0].loading=0;
-						step=0;
-						//GA
-						//analytics.trackEvent("Action_fail", "find_location_err", error.message, 1);
-					}
-		    	},{timeout: 3000, enableHighAccuracy: true}
-		    );*/
+			
 		}
 		return 1;
 	});
@@ -461,7 +385,8 @@ $(document).ready(function(){
 	*/
 	$('#validateButton').click(function() {
 		//GA
-		//analytics.trackEvent("Button_click", "Validate_place", "", 1);
+        GATrackerEvent("Button_click", "Validate_place", "");
+        //
 		if(checkFields()){
 			//LOADER: launch the loader
 			$('#loader_container').css({display:'block'});
@@ -523,7 +448,8 @@ $(document).ready(function(){
 							mylo_UI_init_variables[0].loading=0;
 							step=0;
 							//GA
-							gaPlugin.trackEvent( successHandler, errorHandler, "Action_fail", "add_location_err", status, 1);
+					        GATrackerEvent("Action_fail", "add_location_err", status);
+					        //
 					    }
 					});    
 			    }catch(err){
@@ -541,7 +467,8 @@ $(document).ready(function(){
 					mylo_UI_init_variables[0].loading=0;
 					step=0;
 					//GA
-					//analytics.trackEvent("Action_fail", "add_location_err", err.message, 1);
+			        GATrackerEvent("Action_fail", "add_location_err", err.message);
+			        //
 			    }
 			}
 		}else{
@@ -552,7 +479,8 @@ $(document).ready(function(){
 			//},mylo_textes[0].error_add_place_form_empty_fields);
 			showAndroidToast(mylo_textes[0].error_add_place_form_empty_fields);
 			//GA
-			//analytics.trackEvent("Action_fail", "add_location_err", "missing fields", 1);
+	        GATrackerEvent("Action_fail", "add_location_err", "missing fields");
+	        //
 		}
 	});
 
@@ -561,10 +489,15 @@ $(document).ready(function(){
 		//hideAndroidSoftwareKeyboard();
 		logBodySize();
 		//GA
-		//analytics.trackEvent("Button_click", "Validate_place", "", 1);
+        GATrackerEvent("Button_click", "Save_place", "");
+        //
 		if(checkFields()){
 			console.log("locId: "+mylo_UI_init_variables[0].editPlace.id+" locname: "+$('#nameField').val());
 			editPlacesName(mylo_UI_init_variables[0].editPlace.id,$('#nameField').val());
+		}else{
+			//GA
+	        GATrackerEvent("Action_fail", "save_location_err", "missing fields");
+	        //
 		}
 	});
 	
@@ -574,7 +507,8 @@ $(document).ready(function(){
 	*/
 	$('#validateGroup').click(function() {
 		//GA
-		//analytics.trackEvent("Button_click", "Validate_group", "", 1);
+        GATrackerEvent("Button_click", "Validate_group", "");
+        //
 		if($('#groupnameField').val()){
 			var div = document.getElementsByName("addGroupIcon")[0];
 			//ADD NEW LOC TO STORAGE AND LOC ARRAY
@@ -602,7 +536,9 @@ $(document).ready(function(){
 			//},mylo_textes[0].error_add_group_form_empty_fields);
 			showAndroidToast(mylo_textes[0].error_add_group_form_empty_fields);
 			//GA
-			//analytics.trackEvent("Action_fail", "add_group_err", "missing fields", 1);
+	        GATrackerEvent("Action_fail", "add_group_err", "missing fields");
+	        //
+
 		}
 	});
 });
