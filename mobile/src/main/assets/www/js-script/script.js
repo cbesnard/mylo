@@ -487,13 +487,25 @@ $(document).ready(function(){
 	$('#saveButton').click(function() {
 		console.log('in edit place: save Button pressed');
 		//hideAndroidSoftwareKeyboard();
-		logBodySize();
+		//logBodySize();
 		//GA
         GATrackerEvent("Button_click", "Save_place", "");
         //
 		if(checkFields()){
 			console.log("locId: "+mylo_UI_init_variables[0].editPlace.id+" locname: "+$('#nameField').val());
 			editPlacesName(mylo_UI_init_variables[0].editPlace.id,$('#nameField').val());
+			//LOADER: Display end of load
+			$('#loader').css({display:'none'});
+			$('#loader_end').css({display:'block'});
+			mylo_UI_init_variables[0].loading=0;
+			step=0;
+
+			// CLOSE EDIT PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
+			var idGroup = parseInt($('.currentGroup').attr('name'));
+			var locsToPrint = getPositions(idGroup);
+			printUserLocation(idGroup,locsToPrint,fadeIn1);
+			//CLOSE EDIT PLACE
+			hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
 		}else{
 			//GA
 	        GATrackerEvent("Action_fail", "save_location_err", "missing fields");

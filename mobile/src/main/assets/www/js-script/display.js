@@ -681,6 +681,7 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 
 
 function displayAddGroupDiv(){
+	changeAndroidAppState(1);
 	//display add group div	
 	var totalGroups = $('.group');
 	//var sscroll = $('#groupsContainer').width()-($('.addGroup').width()+2*mylo_UI_init_variables[0].gGutter);
@@ -719,6 +720,7 @@ function displayAddGroupDiv(){
 }
 
 function hideAddGroupDiv(){
+	changeAndroidAppState(0);
 	$('#groupnameField').blur();
 	$('#groupnameField').val("");
 	validateGroupNameField();
@@ -901,7 +903,8 @@ function displayAddPlaceScreen(){
     mylo_UI_init_variables[0].isAddingPlace = !mylo_UI_init_variables[0].isAddingPlace;
 }
 function hideAddPlaceScreen(delay){
-	logBodySize();
+	changeAndroidAppState(0);
+	//logBodySize();
 	console.log('in JAVASCRIPT hideAddPlaceScreen function');
 	mylo_UI_init_variables[0].editPlace=null;
 	var timer = window.setTimeout(function(){

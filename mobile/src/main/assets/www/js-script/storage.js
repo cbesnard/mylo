@@ -45,12 +45,12 @@ function editPlacesName(locId, locname){
 	//SAVE IN ANDROID
 	storeDataInAndroid();
 
-	// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
+	/*// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
 	var idGroup = parseInt($('.currentGroup').attr('name'));
 	var locsToPrint = getPositions(idGroup);
 	printUserLocation(idGroup,locsToPrint,fadeIn1);
 	//CLOSE ADDING PLACE
-	hideAddPlaceScreen(0);	//in hideAddPlaceScreen => hide LOADER
+	hideAddPlaceScreen(0);	//in hideAddPlaceScreen => hide LOADER*/
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
 *	DELETE LOCATION 
