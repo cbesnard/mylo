@@ -36,8 +36,8 @@ public class MyActivity extends Activity {
     private TextView titleview;
     //private ImageButton addButton;
     private CircledImageView addButton;
-    static public CircledImageView endLoader;
-    static public TextView errorTxtView;
+    public CircledImageView endLoader;
+    public TextView errorTxtView;
     private GoogleApiClient mGoogleApiClient;
     public AnimatedView animatedview;
     public LinearLayout container;
@@ -56,21 +56,17 @@ public class MyActivity extends Activity {
         titleview.setTextColor(Color.BLACK);
         titleview.setTextSize(26);
         titleview.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        titleview.setPadding(0, 0, 0, 0);// llp.setPadding(left, top, right, bottom);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(0, 20, 0, 0); // llp.setMargins(left, top, right, bottom);
+        llp.gravity= Gravity.CENTER_HORIZONTAL;
+        titleview.setLayoutParams(llp);
         titleview.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        /*addButton = new ImageButton(this);
-        //addButton.setImageResource(R.drawable.ic_launcher);android_wear_addButton
-        addButton.setImageResource(R.drawable.android_wear_addbutton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("in on click","add button clicked");
-                onButtonClicked();
-            }
-        });*/
         addButton = new CircledImageView(this);
         addButton.setImageResource(R.drawable.android_wear_addbutton);
-        addButton.setCircleRadius(150);
+        addButton.setCircleRadius(120);
+        addButton.setPadding(0, 0, 0, 0);// llp.setPadding(left, top, right, bottom);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,10 +155,11 @@ public class MyActivity extends Activity {
 
             @Override
             public void run() {
+                Log.i(TAG, "End of response display: back to add button");
                 errorTxtView.setVisibility(View.GONE);
                 addButton.setVisibility(View.VISIBLE);
             }
-        },4000);
+        },2500);
     }
 
     public void onButtonClicked() {
