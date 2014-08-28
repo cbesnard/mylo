@@ -41,6 +41,7 @@ public class MyActivity extends Activity {
     private LocationListener locationListener;
     public LocationManager locationManager;
     public static int appState;
+    public static boolean updated;
     private static final String TAG = MyActivity.class.getSimpleName();
     private static final String PROPERTY_ID = "UA-51649868-2";
 
@@ -48,7 +49,9 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_my);
-        myJsInterface.activity=this;
+        updated = false;
+        onCreate=false;
+        Log.i(TAG,"onCreate called");
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
         w.setWebContentsDebuggingEnabled (true);
@@ -60,6 +63,7 @@ public class MyActivity extends Activity {
                 //
                 readDatas();
                 webviewEndOfLoad=true;
+
             }
         });
         w.loadUrl("file:///android_asset/www/index.html");
@@ -77,15 +81,18 @@ public class MyActivity extends Activity {
         makeUseOfNewLocation(lastKnownLocation);
         //currentLoc = lastKnownLocation;
         //
-        onCreate=false;
+
         appState=0;
     }
 
     @Override
     protected void onResume() {
+        Log.i(TAG,"onResume called");
         super.onResume();
+        myJsInterface.activity=this;
+        MyloWearService.activity=this;
         // Acquire a reference to the system Location Manager
-        sendGATrackerEvent("Flags", "Launch_App", "");
+        sendGATrackerEvent("Flags", "Resume_App", "");
         /**/
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
@@ -97,7 +104,7 @@ public class MyActivity extends Activity {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 makeUseOfNewLocation(location);
-                Log.v("location changed", "lat:"+location.getLatitude()+"lon:"+location.getLongitude());
+                //Log.v("location changed", "lat:"+location.getLatitude()+"lon:"+location.getLongitude());
             }
             public void onStatusChanged(String provider, int status, Bundle extras) {}
             public void onProviderEnabled(String provider) {}
@@ -105,12 +112,24 @@ public class MyActivity extends Activity {
         };
         // Register the listener with the Location Manager to receive location updates
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, locationListener);
+
+        //CHECK FOR UPDATES AND REFRESH IF ANY
+        refreshUserDatas();
     }
 
     @Override
     protected void onPause() {
+        Log.i(TAG,"onPause called");
         super.onPause();
         locationManager.removeUpdates(locationListener);
+        myJsInterface.activity = null;
+        MyloWearService.activity = null;
+    }
+
+    @Override
+    protected void onStop(){
+        Log.i(TAG,"onStop called");
+        super.onStop();
     }
 
     @Override
@@ -125,6 +144,14 @@ public class MyActivity extends Activity {
         }
     }
 
+    public void refreshUserDatas(){
+        Log.i(TAG, "In refreshUserDatas method");
+        if(updated){
+            Log.i(TAG, "updates detected: calling readDatas");
+            readDatas();
+            updated=false;
+        }else {Log.i(TAG, "No updates");}
+    }
     /** Determines whether one Location reading is better than the current Location fix
      * @param location  The new Location that you want to evaluate
      * @param currentBestLocation  The current Location fix, to which you want to compare the new one
@@ -180,9 +207,11 @@ public class MyActivity extends Activity {
 
     /** Make use of new location */
     public void makeUseOfNewLocation(Location loc) {
+        //Log.v(TAG, "in makeUseOfNewLocation method");
         if(currentLoc !=null){
             if(isBetterLocation(loc,currentLoc)){
-                Log.v("new best location", "lat:"+loc.getLatitude()+"lon:"+loc.getLongitude());
+                //Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
+                //Log.v(TAG, "loc age in nano="+loc.getElapsedRealtimeNanos()+"loc age in millisec="+loc.getTime());
                 currentLoc=loc;
                 if(webviewEndOfLoad){
                     w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
@@ -194,12 +223,12 @@ public class MyActivity extends Activity {
     }
     /***/
     private void readDatas() {
-        Log.v("in read data method","in read data method");
+        Log.i(TAG,"in read data method");
         String FILENAME = "data.txt";
 
         if(isExternalStorageReadable()){
             String root = Environment.getExternalStorageDirectory().toString();
-            Log.v("external storage file ","root: "+root);
+            //Log.v("external storage file ","root: "+root);
             File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
             //myDir.mkdirs();
 
@@ -216,26 +245,38 @@ public class MyActivity extends Activity {
                     }
                     isr.close();
                     fis.close();
-                    Log.v("read data = ",sb.toString());
-                    Log.v("call javascript ","initUserDatas ");
-                    //w.loadUrl("javascript:initUserDatas('"+sb.toString()+"')");
-                    w.loadUrl("javascript:initUserDatas('"+sb+"')");
-                    //w.loadUrl("javascript:initUserDatas('')");
+                    //Log.v("read data = ",sb.toString());
+
+                    if(!onCreate){
+                        Log.i(TAG,"onCreate=false => calling javascript init");
+                        //if(webviewEndOfLoad){
+                            w.loadUrl("javascript:initUserDatas('"+sb+"')");
+                        //}
+                        onCreate=true;
+                    }else{
+                        Log.i(TAG,"onCreate=true");
+                        if(webviewEndOfLoad){
+                            Log.v(TAG,"onCreate=false => webviewEndOfLoad");
+                            w.loadUrl("javascript:refreshData('"+sb+"')");
+                        }
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     sendGATrackerEvent("Action_fail", "read_data", "error while reading data");
                 }
             }else{
-                Log.v("file doesn't exist","file"+FILENAME+" doesn't exist");
+                Log.e(TAG,"file"+FILENAME+" doesn't exist");
                 w.loadUrl("javascript:initUserDatas('')");
             }
         }else{
-            Log.v("error while reading file","external storage not readable");
+            Log.e(TAG,"error while reading file: external storage not readable");
             sendGATrackerEvent("Action_fail", "read_data", "not_readable");
         }
 
     }
+
     /***/
     private boolean fileExistence(String FILE){
         File file = getFileStreamPath(FILE);

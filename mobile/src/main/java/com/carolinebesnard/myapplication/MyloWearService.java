@@ -6,6 +6,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,7 +32,7 @@ import java.util.Locale;
  * Created by carolinebesnard on 17/07/2014.
  */
 public class MyloWearService extends WearableListenerService {
-
+    public static MyActivity activity;
     private String userDatas;
     private GoogleApiClient mGoogleApiClient;
     static public final String PATH_STRING = "/MESSAGE";
@@ -125,7 +127,10 @@ public class MyloWearService extends WearableListenerService {
                     storeDatas(obj.toString());
 
                     Log.i(TAG,"Store new location SUCCESS");
-                    //MESSAGE WEAR FOR END OF LOAD
+                    //
+                    MyActivity.updated = true;
+                    callRefreshUserDatas();
+                    //MESSAGE WEAR FOR END OF LOAD SUCCESS
                     if(mGoogleApiClient == null){
                         return;
                     }
@@ -138,13 +143,22 @@ public class MyloWearService extends WearableListenerService {
                     //error case
                     Log.i(TAG,"ERROR: Couldn't store new location address: send error message wear service");
                     //Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
+                    //MESSAGE WEAR FOR END OF LOAD
+                    if(mGoogleApiClient == null){
+                        return;
+                    }
                     byte [] data = new byte[]{(byte)0};
                     Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
                 }
-            }else {
+            }else {//MyActivity.currentLoc is null => no good and accurate location found
                 //error case
-                Log.i(TAG,"ERROR: Couldn't find user location: send error message wear service");
+                Log.i(TAG,"ERROR: MyActivity.currentLoc is null: couldn't find accurate user location: sending error message to wear");
                 //Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
+                //MESSAGE WEAR FOR END OF LOAD
+                if(mGoogleApiClient == null){
+                    Log.i(TAG,"ERROR: mGoogleApiClient is null : couldn't send message to wear");
+                    return;
+                }
                 byte [] data = new byte[]{(byte)0};
                 Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
             }
@@ -152,13 +166,34 @@ public class MyloWearService extends WearableListenerService {
 
         }
     }
-
+    public void callRefreshUserDatas(){
+        if (activity!=null){
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.refreshUserDatas();
+                }
+            });
+        }
+    }
     /** Make use of new location */
     public void makeUseOfNewLocation(Location loc) {
+        Log.i(TAG,"In makeUseOfNewLocation method");
+        if(MyActivity.currentLoc !=null){
+            Log.i(TAG,"MyActivity.currentLoc: lat="+MyActivity.currentLoc.getLatitude()+" , lon="+MyActivity.currentLoc.getLongitude());
+        }
+        if(loc!=null){
+            Log.i(TAG,"Last known loc=: lat="+loc.getLatitude()+" , lon="+loc.getLongitude());
+        }
         if(MyActivity.isBetterLocation(loc,MyActivity.currentLoc)){
+            /*Long t = SystemClock.elapsedRealtimeNanos();
+            Long locT = loc.getElapsedRealtimeNanos();
+            Log.i(TAG,"current time in nano="+t);
+            Log.i(TAG,"loc age in nano="+locT);
+            Long age = t-locT;//in nanosec
+            age = age/1000;//in millisec*/
             //Log.v("new best location", "lat:"+loc.getLatitude()+"lon:"+loc.getLongitude());
             MyActivity.currentLoc=loc;
-            //do what i need to do here
         }
     }
 

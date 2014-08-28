@@ -46,6 +46,6 @@ public class MyloWearServiceListener extends WearableListenerService {
                     }
                 });
             }
-        }
+        }else{ Log.i(TAG,"Activity is null");}
     }
 }

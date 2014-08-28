@@ -47,7 +47,8 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyloWearServiceListener.activity=this;
+        //MyloWearServiceListener.activity=this;
+        Log.i(TAG,"onCreate called");
         context = this;
         //View view = this.getWindow().getDecorView();
         //view.setBackgroundColor(Color.GREEN);
@@ -108,21 +109,22 @@ public class MyActivity extends Activity {
                 .addApi(Wearable.API)
                 .build();
         mGoogleApiClient.connect();
-
-        //TEST
-        /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                animatedview.doneLoading=true;
-                //android_wear_loader_end
-                endLoader.setVisibility(View.VISIBLE);
-                container.invalidate();
-            }
-        }, 10000);*/
-
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.i(TAG,"onResume called");
+        MyloWearServiceListener.activity = this;
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.i(TAG,"onPause called");
+        MyloWearServiceListener.activity = null;
     }
     @Override
     protected void onStop(){
+        Log.i(TAG,"onStop called");
         super.onStop();
         MyloWearServiceListener.activity = null;
     }
@@ -176,31 +178,18 @@ public class MyActivity extends Activity {
             animatedview.setVisibility(View.VISIBLE);
             animatedview.startAnimating(0f,360f);
 
-            /*Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    animatedview.doneLoading=true;
-                    //android_wear_loader_end
-                    animatedview.setVisibility(View.GONE);
-                    endLoader.setVisibility(View.VISIBLE);
-                    //
-                    Handler h = new Handler();
-                    h.postDelayed(new Runnable(){
+            /*Handler h = new Handler();
+            h.postDelayed(new Runnable(){
 
-                        @Override
-                        public void run() {
-                            endLoader.setVisibility(View.GONE);
-                            addButton.setVisibility(View.VISIBLE);
-                        }
-                    },1000);
+                @Override
+                public void run() {
+                    //past this time something went wrong
+                    addErrorDisplay();
                 }
-            }, 10000);*/
+            },5000);*/
+
         } catch(Exception e) { // or your specific exception
             Log.i("Exception catched","error: "+e.getMessage());
         }
-        /*Intent intent = new Intent();
-        intent.setClass(this,loaderActivity.class);
-        startActivity(intent);*/
-        //Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
     }
 }

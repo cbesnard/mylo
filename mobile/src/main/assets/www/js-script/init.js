@@ -403,6 +403,39 @@ function displayUserDatas(){
     }, 350, "linear");
 }
 
+/*
+*
+*/
+function refreshData(stringDatas){
+    console.log("in refreshData function");
+    //PARSE NEW USER DATAS
+    try{
+        console.log("Android data received is"+stringDatas);
+        if(stringDatas.length>0){
+            //RETRIEVE USER DATA
+            var datas = JSON.parse(stringDatas);
+            userGroups = datas.groups;
+            locations = datas.locs;
+        }
+        //SET USER GROUPS
+        nb_user_group = userGroups.length; 
+        //console.log(nb_user_group);
+        var i = 0;
+        //for(i=locations.length-1;i>=0;i--)
+        for(i=0;i<userGroups.length;i++)    //user's groups ids start at 1
+        {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
+            groups[userGroups[i].id].name = userGroups[i].name; 
+        }
+    }catch(e){
+       console.log("error : "+e.message);
+    }
+    //DISPLAY REFRESHED USER DATAS
+    var groupToDisplay = $('.currentGroup').attr('name');
+    var idGroupToDisplay = parseInt(groupToDisplay);
+    var locToDisplay = getPositions(idGroupToDisplay);
+    printUserLocation(idGroupToDisplay,locToDisplay,fadeIN2);
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
 *   MOUSE EVENT
 * * * * * * * * * * * * * * * * * * * * * * * * * * */
