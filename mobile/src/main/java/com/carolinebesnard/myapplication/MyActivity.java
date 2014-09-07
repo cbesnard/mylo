@@ -7,6 +7,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -58,12 +59,11 @@ public class MyActivity extends Activity {
         w.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
+                webviewEndOfLoad=true;
                 // do your stuff here
                 w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
                 //
                 readDatas();
-                webviewEndOfLoad=true;
-
             }
         });
         w.loadUrl("file:///android_asset/www/index.html");
@@ -113,8 +113,11 @@ public class MyActivity extends Activity {
         // Register the listener with the Location Manager to receive location updates
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, locationListener);
 
-        //CHECK FOR UPDATES AND REFRESH IF ANY
-        refreshUserDatas();
+        if(onCreate){
+            Log.i(TAG,"onCreate=true");
+            //CHECK FOR UPDATES AND REFRESH IF ANY
+            refreshUserDatas();
+        }
     }
 
     @Override
@@ -249,15 +252,21 @@ public class MyActivity extends Activity {
 
                     if(!onCreate){
                         Log.i(TAG,"onCreate=false => calling javascript init");
-                        //if(webviewEndOfLoad){
-                            w.loadUrl("javascript:initUserDatas('"+sb+"')");
-                        //}
+                        Log.v(TAG,"read data= '"+sb.toString()+"'");
+                        Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
+                        if(webviewEndOfLoad){
+                            String converted = Base64.encodeToString(sb.toString().getBytes(), Base64.DEFAULT);
+                            String url="javascript:initUserDatas('"+converted+"')";
+                            Log.i(TAG,"url="+url);
+                            w.loadUrl(url);
+                        }
                         onCreate=true;
                     }else{
                         Log.i(TAG,"onCreate=true");
                         if(webviewEndOfLoad){
-                            Log.v(TAG,"onCreate=false => webviewEndOfLoad");
-                            w.loadUrl("javascript:refreshData('"+sb+"')");
+                            Log.v(TAG,"onCreate=true => webviewEndOfLoad");
+                            String converted = Base64.encodeToString(sb.toString().getBytes(), Base64.DEFAULT);
+                            w.loadUrl("javascript:refreshData('"+converted+"')");
                         }
                     }
 

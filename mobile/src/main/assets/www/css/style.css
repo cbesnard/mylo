@@ -187,8 +187,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 }
 
 .new{
-	border-top:1px solid #fBfBfB;
-	background-color: #f2F1F1;
+	border-top:1px solid #F2F1F1;
+	background-color: #f9F9F9;
 }
 .loc .container{
 	float: left;

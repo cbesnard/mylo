@@ -346,10 +346,12 @@ function setUI(callback){
 function initUserDatas(stringDatas){
     console.log("in initUserDatas function");
     try{
-        console.log("Android data received is"+stringDatas);
+        console.log("Android data received is"+stringDatas.toString());
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
-            var datas = JSON.parse(stringDatas);
+            var decoded = window.atob(stringDatas);
+            var datas = JSON.parse(decoded);
+            //var datas = stringDatas;
             userGroups = datas.groups;
             locations = datas.locs;
         }
@@ -413,7 +415,8 @@ function refreshData(stringDatas){
         console.log("Android data received is"+stringDatas);
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
-            var datas = JSON.parse(stringDatas);
+            var decoded = window.atob(stringDatas);
+            var datas = JSON.parse(decoded);
             userGroups = datas.groups;
             locations = datas.locs;
         }
