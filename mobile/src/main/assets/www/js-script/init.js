@@ -607,7 +607,7 @@ function afterDrag(){
     if(dragType=='loc'){
         if(selectedDraggable.hasClass("new")){
             $('.group').addClass('droppable');
-            selectedDraggable.css('background-color','#f2f1f1');
+            selectedDraggable.css('background-color','#F9F9F9');
         }else{
             selectedDraggable.css('background-color','#ffffff');
             $('.currentGroup').addClass('droppable');

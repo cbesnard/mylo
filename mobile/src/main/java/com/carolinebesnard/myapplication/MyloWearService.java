@@ -91,7 +91,7 @@ public class MyloWearService extends WearableListenerService {
                     Log.i(TAG,"Get location address SUCCESS: address="+address);
                     //String city = addresses.get(0).getAddressLine(1);
                     //String country = addresses.get(0).getAddressLine(2);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     //error case
                     Log.i(TAG,"Couldn't get location address: send error message wear service");
@@ -102,54 +102,62 @@ public class MyloWearService extends WearableListenerService {
                 //READ USER DATAS
                 readDatas();
                 //Log.v("read data = ",userDatas);
+                if(address.length()>0){
+                    try {
+                        //DE-STRINGIFY DATA INTO AN OBJECT
+                        JSONObject obj = new JSONObject(userDatas);
+                        JSONArray mylocs = obj.getJSONArray("locs");
+                        //CREATE ID FOR NEW LOC
+                        int index = mylocs.length()-1;
+                        JSONObject lastloc = mylocs.getJSONObject(index);
+                        int id = lastloc.getInt("id")+1;
+                        //CREATE NEW LOC
+                        JSONObject newLoc = new JSONObject("{\"id\":"+id+",\"name\":\"\",\"group\":0,\"lat\":"+MyActivity.currentLoc.getLatitude()+",\"lon\":"+MyActivity.currentLoc.getLongitude()+",\"adr\":\""+address+"\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
+                        //{"id":0,"name":"work","group":0,"lat":48.8708832,"lon":2.346594,"adr":"GPS location near: Mail, Paris, France","country":"","publicName":"","gps":1},
 
-                try {
-                    //DE-STRINGIFY DATA INTO AN OBJECT
-                    JSONObject obj = new JSONObject(userDatas);
-                    JSONArray mylocs = obj.getJSONArray("locs");
-                    //CREATE ID FOR NEW LOC
-                    int index = mylocs.length()-1;
-                    JSONObject lastloc = mylocs.getJSONObject(index);
-                    int id = lastloc.getInt("id")+1;
-                    //CREATE NEW LOC
-                    JSONObject newLoc = new JSONObject("{\"id\":"+id+",\"name\":\"\",\"group\":0,\"lat\":"+MyActivity.currentLoc.getLatitude()+",\"lon\":"+MyActivity.currentLoc.getLongitude()+",\"adr\":\""+address+"\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
-                    //{"id":0,"name":"work","group":0,"lat":48.8708832,"lon":2.346594,"adr":"GPS location near: Mail, Paris, France","country":"","publicName":"","gps":1},
+                        //ADD NEW LOC TO location OBJECT
+                        mylocs.put(newLoc);
+                        //Log.v("new locs obj= ",mylocs.toString());
 
-                    //ADD NEW LOC TO location OBJECT
-                    mylocs.put(newLoc);
-                    //Log.v("new locs obj= ",mylocs.toString());
+                        //ADD NEW LOC TO DATA OBJECT
+                        obj.put("locs",mylocs);
+                        //Log.v("new userDatas obj= ",obj.toString());
 
-                    //ADD NEW LOC TO DATA OBJECT
-                    obj.put("locs",mylocs);
-                    //Log.v("new userDatas obj= ",obj.toString());
+                        //STRINGIFY DATA //WRITE USER DATAS
+                        storeDatas(obj.toString());
 
-                    //STRINGIFY DATA //WRITE USER DATAS
-                    storeDatas(obj.toString());
+                        Log.i(TAG,"Store new location SUCCESS");
+                        //
+                        MyActivity.updated = true;
+                        callRefreshUserDatas();
+                        //MESSAGE WEAR FOR END OF LOAD SUCCESS
+                        if(mGoogleApiClient == null){
+                            return;
+                        }
+                        Log.i(TAG,"Send message to wear: mGoogleApiClient="+mGoogleApiClient.toString());
+                        byte [] data = new byte[]{(byte)1};
+                        Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
 
-                    Log.i(TAG,"Store new location SUCCESS");
-                    //
-                    MyActivity.updated = true;
-                    callRefreshUserDatas();
-                    //MESSAGE WEAR FOR END OF LOAD SUCCESS
-                    if(mGoogleApiClient == null){
-                        return;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //error case
+                        Log.i(TAG,"ERROR: Couldn't store new location address: send error message wear service");
+                        //Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
+                        //MESSAGE WEAR FOR END OF LOAD
+                        if(mGoogleApiClient == null){
+                            return;
+                        }
+                        byte [] data = new byte[]{(byte)0};
+                        Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
                     }
-                    Log.i(TAG,"Send message to wear: mGoogleApiClient="+mGoogleApiClient.toString());
-                    byte [] data = new byte[]{(byte)1};
-                    Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }else{
                     //error case
-                    Log.i(TAG,"ERROR: Couldn't store new location address: send error message wear service");
+                    Log.i(TAG,"Couldn't get location address, address is empty: send error message wear service");
                     //Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
-                    //MESSAGE WEAR FOR END OF LOAD
-                    if(mGoogleApiClient == null){
-                        return;
-                    }
                     byte [] data = new byte[]{(byte)0};
                     Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
                 }
+
             }else {//MyActivity.currentLoc is null => no good and accurate location found
                 //error case
                 Log.i(TAG,"ERROR: MyActivity.currentLoc is null: couldn't find accurate user location: sending error message to wear");
