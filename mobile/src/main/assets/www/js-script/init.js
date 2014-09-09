@@ -349,7 +349,8 @@ function initUserDatas(stringDatas){
         console.log("Android data received is"+stringDatas.toString());
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
-            var decoded = window.atob(stringDatas);
+            var d = window.atob(stringDatas);
+            var decoded = _utf8_decode(d);
             var datas = JSON.parse(decoded);
             //var datas = stringDatas;
             userGroups = datas.groups;
@@ -415,7 +416,8 @@ function refreshData(stringDatas){
         console.log("Android data received is"+stringDatas);
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
-            var decoded = window.atob(stringDatas);
+            var d = window.atob(stringDatas);
+            var decoded = _utf8_decode(d);
             var datas = JSON.parse(decoded);
             userGroups = datas.groups;
             locations = datas.locs;
@@ -935,4 +937,35 @@ function myMouseLeave(obj){
     }
     //empty slected droppable
     selectedDroppable = null;
+}
+
+// private method for UTF-8 decoding
+function _utf8_decode(utftext) {
+    var string = "";
+    var i = 0;
+    var c = c1 = c2 = 0;
+
+    while ( i < utftext.length ) {
+
+        c = utftext.charCodeAt(i);
+
+        if (c < 128) {
+            string += String.fromCharCode(c);
+            i++;
+        }
+        else if((c > 191) && (c < 224)) {
+            c2 = utftext.charCodeAt(i+1);
+            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+            i += 2;
+        }
+        else {
+            c2 = utftext.charCodeAt(i+1);
+            c3 = utftext.charCodeAt(i+2);
+            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            i += 3;
+        }
+
+    }
+
+    return string;
 }

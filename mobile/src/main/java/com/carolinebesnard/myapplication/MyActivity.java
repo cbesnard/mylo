@@ -239,7 +239,7 @@ public class MyActivity extends Activity {
             if (file.exists ()){
                 try {
                     FileInputStream fis = new FileInputStream(file);
-                    InputStreamReader isr = new InputStreamReader(fis);
+                    InputStreamReader isr = new InputStreamReader(fis,"UTF-8");
                     BufferedReader bufferedReader = new BufferedReader(isr);
                     StringBuilder sb = new StringBuilder();
                     String line;
@@ -255,7 +255,7 @@ public class MyActivity extends Activity {
                         Log.v(TAG,"read data= '"+sb.toString()+"'");
                         Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
                         if(webviewEndOfLoad){
-                            String converted = Base64.encodeToString(sb.toString().getBytes(), Base64.DEFAULT);
+                            String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             String url="javascript:initUserDatas('"+converted+"')";
                             Log.i(TAG,"url="+url);
                             w.loadUrl(url);
@@ -265,7 +265,7 @@ public class MyActivity extends Activity {
                         Log.i(TAG,"onCreate=true");
                         if(webviewEndOfLoad){
                             Log.v(TAG,"onCreate=true => webviewEndOfLoad");
-                            String converted = Base64.encodeToString(sb.toString().getBytes(), Base64.DEFAULT);
+                            String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             w.loadUrl("javascript:refreshData('"+converted+"')");
                         }
                     }
