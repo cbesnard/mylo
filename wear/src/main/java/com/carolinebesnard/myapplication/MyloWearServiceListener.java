@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.WearableListenerService;
 
 
@@ -48,4 +49,16 @@ public class MyloWearServiceListener extends WearableListenerService {
             }
         }else{ Log.i(TAG,"Activity is null");}
     }
+
+    /*@Override
+    public void onPeerConnected (Node peer){
+        super.onPeerConnected(peer);
+        MyActivity.deviceIsConnected = true;
+    }
+
+    @Override
+    public void onPeerDisconnected (Node peer){
+        super.onPeerDisconnected(peer);
+        MyActivity.deviceIsConnected = false;
+    }*/
 }

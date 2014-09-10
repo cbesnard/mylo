@@ -35,6 +35,7 @@ public class MyActivity extends Activity {
 
     private TextView titleview;
     //private ImageButton addButton;
+    //public static Boolean deviceIsConnected;
     private CircledImageView addButton;
     public CircledImageView endLoader;
     public TextView errorTxtView;
@@ -50,6 +51,7 @@ public class MyActivity extends Activity {
         //MyloWearServiceListener.activity=this;
         Log.i(TAG,"onCreate called");
         context = this;
+        //deviceIsConnected = true;
         //View view = this.getWindow().getDecorView();
         //view.setBackgroundColor(Color.GREEN);
         titleview = new TextView(this);
@@ -170,26 +172,66 @@ public class MyActivity extends Activity {
             if(mGoogleApiClient == null){
                 return;
             }
-            Log.i("mGoogleApiClient","="+mGoogleApiClient.toString());
-            Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
+            Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
             //launch loader
             addButton.setVisibility(View.GONE);
             animatedview.doneLoading=false;
             animatedview.setVisibility(View.VISIBLE);
             animatedview.startAnimating(0f,360f);
 
-            /*Handler h = new Handler();
-            h.postDelayed(new Runnable(){
+            //if(deviceIsConnected==true){
+                //Log.i(TAG,"deviceIsConnected="+deviceIsConnected);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "in new thread run method");
+                        NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
 
-                @Override
-                public void run() {
-                    //past this time something went wrong
-                    addErrorDisplay();
-                }
-            },5000);*/
+                        Log.i(TAG, "nodes.getNodes().isEmpty()="+nodes.getNodes().isEmpty());
+
+                        if(nodes.getNodes().isEmpty()){
+                            // Log an error : No device over bluetooth
+                            Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                            //addErrorDisplay();
+                            MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MyloWearServiceListener.activity.addErrorDisplay();
+                                }
+                            });
+                        }
+                        else { //device over bluetooth
+                            for (Node node : nodes.getNodes()) {
+                                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/MESSAGE", null).await();
+                                if (result.getStatus().isSuccess()) {
+                                    Log.i(TAG, "Message sent to handle device ");
+                                }
+                                else {
+                                    // Log an error
+                                    Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                                    //addErrorDisplay();
+                                    MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MyloWearServiceListener.activity.addErrorDisplay();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }).start();
+
+                Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
+
+            //}else {
+            //    Log.i(TAG,"Error: device is out of reach");
+            //    addErrorDisplay();
+            //}
 
         } catch(Exception e) { // or your specific exception
-            Log.i("Exception catched","error: "+e.getMessage());
+            Log.i(TAG,"Exception catched: "+e.getMessage());
+            addErrorDisplay();
         }
     }
 }
