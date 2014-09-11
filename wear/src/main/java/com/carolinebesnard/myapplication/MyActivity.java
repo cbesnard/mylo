@@ -44,6 +44,8 @@ public class MyActivity extends Activity {
     public LinearLayout container;
     private Context context;
     private static final String TAG = MyActivity.class.getSimpleName();
+    public static final String OutOfReachErrorString = "Sorry, your phone is out of reach verify your bluetooth and try again :)";
+    public static final String AddLocErrorString = "Sorry, your position couldn't be found!\nTry again later :)";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public class MyActivity extends Activity {
         endLoader.setVisibility(View.INVISIBLE);
 
         errorTxtView = new TextView(this);
-        errorTxtView.setText("\nSorry, your position couldn't be found!\nTry again later :)");
+        errorTxtView.setText(AddLocErrorString);
         errorTxtView.setTextColor(Color.GRAY);
         errorTxtView.setTextSize(18);
         errorTxtView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
@@ -146,11 +148,12 @@ public class MyActivity extends Activity {
         },1000);
     }
 
-    public void addErrorDisplay(){
+    public void addErrorDisplay(String message){
         titleview.setVisibility(View.VISIBLE);
         addButton.setVisibility(View.GONE);
         animatedview.setVisibility(View.GONE);
         endLoader.setVisibility(View.GONE);
+        errorTxtView.setText("\n"+message);
         errorTxtView.setVisibility(View.VISIBLE);
         //
         Log.i(TAG, "In addErrorDisplay method");
@@ -196,7 +199,7 @@ public class MyActivity extends Activity {
                             MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MyloWearServiceListener.activity.addErrorDisplay();
+                                    MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
                                 }
                             });
                         }
@@ -213,7 +216,7 @@ public class MyActivity extends Activity {
                                     MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            MyloWearServiceListener.activity.addErrorDisplay();
+                                            MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
                                         }
                                     });
                                 }
@@ -231,7 +234,7 @@ public class MyActivity extends Activity {
 
         } catch(Exception e) { // or your specific exception
             Log.i(TAG,"Exception catched: "+e.getMessage());
-            addErrorDisplay();
+            addErrorDisplay(OutOfReachErrorString);
         }
     }
 }

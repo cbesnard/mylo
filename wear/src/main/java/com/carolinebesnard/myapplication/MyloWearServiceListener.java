@@ -43,7 +43,7 @@ public class MyloWearServiceListener extends WearableListenerService {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        activity.addErrorDisplay();
+                        activity.addErrorDisplay(MyActivity.AddLocErrorString);
                     }
                 });
             }
