@@ -14,6 +14,7 @@ import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -37,6 +38,7 @@ public class MyActivity extends Activity {
     //private ImageButton addButton;
     //public static Boolean deviceIsConnected;
     private CircledImageView addButton;
+    private Boolean addButtonMove;
     public CircledImageView endLoader;
     public TextView errorTxtView;
     private GoogleApiClient mGoogleApiClient;
@@ -50,12 +52,9 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //MyloWearServiceListener.activity=this;
         Log.i(TAG,"onCreate called");
         context = this;
-        //deviceIsConnected = true;
-        //View view = this.getWindow().getDecorView();
-        //view.setBackgroundColor(Color.GREEN);
+
         titleview = new TextView(this);
         titleview.setText("Quick Add");
         titleview.setTextColor(Color.BLACK);
@@ -72,11 +71,46 @@ public class MyActivity extends Activity {
         addButton.setImageResource(R.drawable.android_wear_addbutton);
         addButton.setCircleRadius(120);
         addButton.setPadding(0, 0, 0, 0);// llp.setPadding(left, top, right, bottom);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addButtonMove = false;
+        /*addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("in on click","add button clicked");
                 onButtonClicked();
+            }
+        });*/
+
+        addButton.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("IMAGE", "motion event: " + event.toString());
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        addButton.setImageResource(R.drawable.android_wear_addbutton_pressed);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if(!addButtonMove){
+                            addButton.setImageResource(R.drawable.android_wear_addbutton);
+                            onButtonClicked();
+                        }
+                        addButtonMove = false;
+                        break;
+
+                    case MotionEvent.ACTION_CANCEL:
+                        addButton.setImageResource(R.drawable.android_wear_addbutton);
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        addButton.setImageResource(R.drawable.android_wear_addbutton);
+                        addButtonMove = true;
+                        break;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
@@ -94,7 +128,6 @@ public class MyActivity extends Activity {
         errorTxtView.setTextColor(Color.GRAY);
         errorTxtView.setTextSize(18);
         errorTxtView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-        //errorTxtView.setGravity(Gravity.CENTER_HORIZONTAL);
         errorTxtView.setGravity(Gravity.CENTER);
         errorTxtView.setVisibility(View.INVISIBLE);
 
@@ -128,8 +161,8 @@ public class MyActivity extends Activity {
     }
     @Override
     protected void onStop(){
-        Log.i(TAG,"onStop called");
         super.onStop();
+        Log.i(TAG,"onStop called");
         MyloWearServiceListener.activity = null;
     }
 
@@ -182,55 +215,48 @@ public class MyActivity extends Activity {
             animatedview.setVisibility(View.VISIBLE);
             animatedview.startAnimating(0f,360f);
 
-            //if(deviceIsConnected==true){
-                //Log.i(TAG,"deviceIsConnected="+deviceIsConnected);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "in new thread run method");
-                        NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i(TAG, "in new thread run method");
+                    NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
 
-                        Log.i(TAG, "nodes.getNodes().isEmpty()="+nodes.getNodes().isEmpty());
+                    Log.i(TAG, "nodes.getNodes().isEmpty()="+nodes.getNodes().isEmpty());
 
-                        if(nodes.getNodes().isEmpty()){
-                            // Log an error : No device over bluetooth
-                            Log.i(TAG, "MESSAGE ERROR: failed to send Message");
-                            //addErrorDisplay();
-                            MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
-                                }
-                            });
-                        }
-                        else { //device over bluetooth
-                            for (Node node : nodes.getNodes()) {
-                                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/MESSAGE", null).await();
-                                if (result.getStatus().isSuccess()) {
-                                    Log.i(TAG, "Message sent to handle device ");
-                                }
-                                else {
-                                    // Log an error
-                                    Log.i(TAG, "MESSAGE ERROR: failed to send Message");
-                                    //addErrorDisplay();
-                                    MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
-                                        }
-                                    });
-                                }
+                    if(nodes.getNodes().isEmpty()){
+                        // Log an error : No device over bluetooth
+                        Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                        //addErrorDisplay();
+                        MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
+                            }
+                        });
+                    }
+                    else { //device over bluetooth
+                        for (Node node : nodes.getNodes()) {
+                            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/MESSAGE", null).await();
+                            if (result.getStatus().isSuccess()) {
+                                Log.i(TAG, "Message sent to handle device ");
+                            }
+                            else {
+                                // Log an error
+                                Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                                //addErrorDisplay();
+                                MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MyloWearServiceListener.activity.addErrorDisplay(OutOfReachErrorString);
+                                    }
+                                });
                             }
                         }
                     }
-                }).start();
+                }
+            }).start();
 
-                Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
-
-            //}else {
-            //    Log.i(TAG,"Error: device is out of reach");
-            //    addErrorDisplay();
-            //}
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
 
         } catch(Exception e) { // or your specific exception
             Log.i(TAG,"Exception catched: "+e.getMessage());
