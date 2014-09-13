@@ -69,6 +69,7 @@ searching_position:0,
 out_of_draggable:0,
 ready_to_delete:0,//mylo_UI_init_variables[0].clone
 clone:null,
+longPress_vibration_time:10,//mylo_UI_init_variables[0].longPress_vibration_time
 });
 //var loader_size=80;
 //var myWatchID;

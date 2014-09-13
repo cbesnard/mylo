@@ -69,8 +69,9 @@ function androidBackButtonPressed(){
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	VIBRATE
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-function vibrate() {
-	//navigator.notification.vibrate(20);
+function vibrate(milliseconds) {
+	console.log("in JAVASCRIPT vibrate function");
+	Android.phoneVibrate(milliseconds);
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	GA success handler
@@ -87,7 +88,7 @@ function errorHandler() {
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function hideAndroidSoftwareKeyboard(){
 	console.log("in JAVASCRIPT hideAndroidSoftwareKeyboard function");
-	Android.hideKeyboard();
+	//Android.hideKeyboard();
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	SEND ANDROID GA TRACKER EVENT

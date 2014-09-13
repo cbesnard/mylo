@@ -35,7 +35,7 @@ function bindGroupEvents(){
 			selectedDraggable = $(this);
 			// Set timeout to check for longpress
 			pressTimer = window.setTimeout(function(){
-				vibrate();
+				vibrate(mylo_UI_init_variables[0].longPress_vibration_time);
 				dragType = "group";
 				dragStart(e.pageX, e.pageY);
 				//GA
@@ -458,7 +458,7 @@ function bindLocsEvents(){
 			selectedDraggable = $(this);
 			// Set timeout to check for longpress
 			pressTimer = window.setTimeout(function(){
-				vibrate();
+				vibrate(mylo_UI_init_variables[0].longPress_vibration_time);
 				dragType = "loc";
 				dragStart(e.pageX, e.pageY);
 				//GA
@@ -787,7 +787,7 @@ function displayNewGroup(id,name){
 		if(!isDragging){
 			selectedDraggable = $(this);
 			pressTimer = window.setTimeout(function(){
-				vibrate();
+				vibrate(mylo_UI_init_variables[0].longPress_vibration_time);
 				dragType = "group";
 				dragStart(e.pageX, e.pageY);
 			},mylo_UI_init_variables[0].longPressTimer);

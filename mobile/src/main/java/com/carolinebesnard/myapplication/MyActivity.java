@@ -7,6 +7,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -395,33 +396,17 @@ class myJsInterface {
     }
 
     @JavascriptInterface
-    public void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(webview, InputMethodManager.SHOW_IMPLICIT);
-        ((InputMethodManager) con.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(webview,0);
-        Log.v(TAG,"show keyboard called");
+    public void phoneVibrate(int milliseconds) {
+        Vibrator v = (Vibrator) con.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for milliseconds milliseconds
+        v.vibrate(milliseconds);
     }
-
-    @JavascriptInterface
-    public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(webview.getWindowToken(),0);
-        Log.v(TAG,"hide keyboard called");
-    }
-
 
     @JavascriptInterface
     public void storeDatas(String datas) {
         Log.v("storeDatas android method called","in android storeDatas ");
         String FILENAME = "data.txt";
-        /*try{
-            FileOutputStream fos = con.openFileOutput (FILENAME, Context.MODE_PRIVATE);
-            fos.write(datas.getBytes());
-            fos.close();
-        }catch (java.io.IOException e){
-            Log.v("error while writing file","error while writing file");
-            e.printStackTrace();
-        }*/
+
         if(isExternalStorageWritable()){
             String root = Environment.getExternalStorageDirectory().toString();
             Log.v("external storage file ","root: "+root);
