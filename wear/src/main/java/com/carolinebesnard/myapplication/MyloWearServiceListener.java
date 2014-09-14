@@ -25,10 +25,8 @@ public class MyloWearServiceListener extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent){
         super.onMessageReceived(messageEvent);
-        //messageEvent.getData()[0] == 1
-        Log.i(TAG,"In on messageReceived: message="+messageEvent);
+        //Log.i(TAG,"MESSAGE RECEIVED: message="+messageEvent.getPath());
         AnimatedView.doneLoading=true;
-        //AnimatedView.success=true;
         if (activity!=null){
             if(PATH_STRING.equals(messageEvent.getPath()) && messageEvent.getData()[0] == 1){
                 Log.i(TAG, "Add new loc SUCCESS");
@@ -48,6 +46,8 @@ public class MyloWearServiceListener extends WearableListenerService {
                     }
                 });
             }
-        }else{ Log.i(TAG,"Activity is null");}
+        }else{
+
+        }
     }
 }

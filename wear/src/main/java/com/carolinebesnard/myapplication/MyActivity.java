@@ -73,19 +73,11 @@ public class MyActivity extends Activity {
         addButton.setCircleRadius(120);
         addButton.setPadding(0, 0, 0, 0);// llp.setPadding(left, top, right, bottom);
         addButtonMove = false;
-        /*addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("in on click","add button clicked");
-                onButtonClicked();
-            }
-        });*/
 
         addButton.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.i("IMAGE", "motion event: " + event.toString());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         addButton.setImageResource(R.drawable.android_wear_addbutton_pressed);
@@ -116,7 +108,6 @@ public class MyActivity extends Activity {
         });
 
         animatedview = new AnimatedView(this);
-        //animatedview.startAnimating(0f,360f);
         animatedview.setVisibility(View.INVISIBLE);
 
         endLoader = new CircledImageView(this);
@@ -151,19 +142,16 @@ public class MyActivity extends Activity {
     @Override
     protected void onResume(){
         super.onResume();
-        Log.i(TAG,"onResume called");
         MyloWearServiceListener.activity = this;
     }
     @Override
     protected void onPause(){
         super.onPause();
-        Log.i(TAG,"onPause called");
         MyloWearServiceListener.activity = null;
     }
     @Override
     protected void onStop(){
         super.onStop();
-        Log.i(TAG,"onStop called");
         MyloWearServiceListener.activity = null;
     }
 
@@ -190,13 +178,11 @@ public class MyActivity extends Activity {
         errorTxtView.setText("\n"+message);
         errorTxtView.setVisibility(View.VISIBLE);
         //
-        Log.i(TAG, "In addErrorDisplay method");
         Handler h = new Handler();
         h.postDelayed(new Runnable(){
 
             @Override
             public void run() {
-                Log.i(TAG, "End of response display: back to add button");
                 errorTxtView.setVisibility(View.GONE);
                 addButton.setVisibility(View.VISIBLE);
             }
@@ -204,12 +190,10 @@ public class MyActivity extends Activity {
     }
 
     public void onButtonClicked() {
-        Log.i("in onButtonClicked","youhou");
         try{
             if(mGoogleApiClient == null){
                 return;
             }
-            Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
             //launch loader
             addButton.setVisibility(View.GONE);
             animatedview.doneLoading=false;
@@ -219,13 +203,12 @@ public class MyActivity extends Activity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i(TAG, "in new thread run method");
                     NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
                     Log.i(TAG, "nodes.getNodes().isEmpty()="+nodes.getNodes().isEmpty());
 
                     if(nodes.getNodes().isEmpty()){
                         // Log an error : No device over bluetooth
-                        Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                        Log.i(TAG, "SEND MESSAGE ERROR: failed to send Message, handheld device out of reach");
                         //addErrorDisplay
                         MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
                             @Override
@@ -240,11 +223,11 @@ public class MyActivity extends Activity {
                             byte [] data = d.getBytes();
                             MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), PATH_STRING, data).await();
                             if (result.getStatus().isSuccess()) {
-                                Log.i(TAG, "Message sent to handle device ");
+                                Log.i(TAG, "SEND MESSAGE SUCCESS: message successfully sent to handheld device");
                             }
                             else {
                                 // Log an error
-                                Log.i(TAG, "MESSAGE ERROR: failed to send Message");
+                                Log.i(TAG, "SEND MESSAGE ERROR: failed to send Message");
                                 //addErrorDisplay();
                                 MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
                                     @Override
