@@ -35,7 +35,7 @@ public class MyloWearService extends WearableListenerService {
     public static MyActivity activity;
     private String userDatas;
     private GoogleApiClient mGoogleApiClient;
-    static public final String PATH_STRING = "/MESSAGE";
+    static public final String PATH_STRING = "MYLO/ADD_NEW_LOC";
     private static final String TAG = MyloWearService.class.getSimpleName();
 
     @Override
@@ -52,9 +52,9 @@ public class MyloWearService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent){
         super.onMessageReceived(messageEvent);
-        Log.i(TAG,"Message received SUCCESS: message="+messageEvent);
+        Log.i(TAG,"Message received SUCCESS: message.getpath="+messageEvent.getPath()+" message="+messageEvent.getData().toString());
 
-        if("/MESSAGE".equals(messageEvent.getPath())) {
+        if(PATH_STRING.equals(messageEvent.getPath())) {
             // launch some Activity or do anything you like
             //Log.i(TAG,"in if /Message: message="+messageEvent);
             //GET USER LOCATION !!!

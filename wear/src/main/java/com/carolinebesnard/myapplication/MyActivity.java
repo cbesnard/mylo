@@ -46,8 +46,9 @@ public class MyActivity extends Activity {
     public LinearLayout container;
     private Context context;
     private static final String TAG = MyActivity.class.getSimpleName();
-    public static final String OutOfReachErrorString = "Sorry, your phone is out of reach verify your bluetooth and try again :)";
-    public static final String AddLocErrorString = "Sorry, your position couldn't be found!\nTry again later :)";
+    static public final String PATH_STRING = "MYLO/ADD_NEW_LOC";
+    public static final String OutOfReachErrorString = "Sorry, your phone is out of reach verify your bluetooth and try again :/";
+    public static final String AddLocErrorString = "Sorry, your position couldn't be found!\nTry again later :/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,13 +221,12 @@ public class MyActivity extends Activity {
                 public void run() {
                     Log.i(TAG, "in new thread run method");
                     NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
-
                     Log.i(TAG, "nodes.getNodes().isEmpty()="+nodes.getNodes().isEmpty());
 
                     if(nodes.getNodes().isEmpty()){
                         // Log an error : No device over bluetooth
                         Log.i(TAG, "MESSAGE ERROR: failed to send Message");
-                        //addErrorDisplay();
+                        //addErrorDisplay
                         MyloWearServiceListener.activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -236,7 +236,9 @@ public class MyActivity extends Activity {
                     }
                     else { //device over bluetooth
                         for (Node node : nodes.getNodes()) {
-                            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/MESSAGE", null).await();
+                            String d = "add_loc";
+                            byte [] data = d.getBytes();
+                            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), PATH_STRING, data).await();
                             if (result.getStatus().isSuccess()) {
                                 Log.i(TAG, "Message sent to handle device ");
                             }
@@ -256,7 +258,7 @@ public class MyActivity extends Activity {
                 }
             }).start();
 
-            Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
+            //Wearable.MessageApi.sendMessage(mGoogleApiClient, "", "/MESSAGE", null);
 
         } catch(Exception e) { // or your specific exception
             Log.i(TAG,"Exception catched: "+e.getMessage());

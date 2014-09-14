@@ -13,6 +13,7 @@ import com.google.android.gms.wearable.WearableListenerService;
  */
 public class MyloWearServiceListener extends WearableListenerService {
     static public MyActivity activity;
+    static public final String PATH_STRING = "MYLO/ADD_NEW_LOC";
     private static final String TAG = MyloWearServiceListener.class.getSimpleName();
 
     @Override
@@ -29,7 +30,7 @@ public class MyloWearServiceListener extends WearableListenerService {
         AnimatedView.doneLoading=true;
         //AnimatedView.success=true;
         if (activity!=null){
-            if(messageEvent.getData()[0] == 1){
+            if(PATH_STRING.equals(messageEvent.getPath()) && messageEvent.getData()[0] == 1){
                 Log.i(TAG, "Add new loc SUCCESS");
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -49,16 +50,4 @@ public class MyloWearServiceListener extends WearableListenerService {
             }
         }else{ Log.i(TAG,"Activity is null");}
     }
-
-    /*@Override
-    public void onPeerConnected (Node peer){
-        super.onPeerConnected(peer);
-        MyActivity.deviceIsConnected = true;
-    }
-
-    @Override
-    public void onPeerDisconnected (Node peer){
-        super.onPeerDisconnected(peer);
-        MyActivity.deviceIsConnected = false;
-    }*/
 }
