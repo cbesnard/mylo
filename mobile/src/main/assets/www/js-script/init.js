@@ -9,7 +9,7 @@ add_place_form_title_gps:"Add gps location",
 add_place_form_title_place:"Add place",
 edit_place_form_title:"Edit location's name",
 edit_place_form_validate_button:"Save",
-error_add_place_form_location_not_found:"Sorry, your position couldn't be found! Try again later :)",
+error_add_place_form_location_not_found:"Sorry, your position couldn't be found! Try again later :/",
 error_add_place_form_addr_not_found:"Address not recognized!",
 error_add_place_form_connexion_pb:"Sorry, your place couldn't be added due to connexion problems :/ \nTry again later!",
 first_time_group_txt_1:"What ",
@@ -71,81 +71,25 @@ ready_to_delete:0,//mylo_UI_init_variables[0].clone
 clone:null,
 longPress_vibration_time:10,//mylo_UI_init_variables[0].longPress_vibration_time
 });
-//var loader_size=80;
-//var myWatchID;
-//var mylo_UI_init_variables[0].userpos = {lat:0,lon:0};
-//var nameLimitLength = 15;
-//var groupNameLimitLength = 10;
-/*******************************************/
-//var longPressTimer = 200;
-/********* HEADER ******************/
-//var headerHeight = 45;
-//var headerWidth = screenWidth;
-/*********FORM BUttoNS***********/
-//var formInactiveColor = "cccccc";
-//var formActiveColor = "E52636";
-//var formFocusColor = "ac1c28";
-/**************GROUPS**********************/
-//var isAddingGroup = 0;
-//var groupsDivHeight = 125;
-//var groupSize = 80;
-//var gborerSize = 10;
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
-//var gGutter = 10;
-//var gFontSize = 20;
 /**************BUTTON ADD GROUP**************************/
-//var addGroupBorder = 1;
 var addGroupSize = mylo_UI_init_variables[0].groupSize+(mylo_UI_init_variables[0].gborerSize-mylo_UI_init_variables[0].addGroupBorder)*2;
-//var addGroupFontSize = 80;
 var addGroupWidth = screenWidth-addGroupSize-mylo_UI_init_variables[0].gGutter*2;//10=marginleft
-//alert(screenHeight);
 /******************************************/
-//var addingPublicName="";
 var addPlaceButtonHeight = mylo_UI_init_variables[0].headerHeight;
-//var isAddingPlace = 0;
-//var addPlacePadding = 15;
 var addPlaceWidth = screenWidth-mylo_UI_init_variables[0].addPlacePadding*2;
 var addPlaceTextInputWidth = addPlaceWidth;
 var addPlaceHeight = screenHeight-mylo_UI_init_variables[0].headerHeight-mylo_UI_init_variables[0].groupsDivHeight-addPlaceButtonHeight;
-//var addPlaceFontSize = 25;
 /************LOCATIONS****************************/
-//var locBorder = 12;
-//var locContainerHeight = 122;
-//var locContainerPaddingTop = 0;
 var locHeight = mylo_UI_init_variables[0].locContainerHeight+mylo_UI_init_variables[0].locContainerPaddingTop*2;
-//var nbLocOnScreen; //nb of loc that can be dsplayed on one screen
-//var locButtonsWidth = 57;
-//var imgLocButtonsWidth = 30;
 var locButtonHeight = Math.floor(locHeight/2)-1;
 var imgLocButtonsPaddingTop = Math.floor((locButtonHeight-mylo_UI_init_variables[0].imgLocButtonsWidth)/2);
 var imgLocButtonsPaddingLeft = Math.floor((mylo_UI_init_variables[0].locButtonsWidth-mylo_UI_init_variables[0].imgLocButtonsWidth)/2);
-//var locContainerPaddingLeft = 30;
-//var locContainerPaddingRight = 5; 
 var locContainerWidth = screenWidth-mylo_UI_init_variables[0].locContainerPaddingLeft-mylo_UI_init_variables[0].locContainerPaddingRight-mylo_UI_init_variables[0].locBorder-mylo_UI_init_variables[0].locButtonsWidth;
 /*
 * INITIALIZE DEFAULT GROUPS 
 */
 /*********** GROUPS COLORS ************/
-/*var c0 = "#DDDDDD";
-var c1 = "#7CB9E7";
-var c2 = "#FFDB59";
-var c3 = "#DE1F89";
-var c4 = "#70DBEB";
-var c5 = "#9B67D0";
-var c6 = "#F485C8";
-var c7 = "#FFD998";
-var c8 = "#FF8340";
-var c9 = "#E52636";*/
-/*var c0 = "#DDDDDD";
-var c1 = "#33B5E5";
-var c2 = "#FFDB59";
-var c3 = "#DE1F89";
-var c4 = "#68DFF0";
-var c5 = "#9B67D0";
-var c6 = "#F26BBC";
-var c7 = "#FFE6BB";
-var c8 = "#FE7226";
-var c9 = "#555555";*/
 var c0 = "#DDDDDD";
 var c1 = "#0099CC";
 var c2 = "#FFDB59";
@@ -158,7 +102,6 @@ var c8 = "#FF4444";
 var c9 = "#FFBB33";
 
 var groups = new Array();
-//groups = [];
 var g0 = {id:0,name:"All",color:c0};
 var g1 = {id:1,name:"",color:c1};
 var g2 = {id:2,name:"",color:c2};
@@ -180,7 +123,6 @@ groups.push(g6);
 groups.push(g7);
 groups.push(g8);
 var nbmaxgroups = groups.push(g9)-1;
-//alert(nbmaxgroups);
 var userGroups = new Array();
 var nb_user_group = userGroups.length;
 /*
@@ -236,7 +178,6 @@ function setUI(callback){
         'color':'#333333',
     });
     var top=(mylo_UI_init_variables[0].groupsDivHeight-($('#groupnameField').outerHeight()+$('#validateGroup').height()+10))/2;
-    //alert('groupnameField='+$('#groupnameField').outerHeight()+' validateGroup='+$('#validateGroup').height());
     $('#addGroup').find('#groupnameField').css({
         'margin-top':top+'px',//10 = groupnamefield margon bottom
     });
@@ -250,7 +191,6 @@ function setUI(callback){
     /*
     * DEFAULT GROUP
     */
-    //alert(mylo_textes[0].default_group_name);
     $('.default').find('.centered').text(mylo_textes[0].default_group_name);
     $('.default').css({
         height: mylo_UI_init_variables[0].groupSize+'px',
@@ -291,14 +231,10 @@ function setUI(callback){
     }, 0, 'linear');
     /********/
     $('#addPlace').css({height: locsdivHeight-1-mylo_UI_init_variables[0].addPlacePadding*2+'px'}); 
-    //$('#addPlace').css({width: screenWidth-21+'px'});     
     $('#addPlace').css({
         width: addPlaceWidth-1+'px',
         padding: mylo_UI_init_variables[0].addPlacePadding+'px',
     });
-    /*$('#table').css({
-        width: addPlaceWidth-1-2*mylo_UI_init_variables[0].addPlacePadding+'px',
-    });*/
     /*
     * LOADER
     */
@@ -345,9 +281,8 @@ function setUI(callback){
 *   INIT USER DATAS 
 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function initUserDatas(stringDatas){
-    console.log("in initUserDatas function");
     try{
-        console.log("Android data received is"+stringDatas.toString());
+        //console.log("Android data received is"+stringDatas.toString());
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
             var d = window.atob(stringDatas);
@@ -359,9 +294,7 @@ function initUserDatas(stringDatas){
         }
         //SET USER GROUPS
         nb_user_group = userGroups.length; 
-        //console.log(nb_user_group);
         var i = 0;
-        //for(i=locations.length-1;i>=0;i--)
         for(i=0;i<userGroups.length;i++)    //user's groups ids start at 1
         {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
             groups[userGroups[i].id].name = userGroups[i].name; 
@@ -369,37 +302,15 @@ function initUserDatas(stringDatas){
     }catch(e){
        console.log("error : "+e.message);
     }
-    
     //DISPLAY USER DATA;
     showUserGroups(displayUserDatas);
-    /*
-    * GROUPS : get user's groups from server and fill the UI with it
-    */
-    //getUserGroups(showUserGroups);
-    /*
-    * LOCATIONS : get user's locations from server and fill the UI with it
-    */  
-    //getStoredLocations();//User locations object stored in an array
-            // location object={id:0,name:"",group:"",lat:0,lon:0,adr:"",country:"",publicName:""}
-    /*getUserPosition(function(){//gets user position and start watchposition
-        var locsToPrint = getPositions();
-        printUserLocation(0,locsToPrint,fadeIN2);
-    },1000);
-    //after datas init is done
-    $('body').anima({
-        opacity: '1', 
-        filter: 'alpha(opacity=100)',
-    }, 350, "linear");*/
 }
-/* * * * *
+/* * * * * * * * * * * * * 
 *   Display user data
-*/
+* * * * * * * * * * * * */
 function displayUserDatas(){
-    console.log("in displayUserDatas function");
-    //getUserPosition(function(){//gets user position and start watchposition
     var locsToPrint = getPositions();
     printUserLocation(0,locsToPrint,fadeIN2);
-    //},1000);
     //after datas init is done
     $('body').anima({
         opacity: '1', 
@@ -407,14 +318,14 @@ function displayUserDatas(){
     }, 350, "linear");
 }
 
-/*
-*
-*/
+/* * * * * * * * * * * * 
+*   REFRASH DATA
+* * * * * * * * * * * */
 function refreshData(stringDatas){
     console.log("in refreshData function");
     //PARSE NEW USER DATAS
     try{
-        console.log("Android data received is"+stringDatas);
+        //console.log("Android data received is"+stringDatas);
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
             var d = window.atob(stringDatas);
@@ -425,11 +336,9 @@ function refreshData(stringDatas){
         }
         //SET USER GROUPS
         nb_user_group = userGroups.length; 
-        //console.log(nb_user_group);
         var i = 0;
-        //for(i=locations.length-1;i>=0;i--)
         for(i=0;i<userGroups.length;i++)    //user's groups ids start at 1
-        {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
+        {                                   // 0 id is reserved for default group (gray color)
             groups[userGroups[i].id].name = userGroups[i].name; 
         }
     }catch(e){
@@ -530,23 +439,13 @@ function dragStart(xpos, ypos){
         cloneOffset.y = ypos - selectedDraggable.offset().top - 5; //10px down so that clone doesn't completely overlap original
     }
     
-    //alert(cloneOffset.x+' '+cloneOffset.y);
-    //alert($('#'+selectedDraggable).offset().left+' '+$('#'+selectedDraggable).offset().top);
-	
     //clone selected loc
-    //clone=document.getElementById(selectedDraggable.attr('id')).cloneNode(true);
     clone.className += " disablePointerEvents clone";
-    //clone.setAttribute("id", "clone");
     clone.style.position="absolute";
     clone.style.top=ypos-cloneOffset.y+'px';
     clone.style.left=xpos-cloneOffset.x+'px';
-    //clone.style.opacity = "0.7";
-    //clone.style.filter  = 'alpha(opacity=70)'; // IE fallback
     document.body.appendChild(clone);
 
-    /*if( dragType=='loc'){  
-        $('.clone').anima({scaleX:0.7, scaleY:0.7}, 200);
-    }*/
     if( dragType=='loc'){  
         $('.clone').css({'border-top':'none'});
     }
@@ -554,7 +453,6 @@ function dragStart(xpos, ypos){
     document.body.onmouseup=dragEnd;
 
     //TRIGGER DRAG
-    //selectedDraggable.trigger('touchmove');
     $('body').trigger('touchmove');
 }
 /*
@@ -568,7 +466,6 @@ function drag(xpos, ypos){
     clone.style.left=xpos-cloneOffset.x+'px';
 
     if(selectedDroppable!=null){//hovered droppable already entered
-        //alert(e.target.attr('name'));
         if(isInElement(point, selectedDroppable)){
             
         }else{
@@ -581,19 +478,13 @@ function drag(xpos, ypos){
         }
     }
     
-    //if( (isInElement(point, $('.trash')) || isInElement(point, $('#groupsDiv'))) && !mylo_UI_init_variables[0].out_of_draggable){
     if(isInElement(point, $('#groupsDiv')) && !mylo_UI_init_variables[0].out_of_draggable){  
-        //if( dragType=='loc' && !mylo_UI_init_variables[0].out_of_draggable){  
-            if(dragType=='loc'&& !selectedDraggable.hasClass("new")){
-                $('.clone').anima({scaleX:0.6, scaleY:0.6}, 150);
-                clone.style.opacity = "0.7";
-                mylo_UI_init_variables[0].out_of_draggable=1;
-            }//else{
-                //$('.clone').anima({scaleX:0.9, scaleY:0.9}, 200);
-            //}      
-        //}
+        if(dragType=='loc'&& !selectedDraggable.hasClass("new")){
+            $('.clone').anima({scaleX:0.6, scaleY:0.6}, 150);
+            clone.style.opacity = "0.7";
+            mylo_UI_init_variables[0].out_of_draggable=1;
+        }
     }else if(!isInElement(point, $('.trash')) && !isInElement(point, $('#groupsDiv')) && mylo_UI_init_variables[0].out_of_draggable){
-    //}else if(!isInElement(point, $('#groupsDiv')) && mylo_UI_init_variables[0].out_of_draggable){  
         if(dragType=='loc'){
             $('.clone').anima({scaleX:1, scaleY:1}, 150);
             clone.style.opacity = "1";
@@ -669,8 +560,7 @@ function dragEnd(xpos, ypos){
                         'margin-left': Math.floor((mylo_UI_init_variables[0].groupSize-(mylo_UI_init_variables[0].groupSize-5))/2)+'px',
                         }, 100, 'linear', function(){}
                     );
-                    //GA
-                    //analytics.trackEvent("Drag_end", "loc_drag_end", "change_group", 1);
+                    
                 //If location was drop on trash => delete location
                 }else if(selectedDroppable.hasClass('trash')){
                     
@@ -679,7 +569,6 @@ function dragEnd(xpos, ypos){
                         GATrackerEvent("Drag_end", "loc_drag_end", "delete_loc");
                         //
                         //console.log('in if else and ready_to_delete:'+mylo_UI_init_variables[0].ready_to_delete);
-                        //alert('delete location '+selectedDraggable.attr('id'));
                         deleteStoredLocation(selectedDraggable.attr('id'));
                         selectedDroppable.find('#off').css('display','block');
                         selectedDroppable.find('#focus').css('display','none');
@@ -687,10 +576,6 @@ function dragEnd(xpos, ypos){
                             'background-color':'#FBFBFB',
                             'border-top': '1px solid #F2F1F1',
                         });
-                        //GA
-                        //analytics.trackEvent("Drag_end", "loc_drag_end", "delete_loc", 1);
-                        //
-                        //myMouseLeave(selectedDroppable);
                         $('#trash_bouncer').stopAnima(true);
                         mylo_UI_init_variables[0].ready_to_delete=0;
                         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
@@ -725,17 +610,12 @@ function dragEnd(xpos, ypos){
                         $('#groupWraper').css({
                             'width': wraperWidth+'px',
                             height:mylo_UI_init_variables[0].groupsDivHeight+'px',
-                            //'overflow-x':'auto',
                         });
                         if(wraperWidth<$(window).width()){
                             $('#groupsContainer').css({width: wraperWidth+'px'});
                         }else{
                             $('#groupsContainer').css({width: $(window).width()+'px'});
                         }
-                        //GA
-                        //analytics.trackEvent("Drag_end", "group_drag_end", "delete_group", 1);
-                        //
-                        //myMouseLeave(selectedDroppable);
                         $('#trash_bouncer').stopAnima(true);
                         mylo_UI_init_variables[0].ready_to_delete=0;
                         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
@@ -751,8 +631,6 @@ function dragEnd(xpos, ypos){
             }else{
                 //GA
                 GATrackerEvent("Drag_end", dragType+"_drag", selectedDraggable.attr('id'));
-                //
-                //console.log('yop?');
                 afterDrag();
             }
 
@@ -767,9 +645,7 @@ function dragEnd(xpos, ypos){
         }
     }
     catch(err) {
-        //alert(err.message);
-        //GA
-        //analytics.trackEvent("Action_fail", "drag_end", err.message, 1);
+        //err.message;
     }
 
    
@@ -812,7 +688,6 @@ function myMouseEnter(obj){
                 width: mylo_UI_init_variables[0].groupSize*1.2+'px',
                 height: mylo_UI_init_variables[0].groupSize*1.2+'px',
                 'margin-top': gMarginTop-((mylo_UI_init_variables[0].groupSize*1.2-mylo_UI_init_variables[0].groupSize)/2)+'px',
-                //'margin-left': mylo_UI_init_variables[0].gGutter-((mylo_UI_init_variables[0].groupSize*1.2-mylo_UI_init_variables[0].groupSize)/2)+'px',
                 }, 100, 'linear', function(){}
             );
             obj.find('p').anima({
@@ -835,8 +710,6 @@ function myMouseEnter(obj){
         obj.find('#off').css('display','none');
         obj.find('#focus').css('display','block');
         obj.css({
-            //'background-color':'#'+mylo_UI_init_variables[0].formActiveColor,
-            //'border-top': '1px solid #ffffff',
             'border-top': '1px solid rgba(0,0,0,0)',
         });
         $('#trash_bouncer').stopAnima(true);
@@ -868,14 +741,8 @@ function myMouseEnter(obj){
                     mylo_UI_init_variables[0].ready_to_delete=1;
                 }});
             }});
-            //$('#trash_bouncer').anima({scaleX:s, scaleY:s}, 800,".6, .04, .98, .335");
-        }
-        
-        
-        //$(this).css('background-color','#'+mylo_UI_init_variables[0].formActiveColor);
-        //selectedDroppable = $(this); 
-    }//else{selectedDroppable = null;alert('false alert');}
-
+        } 
+    }
 }
 
 function myMouseLeave(obj){
@@ -889,7 +756,6 @@ function myMouseLeave(obj){
                 height: mylo_UI_init_variables[0].groupSize+'px',
                 'margin-top': gMarginTop+'px',
                 'margin-left': mylo_UI_init_variables[0].gGutter+'px',
-                //'line-height': mylo_UI_init_variables[0].groupSize+'px',
                 }, 100, 'linear', function(){}
             );
             obj.find('p').anima({
@@ -913,7 +779,6 @@ function myMouseLeave(obj){
         obj.find('#off').css('display','block');
         obj.find('#focus').css('display','none');
         obj.css({
-            //'background-color':'#fbfbfb',
             'border-top': '1px solid #F2F1F1',
         });
         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
@@ -927,14 +792,6 @@ function myMouseLeave(obj){
         }
         $('.clone').anima({scaleX:1, scaleY:1}, 100);
         clone.style.opacity = "1";
-        /*$('.clone').css({
-            opacity: '1', 
-            filter: 'alpha(opacity=100)',
-        });*/
-        /*clone.style.opacity = "1";*/
-        //$(this).css('background-color','#'+mylo_UI_init_variables[0].formInactiveColor);
-        //empty slected droppable
-        //selectedDroppable = null;
     }
     //empty slected droppable
     selectedDroppable = null;

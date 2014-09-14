@@ -50,10 +50,8 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_my);
         updated = false;
         onCreate=false;
-        Log.i(TAG,"onCreate called");
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
         w.setWebContentsDebuggingEnabled (true);
@@ -61,7 +59,7 @@ public class MyActivity extends Activity {
 
             public void onPageFinished(WebView view, String url) {
                 webviewEndOfLoad=true;
-                // do your stuff here
+                // LOAD WEBVIEW
                 w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
                 //
                 readDatas();
@@ -80,15 +78,11 @@ public class MyActivity extends Activity {
         makeUseOfNewLocation(lastKnownLocation);
         lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         makeUseOfNewLocation(lastKnownLocation);
-        //currentLoc = lastKnownLocation;
-        //
-
         appState=0;
     }
 
     @Override
     protected void onResume() {
-        Log.i(TAG,"onResume called");
         super.onResume();
         myJsInterface.activity=this;
         MyloWearService.activity=this;
@@ -115,7 +109,7 @@ public class MyActivity extends Activity {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, locationListener);
 
         if(onCreate){
-            Log.i(TAG,"onCreate=true");
+            //Log.i(TAG,"onCreate=true");
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
         }
@@ -123,7 +117,6 @@ public class MyActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Log.i(TAG,"onPause called");
         super.onPause();
         locationManager.removeUpdates(locationListener);
         myJsInterface.activity = null;
@@ -132,7 +125,6 @@ public class MyActivity extends Activity {
 
     @Override
     protected void onStop(){
-        Log.i(TAG,"onStop called");
         super.onStop();
     }
 
@@ -149,7 +141,6 @@ public class MyActivity extends Activity {
     }
 
     public void refreshUserDatas(){
-        Log.i(TAG, "In refreshUserDatas method");
         if(updated){
             Log.i(TAG, "updates detected: calling readDatas");
             readDatas();
@@ -211,11 +202,9 @@ public class MyActivity extends Activity {
 
     /** Make use of new location */
     public void makeUseOfNewLocation(Location loc) {
-        //Log.v(TAG, "in makeUseOfNewLocation method");
         if(currentLoc !=null){
             if(isBetterLocation(loc,currentLoc)){
                 //Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
-                //Log.v(TAG, "loc age in nano="+loc.getElapsedRealtimeNanos()+"loc age in millisec="+loc.getTime());
                 currentLoc=loc;
                 if(webviewEndOfLoad){
                     w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
@@ -227,14 +216,11 @@ public class MyActivity extends Activity {
     }
     /***/
     private void readDatas() {
-        Log.i(TAG,"in read data method");
         String FILENAME = "data.txt";
 
         if(isExternalStorageReadable()){
             String root = Environment.getExternalStorageDirectory().toString();
-            //Log.v("external storage file ","root: "+root);
             File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
-            //myDir.mkdirs();
 
             File file = new File (myDir, FILENAME);
             if (file.exists ()){
@@ -249,23 +235,21 @@ public class MyActivity extends Activity {
                     }
                     isr.close();
                     fis.close();
-                    //Log.v("read data = ",sb.toString());
 
                     if(!onCreate){
                         Log.i(TAG,"onCreate=false => calling javascript init");
-                        Log.v(TAG,"read data= '"+sb.toString()+"'");
-                        Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
+                        //Log.v(TAG,"read data= '"+sb.toString()+"'");
+                        //Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
                         if(webviewEndOfLoad){
                             String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             String url="javascript:initUserDatas('"+converted+"')";
-                            Log.i(TAG,"url="+url);
                             w.loadUrl(url);
                         }
                         onCreate=true;
                     }else{
                         Log.i(TAG,"onCreate=true");
                         if(webviewEndOfLoad){
-                            Log.v(TAG,"onCreate=true => webviewEndOfLoad");
+                            //Log.v(TAG,"onCreate=true => webviewEndOfLoad");
                             String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             w.loadUrl("javascript:refreshData('"+converted+"')");
                         }
@@ -309,7 +293,6 @@ public class MyActivity extends Activity {
     }
 
     public void sendGATrackerEvent(String category, String action, String label){
-        Log.v(TAG,"In sendGATrackerEvent");
         if (category != null && action != null && label != null) {
             //Tracker t = analytics.newTracker(UA-51649868-2);
             Tracker t = getTracker();
@@ -338,8 +321,6 @@ class myJsInterface {
     public void showToast(String mssg) {
 
         if (mssg != null && mssg.length() > 0) {
-            //Toast.makeText(cordova.getActivity().getApplicationContext(),
-            //        message, Toast.LENGTH_SHORT).show();
             android.widget.Toast toast = android.widget.Toast.makeText(con, mssg, android.widget.Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
@@ -372,7 +353,6 @@ class myJsInterface {
 
     @JavascriptInterface
     public void addGAEvent(String category, String action, String label) {
-        Log.v(TAG,"In addGAEvent");
         if (category != null && action != null && label != null) {
             if (activity != null) {
                 final String categoryFinal = category;
@@ -381,7 +361,7 @@ class myJsInterface {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.v(TAG,"Calling Activity sendGATrackerEvent method");
+                        //Log.v(TAG,"Calling Activity sendGATrackerEvent method");
                         activity.sendGATrackerEvent(categoryFinal, actionFinal, labelFinal);
                     }
                 });
@@ -404,16 +384,14 @@ class myJsInterface {
 
     @JavascriptInterface
     public void storeDatas(String datas) {
-        Log.v("storeDatas android method called","in android storeDatas ");
         String FILENAME = "data.txt";
 
         if(isExternalStorageWritable()){
             String root = Environment.getExternalStorageDirectory().toString();
-            Log.v("external storage file ","root: "+root);
             File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
             //myDir.mkdirs();
             if (!myDir.exists ()){
-                Log.v("external storage DIRECTORY DOESN'T EXISTS ","directory: "+root);
+                Log.i(TAG,"STORE DATA: DIRECTORY DOESN'T EXISTS creating directory: "+root);
                 myDir.mkdirs();
             }
             File file = new File (myDir, FILENAME);
@@ -423,12 +401,12 @@ class myJsInterface {
                 fos.write(datas.getBytes());
                 fos.close();
             }catch (java.io.IOException e){
-                Log.v("error while writing file","error while writing file");
+                Log.e("error while writing file","error while writing file");
                 e.printStackTrace();
                 addGAEvent("Action_fail", "write_data", "error while writing file");
             }
         }else{
-            Log.v("error while writing file","external storage not writable");
+            Log.e("error while writing file","external storage not writable");
             addGAEvent("Action_fail", "write_data", "not_writable");
         }
 

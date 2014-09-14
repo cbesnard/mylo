@@ -8,17 +8,16 @@ function bindGroupEvents(){
 		if(groupToDisplay==$('.currentGroup').attr('name') || groupToDisplay==$('.addGroup').attr('name') || mylo_UI_init_variables[0].isAddingPlace || mylo_UI_init_variables[0].isAddingGroup){
 			//innactive
 		}else{
-			//alert(groupToDisplay);
 			var idGroupToDisplay = parseInt(groupToDisplay);
-			//getUserPosition(function(){
 			var locToDisplay = getPositions(idGroupToDisplay);
 			printUserLocation(idGroupToDisplay,locToDisplay,fadeIN2);
-			//});
+			
 			var nameCurrent = $('.currentGroup').attr('name');
 			$('[name="'+nameCurrent+'"]').removeClass('currentGroup');
 			$(this).addClass('currentGroup');
 		}
-		//analytics.trackEvent("Button_click", "group", groupToDisplay, 1);
+		//GA
+        GATrackerEvent("Button_click", "group", $(this).attr('name'));
 	});
 
 	$('.group').mouseup(function(e){
@@ -38,8 +37,6 @@ function bindGroupEvents(){
 				vibrate(mylo_UI_init_variables[0].longPress_vibration_time);
 				dragType = "group";
 				dragStart(e.pageX, e.pageY);
-				//GA
-				//analytics.trackEvent("Drag", "group_drag", "", 1);
 			},mylo_UI_init_variables[0].longPressTimer);
 		}
 		return false; 
@@ -92,11 +89,9 @@ function bindGroupEvents(){
 *	SET CSS PROPERTIES OF DISPLAYED GROUPS + ADD "ADDGROUP" BUTTON
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function initializeGroup(){	//Set css properties of group div
-	console.log("in initialize group function");
+	//console.log("in initialize group function");
 	$('#groupsContainer').append('<div class="addGroup" name="addGroup"><p name="addGroupIcon">+</p></div>');
 	
-	/*$('[name="'+0+'"]').addClass('default');
-	$('[name="'+0+'"]').removeClass('draggable');*/
 	$('.addGroup').css({
 		height: 45+'px',
 		width: 45+'px',
@@ -105,7 +100,6 @@ function initializeGroup(){	//Set css properties of group div
 		'margin-right': mylo_UI_init_variables[0].gGutter+'px',
 		'margin-top': (mylo_UI_init_variables[0].groupsDivHeight-45)/2+'px',
 		'line-height': 45+'px',
-		//border: mylo_UI_init_variables[0].addGroupBorder+'px dashed #CCCCCC',
 		color: '#FFFFFF',
 		overflow:'hidden',
 	});
@@ -115,7 +109,6 @@ function initializeGroup(){	//Set css properties of group div
 		'font-size': mylo_UI_init_variables[0].addGroupFontSize+'px',
 		'text-align':'center',
 	});
-	//$('.default').addClass('currentGroup');
 	
 	var totalGroups = $('.group');
 	$('#groupsContainer').children().wrapAll('<div id="groupWraper"></div>');
@@ -148,7 +141,7 @@ function initializeGroup(){	//Set css properties of group div
 *	showUserGroups() : display user's group
 * * * * * * * * * * * * * * * * * * * * * * */
 function showUserGroups(callback){
-	console.log("in show user group function");
+	//console.log("in show user group function");
 	var i=0;
 	for(i=0;i<userGroups.length;i++){
 		if(userGroups[i].name!=""){
@@ -190,8 +183,6 @@ function getGroupColor(groupId){
 *	position
 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function refreshLocsdist(){
-	//console.log($('.loc').first().find('.locdist').text());
-	//console.log($('.loc').first().find('.locdist').text().length);
 	var displayed_locs = $('.loc');
 	if(displayed_locs.length>0){
 	if($('.loc').first().find('.locdist').text()=="-"){
@@ -326,8 +317,7 @@ function getPositions(group){
 	if(group==undefined || group==0){//CASE ALL: retourner toutes les positions
 		var i = 0;
 		for(i=0;i<locations.length;i++)
-		{	//alert(userLocs[i]);
-			// Create valueToPush as an object {} rather than an array []
+		{	
 			var valueToPush = {id:0,name:"",group:0,lat:0,lon:0,dist:"",adr:"",country:"",publicName:"",gps:0};
 			// Add the properties to your object
 			valueToPush.id = locations[i].id;
@@ -366,15 +356,10 @@ function getPositions(group){
 			}
 		}
 	}
-	/*console.log("locations length="+locations.length);
-	logLocations(locations, "locations");
-	console.log("userLocs length="+userLocs.length);
-	logLocations(userLocs, "userLocs");*/
 	userLocs.sort(function(a,b){
 		if(a.dist > b.dist){return 1;}
 		else if(a.dist < b.dist){return -1;}
 		else{return 0;}
-		//return a.dist > b.dist ? 1 : a.dist < b.dist : -1 : 0;
 	});
 	//sort locs by increasing distance
 	var sortedLocs = new Array();
@@ -392,9 +377,6 @@ function getPositions(group){
 			sortedLocs.push(userLocs[tata]);
 		}	
 	}
-	//console.log("sortedLocs length="+sortedLocs.length);
-	//logLocations(sortedLocs, "sortedLocs");
-
 	var t=0;
 	for(t=0;t<sortedLocs.length;t++){
 		if(mylo_UI_init_variables[0].userpos.lat==0 && mylo_UI_init_variables[0].userpos.lon==0){
@@ -461,8 +443,6 @@ function bindLocsEvents(){
 				vibrate(mylo_UI_init_variables[0].longPress_vibration_time);
 				dragType = "loc";
 				dragStart(e.pageX, e.pageY);
-				//GA
-				//analytics.trackEvent("Drag", "loc_drag", "", 1);
 			},mylo_UI_init_variables[0].longPressTimer);
 		}
 		return false; 
@@ -634,18 +614,12 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 		        GATrackerEvent("Button_click", "share_loc", "");
 		        //
 				var loc = getLoc($(this).parent().parent('.loc').attr('id')); 
-				//var adressToEncode = loc.publicName+' '+loc.adr;
 				var adressToEncode="";
 				if(loc.gps==1){
 					adressToEncode = "@"+loc.lat+","+loc.lon;//"@"+userLocs[i].lat+","+userLocs[i].lon
 				}else{adressToEncode = loc.publicName+' '+loc.adr;}
 				var urlToShare = 'http://maps.google.com/maps?q='+encodeURIComponent(adressToEncode);
-				/*var message = {
-					text: loc.name,
-					url: urlToShare
-				};*/
 				var message = loc.name+': '+urlToShare;
-				//share(function(){},function(){}, message);
 				shareAndroid(message);
 			});
 			/*
@@ -656,18 +630,11 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 				var loc = getLoc($(this).parent().parent('.loc').attr('id')); 
 				//GA
 		        GATrackerEvent("Button_click", "go_loc", "");
-		        //
-				//var adressToEncode = loc.publicName+' '+loc.adr;
-				var adressToEncode="";
+		        var adressToEncode="";
 				if(loc.gps==1){
 					adressToEncode = loc.lat+","+loc.lon;//"@"+userLocs[i].lat+","+userLocs[i].lon
 				}else{adressToEncode = loc.publicName+' '+loc.adr;}
 				var urlToShare = 'geo:'+loc.lat+","+loc.lon+'?q='+encodeURIComponent(adressToEncode);
-				/*var message = {
-					text: loc.name,
-					url: urlToShare
-				};*/
-				//share(function(){},function(){}, message);
 				showOnMapsAndroid(urlToShare);
 			});
 		}
@@ -684,15 +651,11 @@ function displayAddGroupDiv(){
 	changeAndroidAppState(1);
 	//display add group div	
 	var totalGroups = $('.group');
-	//var sscroll = $('#groupsContainer').width()-($('.addGroup').width()+2*mylo_UI_init_variables[0].gGutter);
 	var sscroll = $('#groupsContainer').width()-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize+2*mylo_UI_init_variables[0].gGutter);
 	
 	$('#groupsDivContainer').anima({
 	  	'margin-left': '-'+sscroll+'px',
 	  	}, 350, '0.120, 0.715, 0.355, 0.875', {complete:function(){
-  			//test
-			//$('#groupnameField').focus();
-			//fin test
 	  	}
 	});
 
@@ -816,7 +779,6 @@ function displayNewGroup(id,name){
 }
 
 function displayAddPlaceScreen(){
-	logBodySize();
 	changeAndroidAppState(1);
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
@@ -831,16 +793,11 @@ function displayAddPlaceScreen(){
 	//CLEAR ALL ADDING PLACE VARIABLES
 	mylo_UI_init_variables[0].addingPublicName="";
 	//display back button
-	//$('.addPlace').find('.text').text(mylo_textes[0].add_place_form_back_button);
 	$('.addPlace').find('.text').anima({
 		perspective: '100px',
 		rotateX: '90deg',
 		rotateY: '0deg',
 	  	}, 150, 'linear',{complete:function(){
-	  		/*$('.addPlace').find('.text').css({
-				'opacity':'0',
-				filter: 'alpha(opacity=0)',
-			});*/
 	  	}
 	});
 	$('#add_place').anima({
@@ -863,7 +820,6 @@ function displayAddPlaceScreen(){
 				'opacity':'0',
 				filter: 'alpha(opacity=0)',
 			});
-			//$('#close_add_loc').css({display:'block'});
 			$('#close_add_loc').css({
 				'opacity':'1',
 				filter: 'alpha(opacity=100)',
@@ -904,8 +860,6 @@ function displayAddPlaceScreen(){
 }
 function hideAddPlaceScreen(delay){
 	changeAndroidAppState(0);
-	//logBodySize();
-	console.log('in JAVASCRIPT hideAddPlaceScreen function');
 	mylo_UI_init_variables[0].editPlace=null;
 	var timer = window.setTimeout(function(){
 		//LOADER: Hide loader
@@ -934,9 +888,7 @@ function hideAddPlaceScreen(delay){
 					filter: 'alpha(opacity=0)',
 					right: '-54px'
 				});
-		  		//$('#close_add_loc').css({display:'none'});
-				//$('.addPlace').find('.text').text(mylo_textes[0].add_button_txt);
-				$('#add_place').css({
+		  		$('#add_place').css({
 					'opacity':'1',
 					filter: 'alpha(opacity=100)',
 				});
@@ -965,7 +917,6 @@ function hideAddPlaceScreen(delay){
 				$('#validateButton').css("display","block");
 				$('#saveButton').css("display","none");
 				//
-				logBodySize();
 		  	}
 		});
 	},delay);

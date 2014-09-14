@@ -6,8 +6,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,8 +39,6 @@ public class MyloWearService extends WearableListenerService {
     @Override
     public void onCreate(){
         super.onCreate();
-        //Log.i(TAG, "on create() called");
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .build();
@@ -55,8 +51,6 @@ public class MyloWearService extends WearableListenerService {
         Log.i(TAG,"Message received SUCCESS: message.getpath="+messageEvent.getPath()+" message="+messageEvent.getData().toString());
 
         if(PATH_STRING.equals(messageEvent.getPath())) {
-            // launch some Activity or do anything you like
-            //Log.i(TAG,"in if /Message: message="+messageEvent);
             //GET USER LOCATION !!!
             LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -89,12 +83,10 @@ public class MyloWearService extends WearableListenerService {
                             addresses.get(0).getCountryName());
                     address = "GPS location near: "+addr;
                     Log.i(TAG,"Get location address SUCCESS: address="+address);
-                    //String city = addresses.get(0).getAddressLine(1);
-                    //String country = addresses.get(0).getAddressLine(2);
                 } catch (Exception e) {
                     e.printStackTrace();
                     //error case
-                    Log.i(TAG,"Couldn't get location address: send error message wear service");
+                    Log.i(TAG,"Get location address ERROR: Couldn't get location address, send error message to wear service");
                     //Log.i(TAG,"mGoogleApiClient="+mGoogleApiClient.toString());
                     byte [] data = new byte[]{(byte)0};
                     Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
@@ -117,11 +109,9 @@ public class MyloWearService extends WearableListenerService {
 
                         //ADD NEW LOC TO location OBJECT
                         mylocs.put(newLoc);
-                        //Log.v("new locs obj= ",mylocs.toString());
 
                         //ADD NEW LOC TO DATA OBJECT
                         obj.put("locs",mylocs);
-                        //Log.v("new userDatas obj= ",obj.toString());
 
                         //STRINGIFY DATA //WRITE USER DATAS
                         storeDatas(obj.toString());
@@ -134,7 +124,7 @@ public class MyloWearService extends WearableListenerService {
                         if(mGoogleApiClient == null){
                             return;
                         }
-                        Log.i(TAG,"Send message to wear: mGoogleApiClient="+mGoogleApiClient.toString());
+                        //Log.i(TAG,"Send message to wear: mGoogleApiClient="+mGoogleApiClient.toString());
                         byte [] data = new byte[]{(byte)1};
                         Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
 
@@ -194,13 +184,6 @@ public class MyloWearService extends WearableListenerService {
             Log.i(TAG,"Last known loc=: lat="+loc.getLatitude()+" , lon="+loc.getLongitude());
         }
         if(MyActivity.isBetterLocation(loc,MyActivity.currentLoc)){
-            /*Long t = SystemClock.elapsedRealtimeNanos();
-            Long locT = loc.getElapsedRealtimeNanos();
-            Log.i(TAG,"current time in nano="+t);
-            Log.i(TAG,"loc age in nano="+locT);
-            Long age = t-locT;//in nanosec
-            age = age/1000;//in millisec*/
-            //Log.v("new best location", "lat:"+loc.getLatitude()+"lon:"+loc.getLongitude());
             MyActivity.currentLoc=loc;
         }
     }
@@ -229,35 +212,22 @@ public class MyloWearService extends WearableListenerService {
                     isr.close();
                     fis.close();
                     userDatas = sb.toString();
-                    //Log.v("read data = ",userDatas);
-                    //Log.v("call javascript ","initUserDatas ");
-                    //w.loadUrl("javascript:initUserDatas('"+sb.toString()+"')");
                     Log.i(TAG,"Read data SUCCESS");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(TAG,"ERROR while reading data");
+                    Log.e(TAG,"ERROR while reading data");
                 }
             }else{
-                Log.v(TAG,"ERROR: file"+FILENAME+" doesn't exist");
-                //w.loadUrl("javascript:initUserDatas('')");
+                Log.e(TAG,"ERROR: file"+FILENAME+" doesn't exist");
             }
         }else{
-            Log.i(TAG,"ERROR while reading data: external storage not readable");
+            Log.e(TAG,"ERROR while reading data: external storage not readable");
         }
 
     }
 
     public void storeDatas(String datas) {
-        //Log.v("storeDatas android method called","in android storeDatas ");
         String FILENAME = "data.txt";
-        /*try{
-            FileOutputStream fos = con.openFileOutput (FILENAME, Context.MODE_PRIVATE);
-            fos.write(datas.getBytes());
-            fos.close();
-        }catch (java.io.IOException e){
-            Log.v("error while writing file","error while writing file");
-            e.printStackTrace();
-        }*/
         if(myJsInterface.isExternalStorageWritable()){
             String root = Environment.getExternalStorageDirectory().toString();
             //Log.v("external storage file ","root: "+root);

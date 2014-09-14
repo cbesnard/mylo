@@ -43,58 +43,20 @@ function androidBackButtonPressed(){
         //
 
 	}else{
-		//GA
-		//analytics.trackEvent("Button_click", "back_button", "close_app", 1);
-		//close application
-		//navigator.app.exitApp();
+		
 	}
 }
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*	onResume
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*function onResume(){
-	//WATCH FOR POSITION CHANGE every 5min
-	getUserPosition(function(){
-		var currentGroupID = parseInt($('.currentGroup').attr('name'));
-		var locsToPrint = getPositions(currentGroupID);
-		printUserLocation(currentGroupID,locsToPrint,fadeIn1);
-	},1000);
-}*/
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*	onPause
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*function onPause(){
-	navigator.geolocation.clearWatch(mylo_UI_init_variables[0].myWatchID);	
-}*/
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	VIBRATE
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function vibrate(milliseconds) {
-	console.log("in JAVASCRIPT vibrate function");
 	Android.phoneVibrate(milliseconds);
-}
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*	GA success handler
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-function successHandler() {
-}
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*	GA error handler
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-function errorHandler() {
-}
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*	HIDE SOFTWARE KEYBOARD
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-function hideAndroidSoftwareKeyboard(){
-	console.log("in JAVASCRIPT hideAndroidSoftwareKeyboard function");
-	//Android.hideKeyboard();
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	SEND ANDROID GA TRACKER EVENT
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function GATrackerEvent(category, action, label){
-	console.log("in JAVASCRIPT GATrackerEvent function");
 	Android.addGAEvent(category, action, label);
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

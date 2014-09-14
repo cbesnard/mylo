@@ -19,22 +19,13 @@ function addLocation(nameloc, adrloc, grouploc, loclat, loclon, country, locatio
 	//add location to locations Array
 	var loc = {id:idLoc,name:nameloc,group:grouploc,lat:loclat,lon:loclon,adr:adrloc,country:country,publicName:locationType,gps:gpsType};
 	locations.push(loc);
-	//alert(loc.publicName);
-	//refresh local file system with new loc
-	/*try{
-        localStorage["userLocs"] = JSON.stringify(locations);
-    }catch(err){
-        alert(err.message);
-    }*/
-    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, got_data_FS_TO_WRITE, fail);
-    storeDataInAndroid();
+	storeDataInAndroid();
 	
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
 *	EDIT LOCATION'S NAME 
 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function editPlacesName(locId, locname){
-	console.log("in storage editPlacesName");
 	for(i=0;i<locations.length;i++){
 		if(locations[i].id==locId){
 			console.log("location"+locId+" found: name="+locname);
@@ -44,13 +35,6 @@ function editPlacesName(locId, locname){
 	}
 	//SAVE IN ANDROID
 	storeDataInAndroid();
-
-	/*// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
-	var idGroup = parseInt($('.currentGroup').attr('name'));
-	var locsToPrint = getPositions(idGroup);
-	printUserLocation(idGroup,locsToPrint,fadeIn1);
-	//CLOSE ADDING PLACE
-	hideAddPlaceScreen(0);	//in hideAddPlaceScreen => hide LOADER*/
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
 *	DELETE LOCATION 
@@ -67,7 +51,6 @@ function deleteStoredLocation(locId){
 	}
 	locations.splice(index, 1);
 	//SCREEN: Refresh screen: remove loc from screen
-	//$('#'+locId).remove();
 	$('#'+locId).slideUp(200,function(){
 		//console.log('in anima complete function');
 		$('#'+locId).remove();
@@ -78,8 +61,6 @@ function deleteStoredLocation(locId){
 	var locToDisplay = getPositions(idGroupToDisplay);
 	checkFirstTime(idGroupToDisplay,locToDisplay);
 	//LOCAL STORAGE: refresh local storage without deleted loc
-	//localStorage["userLocs"] = JSON.stringify(locations);
-	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, got_data_FS_TO_WRITE, fail);
 	storeDataInAndroid();
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
@@ -104,13 +85,6 @@ function addGroup(groupName){
 	//SCREEN: refresh groupsdiv
 	displayNewGroup(newGroupId,groupName);
 	//LOCAL STORAGE: add to local storage
-	/*if(localStorage.getItem("userGroups") === null){
-		userGroups = new Array(); 
-	}else{
-		userGroups = JSON.parse(localStorage["userGroups"]);
-	}*/
-	//localStorage["userGroups"] = JSON.stringify(userGroups);
-	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, got_data_FS_TO_WRITE, fail);
 	storeDataInAndroid();
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
@@ -127,9 +101,6 @@ function deleteGroup(groupId){
 			});
 		}
 	}
-	//LOCAL STORAGE: refresh LOCATIONS local storage with new group for loc
-	//localStorage["userLocs"] = JSON.stringify(locations);
-	
 	//GROUP ARRAY: delete from groups Array
 	groups[groupId].name = "";
 	
@@ -141,9 +112,6 @@ function deleteGroup(groupId){
 		$('[name="'+nameCurrent+'"]').removeClass('currentGroup');
 		$('[name="0"]').addClass('currentGroup');
 	}
-	//$('[name="'+groupId+'"]').remove();
-	//$('[name="'+groupId+'"]').anima({"margin-top":mylo_UI_init_variables[0].groupsDivHeight/2,"margin-left":mylo_UI_init_variables[0].gGutter+mylo_UI_init_variables[0].groupsDivHeight/2,height:0,width:0}, 200,'linear', {complete:function(){
-	//$('[name="'+groupId+'"]').anima({scaleX:0,scaleY:0}, 300,'linear', {complete:function(){
 	$('[name="'+groupId+'"]').anima({"margin-top":mylo_UI_init_variables[0].groupsDivHeight/2,height:0,width:0}, 200,'linear', {complete:function(){
 		//console.log('in anima complete function');
 		$('[name="'+groupId+'"]').remove();
@@ -159,13 +127,7 @@ function deleteGroup(groupId){
 			$('#groupsContainer').css({width: $(window).width()+'px'});
 		}
 	}});
-
 	//LOCAL STORAGE: refresh GROUPS local storage with deleted group
-	/*if(localStorage.getItem("userGroups") === null){
-		userGroups = new Array(); 
-	}else{
-		userGroups = JSON.parse(localStorage["userGroups"]);
-	}*/
 	var indexToDelete;
 	var i=0;
 	for(i=0;i<userGroups.length;i++){
@@ -175,8 +137,6 @@ function deleteGroup(groupId){
 		}
 	}
 	userGroups.splice(indexToDelete, 1);
-	//localStorage["userGroups"] = JSON.stringify(userGroups);
-	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, got_data_FS_TO_WRITE, fail);
 	storeDataInAndroid();
 	//
 	nb_user_group = userGroups.length;
@@ -199,13 +159,6 @@ function changeLocGroup(locId, groupId){
 			var currentGroupId = parseInt($('.currentGroup').attr('name'));
 			
 			if( currentGroupId== locations[i].group && currentGroupId!='0'){
-				//console.log('changeLocGroup: launching anima');
-				/*$('#'+locations[i].id).anima({scaleX:0, scaleY:0}, 600,'linear', {complete:function(){
-			  			console.log('in anima complete function');
-			  			$('#'+locations[i].id).remove();
-			  			afterDrag();
-			  		}
-				});*/
 				$('#'+locations[i].id).slideUp(200,function(){
 		  			//console.log('in anima complete function');
 		  			$('#'+locations[i].id).remove();
@@ -226,8 +179,6 @@ function changeLocGroup(locId, groupId){
 		}
 	}
 	//LOCAL STORAGE: refresh local storage with new group for loc
-	//localStorage["userLocs"] = JSON.stringify(locations);
-	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, got_data_FS_TO_WRITE, fail);
 	storeDataInAndroid();
 }
 

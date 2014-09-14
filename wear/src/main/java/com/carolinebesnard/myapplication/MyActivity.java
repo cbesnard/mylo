@@ -35,8 +35,6 @@ import java.util.List;
 public class MyActivity extends Activity {
 
     private TextView titleview;
-    //private ImageButton addButton;
-    //public static Boolean deviceIsConnected;
     private CircledImageView addButton;
     private Boolean addButtonMove;
     public CircledImageView endLoader;
@@ -71,7 +69,7 @@ public class MyActivity extends Activity {
         addButton = new CircledImageView(this);
         addButton.setImageResource(R.drawable.android_wear_addbutton);
         addButton.setCircleRadius(120);
-        addButton.setPadding(0, 0, 0, 0);// llp.setPadding(left, top, right, bottom);
+        addButton.setPadding(0, 0, 0, 0);
         addButtonMove = false;
 
         addButton.setOnTouchListener(new View.OnTouchListener() {
