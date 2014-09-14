@@ -58,7 +58,6 @@ public class MyActivity extends Activity {
                 webviewEndOfLoad=true;
                 // LOAD WEBVIEW
                 w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
-                //
                 readDatas();
             }
         });
