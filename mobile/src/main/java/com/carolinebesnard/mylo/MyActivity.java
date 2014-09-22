@@ -29,10 +29,13 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import static android.webkit.WebView.*;
+
 
 public class MyActivity extends Activity {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private int locationUpdateRequestResponse = 0;
     public static Location currentLoc;
     public WebView w;
     private boolean onCreate;
@@ -41,23 +44,28 @@ public class MyActivity extends Activity {
     public LocationManager locationManager;
     public static int appState;
     public static boolean updated;
+    private MyLocationClass myLocationObject;
     private static final String TAG = MyActivity.class.getSimpleName();
-    private static final String PROPERTY_ID = "UA-51649868-1";
+    private static final String PROPERTY_ID = "UA-51649868-2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
+
+        /*Create Webview*/
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
-        w.setWebContentsDebuggingEnabled (true);
+        WebView.setWebContentsDebuggingEnabled(true);
         w.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
                 webviewEndOfLoad=true;
-                // LOAD WEBVIEW
-                w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+                if(currentLoc!=null){
+                    //Set Javascript user Position
+                    w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+                }
                 readDatas();
             }
         });
@@ -66,14 +74,7 @@ public class MyActivity extends Activity {
         setContentView(w);
         /**/
         myJsInterface.webview = w;
-        // Acquire a reference to the system Location Manager
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        //
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        makeUseOfNewLocation(lastKnownLocation);
-        lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        makeUseOfNewLocation(lastKnownLocation);
+
         appState=0;
     }
 
@@ -82,30 +83,17 @@ public class MyActivity extends Activity {
         super.onResume();
         myJsInterface.activity=this;
         MyloWearService.activity=this;
+        /*CREATION LOCATION OBJECT*/
+        Context con = getApplicationContext();
+        Log.i(TAG,"avant mylocation creation");
+        myLocationObject = new MyLocationClass(con,this);
+        Log.i(TAG,"après mylocation creation");
+        //Get user last known location
+        currentLoc = myLocationObject.getLocation();
+
         // Acquire a reference to the system Location Manager
         sendGATrackerEvent("Flags", "Resume_App", "");
-        /**/
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        makeUseOfNewLocation(lastKnownLocation);
-        lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        makeUseOfNewLocation(lastKnownLocation);
-        // Define a listener that responds to location updates
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                makeUseOfNewLocation(location);
-                //Log.v("location changed", "lat:"+location.getLatitude()+"lon:"+location.getLongitude());
-            }
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            public void onProviderEnabled(String provider) {}
-            public void onProviderDisabled(String provider) {}
-        };
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, locationListener);
-
         if(onCreate){
-            //Log.i(TAG,"onCreate=true");
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
         }
@@ -114,7 +102,8 @@ public class MyActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        locationManager.removeUpdates(locationListener);
+        //STOP LOCATION UPDATE REQUEST
+        myLocationObject.disconnectMyLocationClient();
         myJsInterface.activity = null;
         MyloWearService.activity = null;
     }
@@ -196,8 +185,14 @@ public class MyActivity extends Activity {
         return provider1.equals(provider2);
     }
 
+    /****/
+    public void updateJavascriptCurrentLocation(){
+        if(webviewEndOfLoad){
+            w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+        }
+    }
     /** Make use of new location */
-    public void makeUseOfNewLocation(Location loc) {
+    /*public void makeUseOfNewLocation(Location loc) {
         if(currentLoc !=null){
             if(isBetterLocation(loc,currentLoc)){
                 //Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
@@ -209,7 +204,7 @@ public class MyActivity extends Activity {
         }else{
             currentLoc = loc;
         }
-    }
+    }*/
     /***/
     private void readDatas() {
         String FILENAME = "data.txt";

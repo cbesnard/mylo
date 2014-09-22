@@ -356,14 +356,9 @@ function getPositions(group){
 			}
 		}
 	}
-	userLocs.sort(function(a,b){
-		if(a.dist > b.dist){return 1;}
-		else if(a.dist < b.dist){return -1;}
-		else{return 0;}
-	});
-	//sort locs by increasing distance
+	
 	var sortedLocs = new Array();
-	//sortedLocs = sortLocsByIncreasingDistance(userLocs);
+	//Place locs added from wear at top of array (last added first)
 	var toto=0;
 	for(toto=0;toto<userLocs.length;toto++){
 		if(userLocs[toto].name==""){
@@ -371,6 +366,14 @@ function getPositions(group){
 		}	
 	}
 
+	//sort locs by increasing distance
+	userLocs.sort(function(a,b){
+		if(a.dist > b.dist){return 1;}
+		else if(a.dist < b.dist){return -1;}
+		else{return 0;}
+	});
+
+	//fill the rest of the array with sorted locs
 	var tata=0;
 	for(tata=0;tata<userLocs.length;tata++){
 		if(userLocs[tata].name!=""){
