@@ -32,6 +32,9 @@ public class MyloWearService extends WearableListenerService {
     public static MyActivity activity;
     private String userDatas;
     private GoogleApiClient mGoogleApiClient;
+
+    private LocationHandler myLocationObject;
+
     static public final String PATH_STRING = "MYLO/ADD_NEW_LOC";
     private static final String TAG = MyloWearService.class.getSimpleName();
 
@@ -42,6 +45,12 @@ public class MyloWearService extends WearableListenerService {
                 .addApi(Wearable.API)
                 .build();
         mGoogleApiClient.connect();
+
+        /*CREATION LOCATION OBJECT*/
+        Context con = getApplicationContext();
+        Log.i(TAG,"before mylocation creation");
+        myLocationObject = new LocationHandler(con, (LocationUpdateListener) null);
+        Log.i(TAG,"after mylocation creation");
     }
 
     @Override
@@ -51,16 +60,7 @@ public class MyloWearService extends WearableListenerService {
 
         if(PATH_STRING.equals(messageEvent.getPath())) {
             //GET USER LOCATION !!!
-            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            //
-            String locationProvider = LocationManager.NETWORK_PROVIDER;
-            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            makeUseOfNewLocation(lastKnownLocation);
-            lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            makeUseOfNewLocation(lastKnownLocation);
-            //Log.i(TAG,"Get location: current loc="+MyActivity.currentLoc);
-
+            MyActivity.currentLoc = myLocationObject.getLocation();
             if(MyActivity.currentLoc!=null){
                 Log.i(TAG,"Get user location SUCCESS: current loc="+MyActivity.currentLoc);
                 //GET ADDR FROM LOCATION
@@ -174,7 +174,7 @@ public class MyloWearService extends WearableListenerService {
         }
     }
     /** Make use of new location */
-    public void makeUseOfNewLocation(Location loc) {
+    /*public void makeUseOfNewLocation(Location loc) {
         Log.i(TAG,"In makeUseOfNewLocation method");
         if(MyActivity.currentLoc !=null){
             Log.i(TAG,"MyActivity.currentLoc: lat="+MyActivity.currentLoc.getLatitude()+" , lon="+MyActivity.currentLoc.getLongitude());
@@ -185,7 +185,7 @@ public class MyloWearService extends WearableListenerService {
         if(MyActivity.isBetterLocation(loc,MyActivity.currentLoc)){
             MyActivity.currentLoc=loc;
         }
-    }
+    }*/
 
     private void readDatas() {
         //Log.v("in read data method","in read data method");
