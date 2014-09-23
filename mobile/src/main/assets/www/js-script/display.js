@@ -185,11 +185,13 @@ function getGroupColor(groupId){
 function refreshLocsdist(){
 	var displayed_locs = $('.loc');
 	if(displayed_locs.length>0){
-	if($('.loc').first().find('.locdist').text()=="-"){
-		var idGroupToDisplay = $('.currentGroup').attr('name');
-		var locToDisplay = getPositions(idGroupToDisplay);
-		printUserLocation(idGroupToDisplay,locToDisplay,fadeIn1);
-	}}	
+		if($('.loc').last().find('.locdist').text()=="-"){
+			//console.log("in refreshLocsdist and dist = -");
+			var idGroupToDisplay = $('.currentGroup').attr('name');
+			var locToDisplay = getPositions(idGroupToDisplay);
+			printUserLocation(idGroupToDisplay,locToDisplay,fadeIn1);
+		}
+	}	
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
 *	getUserPosition(): returns user position in an 

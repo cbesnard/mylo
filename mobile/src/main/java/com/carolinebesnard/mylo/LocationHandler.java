@@ -51,7 +51,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         mGoogleApiClient.connect();
     }
 
-    public void disconnectMyLocationClient() {
+    public void disconnectLocationHandler() {
         mGoogleApiClient.disconnect();
     }
 

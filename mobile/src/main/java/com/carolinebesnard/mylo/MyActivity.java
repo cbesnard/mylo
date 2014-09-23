@@ -100,7 +100,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     protected void onPause() {
         super.onPause();
         //STOP LOCATION UPDATE REQUEST
-        myLocationObject.disconnectMyLocationClient();
+        myLocationObject.disconnectLocationHandler();
         myJsInterface.activity = null;
         MyloWearService.activity = null;
     }
