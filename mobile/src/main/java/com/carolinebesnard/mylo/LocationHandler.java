@@ -1,14 +1,11 @@
 package com.carolinebesnard.mylo;
 
 import android.content.Context;
-import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
@@ -18,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 /**
  * Created by carolinebesnard on 21/09/2014.
  */
-public class MyLocationClass implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
+public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final long updateInterval=120000;//in milliseconds
@@ -31,18 +28,18 @@ public class MyLocationClass implements GoogleApiClient.ConnectionCallbacks,Goog
     private LocationListener myLocationListener;
 
     public Context applicationContext;
-    public MyActivity mainActivityInstance;
+    public LocationUpdateListener myListener;
 
-    private Location currentLocation;
+    public Location currentLocation;
 
-    private static final String TAG = MyLocationClass.class.getSimpleName();
+    private static final String TAG = LocationHandler.class.getSimpleName();
 
     //TO DO : check all possible source of error and prevent it
 
-    public MyLocationClass(Context context, MyActivity activity){
+    public LocationHandler(Context context, LocationUpdateListener listener){
         Log.i(TAG,"Consructor called");
         applicationContext = context;
-        mainActivityInstance = activity;
+        myListener = listener;
         /*
         * CHECK GOOGLE API CLIENT
         */
@@ -94,22 +91,16 @@ public class MyLocationClass implements GoogleApiClient.ConnectionCallbacks,Goog
     public void onLocationChanged(Location location) {
         Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
         if(location!=null){
-            //mainActivityInstance.currentLoc= location;
             if(currentLocation !=null){
                 if(isBetterLocation(location,currentLocation)){
                     Log.v(TAG, "new best location: lat="+location.getLatitude()+"lon="+location.getLongitude());
                     currentLocation=location;
-                    MyActivity.currentLoc= location;
-                    if(mainActivityInstance!=null){
-                        mainActivityInstance.updateJavascriptCurrentLocation();
-                    }
                 }
             }else{
                 currentLocation = location;
-                MyActivity.currentLoc= location;
-                if(mainActivityInstance!=null){
-                    mainActivityInstance.updateJavascriptCurrentLocation();
-                }
+            }
+            if(myListener!=null){
+                myListener.onLocationUpdate(currentLocation);
             }
         }
     }
@@ -117,21 +108,18 @@ public class MyLocationClass implements GoogleApiClient.ConnectionCallbacks,Goog
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "onConnected");
-        startLocationRequest();
+        if(myListener!=null){
+            startLocationRequest();
+        }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "onConnectionSuspended");
-        stopLocationRequest();
+        if(myListener!=null){
+            stopLocationRequest();
+        }
     }
-
-    //@Override
-    public void onDisconnected() {
-        Log.i(TAG, "onDisconnected");
-    }
-
-
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

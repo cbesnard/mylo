@@ -29,14 +29,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import static android.webkit.WebView.*;
 
-
-public class MyActivity extends Activity {
+public class MyActivity extends Activity implements LocationUpdateListener{
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private int locationUpdateRequestResponse = 0;
-    public static Location currentLoc;
+    public static Location currentLoc=null;
     public WebView w;
     private boolean onCreate;
     private boolean webviewEndOfLoad=false;
@@ -44,7 +42,7 @@ public class MyActivity extends Activity {
     public LocationManager locationManager;
     public static int appState;
     public static boolean updated;
-    private MyLocationClass myLocationObject;
+    private LocationHandler myLocationObject;
     private static final String TAG = MyActivity.class.getSimpleName();
     private static final String PROPERTY_ID = "UA-51649868-2";
 
@@ -53,7 +51,6 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
-
         /*Create Webview*/
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
@@ -86,7 +83,7 @@ public class MyActivity extends Activity {
         /*CREATION LOCATION OBJECT*/
         Context con = getApplicationContext();
         Log.i(TAG,"avant mylocation creation");
-        myLocationObject = new MyLocationClass(con,this);
+        myLocationObject = new LocationHandler(con,this);
         Log.i(TAG,"après mylocation creation");
         //Get user last known location
         currentLoc = myLocationObject.getLocation();
@@ -185,27 +182,6 @@ public class MyActivity extends Activity {
         return provider1.equals(provider2);
     }
 
-    /****/
-    public void updateJavascriptCurrentLocation(){
-        if(webviewEndOfLoad){
-            w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
-        }
-    }
-    /** Make use of new location */
-    /*public void makeUseOfNewLocation(Location loc) {
-        if(currentLoc !=null){
-            if(isBetterLocation(loc,currentLoc)){
-                //Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
-                currentLoc=loc;
-                if(webviewEndOfLoad){
-                    w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
-                }
-            }
-        }else{
-            currentLoc = loc;
-        }
-    }*/
-    /***/
     private void readDatas() {
         String FILENAME = "data.txt";
 
@@ -295,6 +271,13 @@ public class MyActivity extends Activity {
         }
     }
 
+    @Override
+    public void onLocationUpdate(Location location) {
+        currentLoc=location;
+        if(webviewEndOfLoad){
+            w.loadUrl("javascript:setUserPosition("+myLocationObject.currentLocation.getLatitude()+","+myLocationObject.currentLocation.getLongitude()+")");
+        }
+    }
 }
 
 class myJsInterface {
