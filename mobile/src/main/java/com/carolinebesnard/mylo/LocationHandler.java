@@ -37,7 +37,6 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     //TO DO : check all possible source of error and prevent it
 
     public LocationHandler(Context context, LocationUpdateListener listener){
-        Log.i(TAG,"Consructor called");
         applicationContext = context;
         myListener = listener;
         /*
@@ -62,11 +61,6 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             return null;
         }
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if(loc!=null){
-            Log.i(TAG, "Last Known Location :" + loc.getLatitude() + "," + loc.getLongitude());
-        }else{
-            Log.i(TAG, "Last Known Location is null");
-        }
         return loc;
     }
 
@@ -89,11 +83,11 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
+        //Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
         if(location!=null){
             if(currentLocation !=null){
                 if(isBetterLocation(location,currentLocation)){
-                    Log.v(TAG, "new best location: lat="+location.getLatitude()+"lon="+location.getLongitude());
+                    //Log.v(TAG, "new best location: lat="+location.getLatitude()+"lon="+location.getLongitude());
                     currentLocation=location;
                 }
             }else{
@@ -154,7 +148,10 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             // A new location is always better than no location
             return true;
         }
-
+        if(location==null){
+            // A new location is always better than no location
+            return false;
+        }
         // Check whether the new location fix is newer or older
         long timeDelta = location.getTime() - currentBestLocation.getTime();
         boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;

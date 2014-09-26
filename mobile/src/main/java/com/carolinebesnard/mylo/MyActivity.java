@@ -48,6 +48,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "MYLO V2.6.3");
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
@@ -82,9 +83,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         MyloWearService.activity=this;
         /*CREATION LOCATION OBJECT*/
         Context con = getApplicationContext();
-        Log.i(TAG,"avant mylocation creation");
         myLocationObject = new LocationHandler(con,this);
-        Log.i(TAG,"après mylocation creation");
         //Get user last known location
         currentLoc = myLocationObject.getLocation();
 
