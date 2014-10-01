@@ -44,11 +44,11 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     public static boolean updated;
     private LocationHandler myLocationObject;
     private static final String TAG = MyActivity.class.getSimpleName();
-    private static final String PROPERTY_ID = "UA-51649868-2";
+    private static final String PROPERTY_ID = "UA-51649868-1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "MYLO V2.6.3");
+        Log.i(TAG, "MYLO V2.6.4");
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
