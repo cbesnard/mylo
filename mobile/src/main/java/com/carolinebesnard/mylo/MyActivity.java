@@ -221,8 +221,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     @Override
     public void onLocationUpdate(Location location) {
         currentLoc=location;
-        if(webviewEndOfLoad){
-            w.loadUrl("javascript:setUserPosition("+myLocationObject.currentLocation.getLatitude()+","+myLocationObject.currentLocation.getLongitude()+")");
+        if(webviewEndOfLoad && location!=null){
+            w.loadUrl("javascript:setUserPosition("+location.getLatitude()+","+location.getLongitude()+")");
         }
     }
 }
