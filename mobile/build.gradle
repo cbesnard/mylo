@@ -8,8 +8,8 @@ android {
         applicationId "com.carolinebesnard.mylo"
         minSdkVersion 19
         targetSdkVersion 20
-        versionCode 16
-        versionName "2.6.4"
+        versionCode 17
+        versionName "2.6.5"
     }
     buildTypes {
         release {
