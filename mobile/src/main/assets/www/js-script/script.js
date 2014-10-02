@@ -56,16 +56,17 @@ $(document).ready(function(){
     
 	$('#nameField, #addressField').focusout(validate);
 
-    $('#nameField').on('change keypress paste textInput input',function(){
+    $('#nameField').on('change paste textInput input',function(){
     	validate();
     });
     //LIMIT GROUP NAME FIELD IN LENGTH
-    $('#nameField').attr('onkeypress','if(this.value.length >= mylo_UI_init_variables[0].nameLimitLength) return false;');
-    $('#nameField').bind('change keyup', function () {
-        if ($(this).val().length > mylo_UI_init_variables[0].nameLimitLength) {
-            //remove extra text which is more then maxlength
-            $(this).val($(this).val().slice(0, mylo_UI_init_variables[0].nameLimitLength));
-        }
+    //$('#nameField').attr('onkeypress','if(this.value.length >= mylo_UI_init_variables[0].nameLimitLength) return false;');
+    $('#nameField').bind('keypress keyup', function () {
+        if($('#nameField').val().length > mylo_UI_init_variables[0].nameLimitLength){
+			console.log('name length over 18');
+	        var content = $('#nameField').val().slice(0, mylo_UI_init_variables[0].nameLimitLength);
+	        $('#nameField').val(content);
+	    }else{}
     });
 
     $('#addressField').on('change keypress paste textInput input',function(){
@@ -98,7 +99,9 @@ $(document).ready(function(){
 		google.maps.event.addListener(searchBox, 'places_changed', function() {
 		  	try{
 			  	var place = searchBox.getPlaces()[0];
-				if(!place.geometry){}else{
+				if(!place.geometry){
+					console.log('currentGPS=plae has no geometry');
+				}else{
 					
 			   		if(!$('#nameField').val()){
 			  			$('#nameField').val(place.name);
@@ -106,6 +109,10 @@ $(document).ready(function(){
 			   
 					$('#addressField').val(place.formatted_address);
 					mylo_UI_init_variables[0].addingGPS=null;
+					mylo_UI_init_variables[0].currentGPS.lat = place.geometry.location.lat();
+					mylo_UI_init_variables[0].currentGPS.lon = place.geometry.location.lng();
+					console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
+					console.log('currentGPS='+mylo_UI_init_variables[0].currentGPS.lat+', '+mylo_UI_init_variables[0].currentGPS.lon);
 				
 					if(place.formatted_address.substring(0,8) != place.name.substring(0,8)){
 			    		mylo_UI_init_variables[0].addingPublicName=place.name;
@@ -115,7 +122,7 @@ $(document).ready(function(){
 					validate();
 			  	}
 		  	}catch(err){
-		    	GATrackerEvent("Init_fail", "searchBoxError", err.message);
+		    	//GATrackerEvent("Init_fail", "searchBoxError", err.message);
 		    }
 		});
     }catch(err){
@@ -247,6 +254,8 @@ $(document).ready(function(){
 				//cleaning fields
 				$('#addressField').blur();
 				$('#nameField').blur();
+				mylo_UI_init_variables[0].currentGPS.lat=null;
+				mylo_UI_init_variables[0].currentGPS.lon=null;
 				step=0;
 				//DISPLAY ADD PLACE SCREEN
 				displayAddPlaceScreen();
@@ -348,53 +357,18 @@ $(document).ready(function(){
 				hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
 			}else{
 				//check addr and get lat & lon of addr
-				try {
-			    	var geocoder = new google.maps.Geocoder();
-					geocoder.geocode( {'address': adr}, function(results, status){
-					    if (status == google.maps.GeocoderStatus.OK) {
-					        latlon.lat = results[0].geometry.location.lat();
-					        latlon.lon = results[0].geometry.location.lng();
-					        latlon.adr = results[0].formatted_address;
-					        // adress and location found => add location
-							addLocation(name, latlon.adr, idGroup, latlon.lat, latlon.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
-							//LOADER: Display end of load
-							$('#loader').css({display:'none'});
-							$('#loader_end').css({display:'block'});
-							mylo_UI_init_variables[0].loading=0;
-							step=0;
-
-							// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
-							var locsToPrint = getPositions(idGroup);
-							printUserLocation(idGroup,locsToPrint,fadeIn1);
-							//CLOSE ADDING PLACE
-							hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
-					    }else{
-					        //TOAST NOTIF ERROR ADDRESS NOT FOUND
-							showAndroidToast(mylo_textes[0].error_add_place_form_addr_not_found);
-					        //LOADER: Hide loader
-							$('#loader_container').css({display:'none'});
-							$('#loader').css({display:'block'});
-							$('#loader_end').css({display:'none'});
-							mylo_UI_init_variables[0].loading=0;
-							step=0;
-							//GA
-					        GATrackerEvent("Action_fail", "add_location_err", status);
-					        //
-					    }
-					});    
-			    }catch(err){
-			    	//TOAST NOTIF ERROR CONNEXION PB
-					showAndroidToast(mylo_textes[0].error_add_place_form_connexion_pb);
-			        //LOADER: Hide loader
-					$('#loader_container').css({display:'none'});
-					$('#loader').css({display:'block'});
-					$('#loader_end').css({display:'none'});
-					mylo_UI_init_variables[0].loading=0;
-					step=0;
-					//GA
-			        GATrackerEvent("Action_fail", "add_location_err", err.message);
-			        //
-			    }
+				console.log('IN VALIDATE: adr='+adr);
+				addLocation(name, adr, idGroup, mylo_UI_init_variables[0].currentGPS.lat, mylo_UI_init_variables[0].currentGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
+				//LOADER: Display end of load
+				$('#loader').css({display:'none'});
+				$('#loader_end').css({display:'block'});
+				mylo_UI_init_variables[0].loading=0;
+				step=0;
+				// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
+				var locsToPrint = getPositions(idGroup);
+				printUserLocation(idGroup,locsToPrint,fadeIn1);
+				//CLOSE ADDING PLACE
+				hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
 			}
 		}else{
 			//TOAST NOTIF ERROR MISSING FIELDS

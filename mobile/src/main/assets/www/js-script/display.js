@@ -952,9 +952,12 @@ function hideAddPlaceScreen(delay){
 
 function validate(){
 	if($('#nameField').val().length >= mylo_UI_init_variables[0].nameLimitLength){
-        $('#nameField').val($('#nameField').val().substring(0,mylo_UI_init_variables[0].nameLimitLength));
+		$('.maxLength').text('Max '+mylo_UI_init_variables[0].nameLimitLength+' characters');
+        $('.maxLength').css('color','#'+mylo_UI_init_variables[0].formActiveColor);
+    }else{
+    	$('.maxLength').text($('#nameField').val().length+'/'+mylo_UI_init_variables[0].nameLimitLength+' characters');
+    	$('.maxLength').css('color','#D6D6D6');
     }
-
     if($('#nameField').val() && $('#addressField').val()){
         $('.formButton').css({
 			'background-color': '#'+mylo_UI_init_variables[0].formActiveColor,

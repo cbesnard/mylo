@@ -581,6 +581,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	padding-right:35px;
 	padding-left: 5px;
 }
+.maxLength{
+	font-family: 'Roboto light';
+	font-size: 14px;
+	margin-top: 2px;
+	color: #D6D6D6;
+}
 #gps_txt{
 	display: none;
 	font-family: 'Roboto thin';
