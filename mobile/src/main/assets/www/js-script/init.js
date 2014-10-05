@@ -8,7 +8,7 @@ add_place_form_validate_button:"Add",
 add_place_form_title_gps:"Add gps location",
 add_place_form_title_place:"Add place",
 edit_place_form_title:"Edit location's name",
-edit_place_form_validate_button:"Save",
+edit_place_form_validate_button:"Rename",
 error_add_place_form_location_not_found:"Sorry, your position couldn't be found! Try again later :/",
 error_add_place_form_addr_not_found:"Address not recognized!",
 error_add_place_form_connexion_pb:"Sorry, your place couldn't be added due to connexion problems :/ \nTry again later!",
@@ -32,7 +32,7 @@ var mylo_UI_init_variables = new Array();
 mylo_UI_init_variables.push({loader_size:80,
 editPlace:null,
 myWatchID:0,
-userpos:{lat:0,lon:0},
+userpos:{lat:0,lon:0},//mylo_UI_init_variables[0].userpos
 userpos_time:0,
 nameLimitLength:18,
 groupNameLimitLength:10,
@@ -71,6 +71,10 @@ out_of_draggable:0,
 ready_to_delete:0,//mylo_UI_init_variables[0].clone
 clone:null,
 longPress_vibration_time:10,//mylo_UI_init_variables[0].longPress_vibration_time
+locMapHeight:100,
+map:null,//mylo_UI_init_variables[0].map
+marker:null,//mylo_UI_init_variables[0].marker
+map_zoom_level:15,//between (min) 0<-->19 (max)  mylo_UI_init_variables[0].map_zoom_level
 });
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
 /**************BUTTON ADD GROUP**************************/
@@ -78,7 +82,8 @@ var addGroupSize = mylo_UI_init_variables[0].groupSize+(mylo_UI_init_variables[0
 var addGroupWidth = screenWidth-addGroupSize-mylo_UI_init_variables[0].gGutter*2;//10=marginleft
 /******************************************/
 var addPlaceButtonHeight = mylo_UI_init_variables[0].headerHeight;
-var addPlaceWidth = screenWidth-mylo_UI_init_variables[0].addPlacePadding*2;
+//var addPlaceWidth = screenWidth-mylo_UI_init_variables[0].addPlacePadding*2;
+var addPlaceWidth = screenWidth;
 var addPlaceTextInputWidth = addPlaceWidth;
 var addPlaceHeight = screenHeight-mylo_UI_init_variables[0].headerHeight-mylo_UI_init_variables[0].groupsDivHeight-addPlaceButtonHeight;
 /************LOCATIONS****************************/
@@ -231,11 +236,52 @@ function setUI(callback){
         rotateY: '0deg',
     }, 0, 'linear');
     /********/
-    $('#addPlace').css({height: locsdivHeight-1-mylo_UI_init_variables[0].addPlacePadding*2+'px'}); 
+    //$('#addPlace').css({height: locsdivHeight-1-mylo_UI_init_variables[0].addPlacePadding*2+'px'});
+    $('#addPlace').css({height: locsdivHeight-1+'px'}); 
     $('#addPlace').css({
         width: addPlaceWidth-1+'px',
-        padding: mylo_UI_init_variables[0].addPlacePadding+'px',
+        //padding: mylo_UI_init_variables[0].addPlacePadding+'px',
     });
+    $('.form').css({
+        'margin-left': mylo_UI_init_variables[0].addPlacePadding+'px',
+        'margin-right': mylo_UI_init_variables[0].addPlacePadding+'px',
+    });
+    /*
+    * EDIT PLACE CONTAINER
+    */
+    $('#map-canvas').css({
+        //width: addPlaceWidth-1+'px',
+        //height: mylo_UI_init_variables[0].locMapHeight+'px',
+        width: '100%',
+        height: '120px',
+    });
+    var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
+    var mapOptions = {
+        zoom: mylo_UI_init_variables[0].map_zoom_level,
+        center: myLatlng,
+        disableDefaultUI: true,
+    }
+    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    mylo_UI_init_variables[0].marker = new google.maps.Marker({
+      position: myLatlng,
+      map: mylo_UI_init_variables[0].map,
+      title: 'Hello World!'
+    });
+
+    //$('#map-canvas').css('display','block');
+    
+
+    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map, 'idle', function(){
+        // do something only the first time the map is loaded
+        //@mapCopyright - gets the google copyright tags
+        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
+        $(mapCopyright).click(function(){
+            return false;
+        });
+    });
+
+    
     /*
     * LOADER
     */

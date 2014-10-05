@@ -453,6 +453,7 @@ function bindLocsEvents(){
 		return false; 
 	});
 	$('.loc').click(function(){
+
 		//GA
         GATrackerEvent("Button_click", "edit_place", $(this).attr('id'));
         //
@@ -464,11 +465,39 @@ function bindLocsEvents(){
 			adr1 = mylo_textes[0].location_gps_addr_txt;
 		}
 		var adr2 = adr.replace(adr1, "");
-		$('#gps_txt').html('<span class="gpsTxt">'+adr1+'</span>'+adr2);
+		var name = "New location";
+		if(loc.name!=""){
+			name=loc.name;
+		}
+		$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+adr1+'</span>'+adr2);
+   		$('#gps_txt').find('.name').text(name);
    		$('#gps_txt').css('display','block');
    		$('#gps_img').css('display','block');
    		$('#addressField').val(adr2);
-   		$('#nameField').val(loc.name);
+   		//$('#nameField').val(loc.name);
+
+   		 
+		/*var mapOptions = {
+	    zoom: 16,
+	    center: myLatlng,
+	    disableDefaultUI: true,
+	    }
+	    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+	    mylo_UI_init_variables[0].marker = new google.maps.Marker({
+	      position: myLatlng,
+	      map: mylo_UI_init_variables[0].map,
+	      title: 'Hello World!'
+	    });
+	    $('#map-canvas').css('display','block');
+	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map, 'idle', function(){
+	        // do something only the first time the map is loaded
+	        //@mapCopyright - gets the google copyright tags
+	        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
+	        $(mapCopyright).click(function(){
+	            return false;
+	        });
+	    });*/
    		//hide search field
    		$('#input_container').css('display','none');
    		validate();
@@ -784,6 +813,7 @@ function displayNewGroup(id,name){
 }
 
 function displayAddPlaceScreen(){
+	$('#map-canvas').css('display','none');
 	changeAndroidAppState(1);
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
@@ -791,6 +821,14 @@ function displayAddPlaceScreen(){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].edit_place_form_title);
 		$('#validateButton').css("display","none");
 		$('#saveButton').css("display","block");
+		//display map
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].editPlace.lat,mylo_UI_init_variables[0].editPlace.lon);
+		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+		    $('#map-canvas').css('display','block');
+		}
 
 	}else{
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_place);
@@ -850,7 +888,10 @@ function displayAddPlaceScreen(){
 	//slide locsContainer from right to left
 	$('#locsWraper').anima({
 		'margin-left': '-'+screenWidth+'px',
-	  	}, 350, '0.120, 0.715, 0.355, 0.875');
+	  	}, 350, '0.120, 0.715, 0.355, 0.875',{complete:function(){
+
+	  	}});
+
 	//rend inactif les groups
     $('#groupWraper').children().css({
     	opacity: '0.4', 
@@ -921,6 +962,9 @@ function hideAddPlaceScreen(delay){
 				//
 				$('#validateButton').css("display","block");
 				$('#saveButton').css("display","none");
+				
+				//$('#map-canvas').empty();
+				//$('body > span').remove();
 				//
 		  	}
 		});
@@ -944,6 +988,7 @@ function hideAddPlaceScreen(delay){
 			mylo_UI_init_variables[0].addingGPS=null;
 			mylo_UI_init_variables[0].addingPublicName="";
 			validate();
+			//$('#map-canvas').css('display','none');
 	  	}}
 	);
     //BOOL mylo_UI_init_variables[0].isAddingPlace to 0

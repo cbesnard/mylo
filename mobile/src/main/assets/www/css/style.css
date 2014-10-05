@@ -223,18 +223,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	font-family: 'Roboto';
 	color: #777777;
 }
+
 .gpsTxt {
 	width: 200px;
 }
-#table {
-	display: table;
-	height: 80px;
-	overflow: hidden;
-}
-.table_cell {
-	display: table-cell;
-	vertical-align: middle;
-}
+
 .loc .locCountry {
 	font-family: 'Roboto light';
 	font-size: 14px;
@@ -524,6 +517,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	border-top: 1px solid #f2f1f1;
 	border-left: 1px solid #f2f1f1;
 }
+#map-canvas {
+	/*display: none;*/
+	/*position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index:7000;*/
+}
+.form{
+}
 #google_logo {
 	float: left;
 	margin-top: 5px;
@@ -587,6 +589,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	margin-top: 2px;
 	color: #D6D6D6;
 }
+#table {
+	display: table;
+	height: 70px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+.table_cell {
+	display: table-cell;
+	vertical-align: middle;
+}
+
 #gps_txt{
 	display: none;
 	font-family: 'Roboto thin';
@@ -598,6 +612,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	/*margin-top: 20px;*/
 	/*margin-left: 10px;*/
 }
+#gps_txt .name{
+	font-size: 20px;
+}
+
 #gps_img{
 	display: none;
 	float: left;
@@ -606,10 +624,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	/*margin-top: 24px;*/
 }
 
+
 #validateButton, #saveButton{
 	display: block;
-
-	margin-top: 40px;
 	height: 32px;
 	line-height: 32px;
 	color:#fff;

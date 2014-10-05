@@ -48,7 +48,7 @@ $(document).ready(function(){
 	    	height:$(window).height()+'px',
 	    });
 	}
-
+	
 	/*
 	* BEHAVIOR OF FORMS
 	*/
@@ -63,8 +63,7 @@ $(document).ready(function(){
     //$('#nameField').attr('onkeypress','if(this.value.length >= mylo_UI_init_variables[0].nameLimitLength) return false;');
     $('#nameField').bind('keypress keyup', function () {
         if($('#nameField').val().length > mylo_UI_init_variables[0].nameLimitLength){
-			console.log('name length over 18');
-	        var content = $('#nameField').val().slice(0, mylo_UI_init_variables[0].nameLimitLength);
+			var content = $('#nameField').val().slice(0, mylo_UI_init_variables[0].nameLimitLength);
 	        $('#nameField').val(content);
 	    }else{}
     });

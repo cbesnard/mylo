@@ -1,5 +1,5 @@
 <!doctype html>
-<!--android:versionCode="15" android:versionName="2.6.3"-->
+<!--android:versionCode="15" android:versionName="2.6.6"-->
 <!-- updates:
 	TODO: - Open Mylo from url of loc "shared from Mylo" 
 -->
@@ -22,7 +22,7 @@
 <script src="js-script/script.js"></script>
 <script src="js-script/debug.js"></script>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC4QjL6Ba54J2kY9SfprjB7UWol-Es-xbc&libraries=places&language=en"></script>
 
 </head>
 <body>
@@ -74,20 +74,24 @@
 			</div>
 		</div>
 		<div id='addPlace'>
-			<div id="input_container">
+			<div id="map-canvas"></div>
+			
+			<div id="input_container" class="form">
 				<!--IMG id="place_search_img" SRC="./png/mylo-icon-V2_add-place.png"-->
 				<input type="text" class='textInput' placeholder="" id="addressField"></input>
 				<IMG id="google_logo" SRC="./png/powered-by-google-on-white.png" width="104" height="16">
 			</div>
-			<div id="table">
+			
+			<div id="table" class="form">
 				<div class="table_cell" ><IMG id="gps_img" SRC="./png/go_dark_filled.png"></div>
 				<div class="table_cell" ><p id="gps_txt"></p></div>
 			</div>
 			
-			<input type="text" class='textInput' placeholder="" id="nameField"></input>
-			<p class="maxLength">0 character</p>
-			<a class="formButton" id="validateButton"></a>
-			<a class="formButton" id="saveButton"></a>
+			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
+			<p class="maxLength form">0 character</p>
+			<a class="formButton form" id="validateButton"></a>
+			<a class="formButton form" id="saveButton"></a>
+			
 		</div>
 	</div>
 	<div id='trash' name="trash" class='trash droppable'>
