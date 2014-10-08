@@ -209,7 +209,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	padding: 0px;
 	margin-left: -1px;
 	margin-top: 5px;
+	height: 32px;
+	line-height: 32px;
+	white-space:nowrap;
 	overflow: hidden;
+	text-overflow:ellipsis;
 }
 .loc .locadr {
 	font-family: 'Roboto light';	
@@ -580,8 +584,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	font-size: 20px;
 	text-transform: capitalize;
 	
-	padding-right:35px;
 	padding-left: 5px;
+}
+#nameField{
+	margin-bottom: 20px;
 }
 .maxLength{
 	font-family: 'Roboto light';
@@ -591,7 +597,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 }
 #table {
 	display: table;
-	height: 70px;
 	overflow: hidden;
 	margin-top: 10px;
 	margin-bottom: 15px;

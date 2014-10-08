@@ -56,17 +56,17 @@ $(document).ready(function(){
     
 	$('#nameField, #addressField').focusout(validate);
 
-    $('#nameField').on('change paste textInput input',function(){
+    $('#nameField').on('keypress keyup change paste textInput input',function(){
     	validate();
     });
     //LIMIT GROUP NAME FIELD IN LENGTH
     //$('#nameField').attr('onkeypress','if(this.value.length >= mylo_UI_init_variables[0].nameLimitLength) return false;');
-    $('#nameField').bind('keypress keyup', function () {
+    /*$('#nameField').bind('keypress keyup', function () {
         if($('#nameField').val().length > mylo_UI_init_variables[0].nameLimitLength){
 			var content = $('#nameField').val().slice(0, mylo_UI_init_variables[0].nameLimitLength);
 	        $('#nameField').val(content);
 	    }else{}
-    });
+    });*/
 
     $('#addressField').on('change keypress paste textInput input',function(){
     	if($('#nameField').val()){
@@ -112,7 +112,16 @@ $(document).ready(function(){
 					mylo_UI_init_variables[0].currentGPS.lon = place.geometry.location.lng();
 					console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
 					console.log('currentGPS='+mylo_UI_init_variables[0].currentGPS.lat+', '+mylo_UI_init_variables[0].currentGPS.lon);
-				
+					
+					//Update map infos
+					var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
+					if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+					    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+					    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+					    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+					    //$('#map-canvas').css('display','block');
+					}
+
 					if(place.formatted_address.substring(0,8) != place.name.substring(0,8)){
 			    		mylo_UI_init_variables[0].addingPublicName=place.name;
 			  		}else{

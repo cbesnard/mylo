@@ -579,10 +579,16 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 			
 						
 			if(userLocs[i].name!=""){
+				var name = userLocs[i].name;
+				/*if(userLocs[i].name.length>mylo_UI_init_variables[0].nameLimitLength){
+					name = userLocs[i].name.slice(0, mylo_UI_init_variables[0].nameLimitLength-3);
+					name = name+"...";
+				}*/
+				
 				$('#locsDiv')
 					.append('<div class="loc" id="'+userLocs[i].id+'"><div class="container"><div id="centered"><p class="locname"></p><p class="locadr"></p><p class="locdist">'+userLocs[i].dist+'</p></div></div><div id="locButtons"><div class="locButton" id="shareLocButton"><IMG SRC="./png/share_dark.png"></div><div class="locButton" id="goLocButton"><IMG SRC="./png/go_dark.png"></div></div></div>');
 
-				$('#'+userLocs[i].id).find('.locname').text(userLocs[i].name);
+				$('#'+userLocs[i].id).find('.locname').text(name);
 				$('#'+userLocs[i].id).find('.container').css({
 					'border-left': mylo_UI_init_variables[0].locBorder+'px solid '+groups[userLocs[i].group].color,
 					'padding-left':mylo_UI_init_variables[0].locContainerPaddingLeft+'px',
@@ -813,10 +819,17 @@ function displayNewGroup(id,name){
 }
 
 function displayAddPlaceScreen(){
-	$('#map-canvas').css('display','none');
+	//$('#map-canvas').css('display','none');
 	changeAndroidAppState(1);
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
+		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+		    //$('#map-canvas').css('display','block');
+		}
 	}else if(mylo_UI_init_variables[0].editPlace!=null){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].edit_place_form_title);
 		$('#validateButton').css("display","none");
@@ -827,11 +840,19 @@ function displayAddPlaceScreen(){
 		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
 		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
 		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
-		    $('#map-canvas').css('display','block');
+		    //$('#map-canvas').css('display','block');
 		}
 
 	}else{
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_place);
+		//add marker + center map on user location
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
+		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+		    //$('#map-canvas').css('display','block');
+		}
 	}
 	//CLEAR ALL ADDING PLACE VARIABLES
 	mylo_UI_init_variables[0].addingPublicName="";
@@ -996,13 +1017,13 @@ function hideAddPlaceScreen(delay){
 }
 
 function validate(){
-	if($('#nameField').val().length >= mylo_UI_init_variables[0].nameLimitLength){
+	/*if($('#nameField').val().length >= mylo_UI_init_variables[0].nameLimitLength){
 		$('.maxLength').text('Max '+mylo_UI_init_variables[0].nameLimitLength+' characters');
         $('.maxLength').css('color','#'+mylo_UI_init_variables[0].formActiveColor);
     }else{
     	$('.maxLength').text($('#nameField').val().length+'/'+mylo_UI_init_variables[0].nameLimitLength+' characters');
     	$('.maxLength').css('color','#D6D6D6');
-    }
+    }*/
     if($('#nameField').val() && $('#addressField').val()){
         $('.formButton').css({
 			'background-color': '#'+mylo_UI_init_variables[0].formActiveColor,

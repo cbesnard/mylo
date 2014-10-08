@@ -305,7 +305,7 @@ function setUI(callback){
     /*
     * INPUT FIELDS
     */
-    $('#addPlace').find('.textInput').css({width: screenWidth-42-mylo_UI_init_variables[0].addPlacePadding*2+'px'});
+    $('#addPlace').find('.textInput').css({width: screenWidth-7-mylo_UI_init_variables[0].addPlacePadding*2+'px'});
     $('#validateButton').text(mylo_textes[0].add_place_form_validate_button);
     $('#validateButton').css({width: screenWidth-mylo_UI_init_variables[0].addPlacePadding*2.2+'px'});
     $('#saveButton').text(mylo_textes[0].edit_place_form_validate_button);
