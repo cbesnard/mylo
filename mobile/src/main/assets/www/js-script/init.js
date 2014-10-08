@@ -76,6 +76,7 @@ map:null,//mylo_UI_init_variables[0].map
 marker:null,//mylo_UI_init_variables[0].marker
 map_zoom_level:15,//between (min) 0<-->19 (max)  mylo_UI_init_variables[0].map_zoom_level
 });
+var MY_MAPTYPE_ID ="my maptype id";
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
 /**************BUTTON ADD GROUP**************************/
 var addGroupSize = mylo_UI_init_variables[0].groupSize+(mylo_UI_init_variables[0].gborerSize-mylo_UI_init_variables[0].addGroupBorder)*2;
@@ -247,7 +248,7 @@ function setUI(callback){
         'margin-right': mylo_UI_init_variables[0].addPlacePadding+'px',
     });
     /*
-    * EDIT PLACE CONTAINER
+    * GOOGLE MAPS
     */
     $('#map-canvas').css({
         //width: addPlaceWidth-1+'px',
@@ -255,13 +256,32 @@ function setUI(callback){
         width: '100%',
         height: '120px',
     });
+    
+    var styles = [
+        {
+          featureType: "poi",
+          stylers: [
+            {visibility: "off"}
+          ]
+        }
+    ];
+
+    var styledMapOptions = {
+        name: 'Custom Style'
+    };
+
     var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
     var mapOptions = {
         zoom: mylo_UI_init_variables[0].map_zoom_level,
         center: myLatlng,
         disableDefaultUI: true,
+        mapTypeId: MY_MAPTYPE_ID,
     }
     mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var customMapType = new google.maps.StyledMapType(styles, styledMapOptions);
+
+    mylo_UI_init_variables[0].map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
 
     mylo_UI_init_variables[0].marker = new google.maps.Marker({
       position: myLatlng,
