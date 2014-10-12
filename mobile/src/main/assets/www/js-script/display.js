@@ -655,11 +655,15 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 		        //
 				var loc = getLoc($(this).parent().parent('.loc').attr('id')); 
 				var adressToEncode="";
+				var adressMessage = "";
 				if(loc.gps==1){
-					adressToEncode = "@"+loc.lat+","+loc.lon;//"@"+userLocs[i].lat+","+userLocs[i].lon
-				}else{adressToEncode = loc.publicName+' '+loc.adr;}
+					adressToEncode = "@"+loc.lat+","+loc.lon;//@lat,lon
+				}else{
+					adressToEncode = loc.publicName+' '+loc.adr;
+				}
+				adressMessage = loc.adr;
 				var urlToShare = 'http://maps.google.com/maps?q='+encodeURIComponent(adressToEncode);
-				var message = loc.name+': '+urlToShare;
+				var message = loc.name+', '+adressMessage+': '+urlToShare;
 				shareAndroid(message);
 			});
 			/*
@@ -672,7 +676,7 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 		        GATrackerEvent("Button_click", "go_loc", "");
 		        var adressToEncode="";
 				if(loc.gps==1){
-					adressToEncode = loc.lat+","+loc.lon;//"@"+userLocs[i].lat+","+userLocs[i].lon
+					adressToEncode = loc.lat+","+loc.lon;//@lat,lon
 				}else{adressToEncode = loc.publicName+' '+loc.adr;}
 				var urlToShare = 'geo:'+loc.lat+","+loc.lon+'?q='+encodeURIComponent(adressToEncode);
 				showOnMapsAndroid(urlToShare);
@@ -847,6 +851,9 @@ function displayAddPlaceScreen(){
 		$('.addPlace').find('#close_txt').text(mylo_textes[0].add_place_form_title_place);
 		//add marker + center map on user location
 		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
+		if(mylo_UI_init_variables[0].currentGPS!=null){
+			myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
+		}
 		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
 		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
 		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
@@ -1007,6 +1014,7 @@ function hideAddPlaceScreen(delay){
 			$('#searchField').val('');
 			$('#gps_txt').html('');
 			mylo_UI_init_variables[0].addingGPS=null;
+			mylo_UI_init_variables[0].currentGPS=null;
 			mylo_UI_init_variables[0].addingPublicName="";
 			validate();
 			//$('#map-canvas').css('display','none');
@@ -1070,4 +1078,49 @@ function validateGroupNameField(){
 			border: '1px solid #'+mylo_UI_init_variables[0].formInactiveColor,
         });
 	}
+}
+
+/* * * * * * * * * * * * * * *  * * * * * * * *
+*	LOADER
+* * * * * * * * * * * * * * * * * * * * * * * */
+
+function easeInOutCirc(t, b, c, d){
+    t /= d/2;
+    if (t < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
+    t -= 2;
+    return c/2 * (Math.sqrt(1 - t*t) + 1) + b;
+};
+function easeOutCirc(t, b, c, d){
+    t /= d;
+    t--;
+    return c * Math.sqrt(1 - t*t) + b;
+};
+
+function render(guage, step){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    if(step<=guage.end){
+        var current = easeOutCirc(step, -quart, PI2, guage.end);
+        ctx.arc(guage.x, guage.y, guage.radius, -quart, current);
+    }else{
+        var current = easeOutCirc(step-guage.end, -quart, PI2, guage.end);
+        ctx.arc(guage.x, guage.y, guage.radius, current, complete);
+    }
+    ctx.strokeStyle = guage.color;
+    ctx.stroke();
+}
+
+function animateLoader(){
+    //if loading's not finished: request another frame
+    if(mylo_UI_init_variables[0].loading){
+        // if animation finished : back to the beggining step=0
+        if(step<circle.end*2){
+            requestAnimationFrame(animateLoader);
+        }else{
+            step=0;
+            requestAnimationFrame(animateLoader);
+        }
+        render(circle, step);
+        step+=1;
+    }
 }

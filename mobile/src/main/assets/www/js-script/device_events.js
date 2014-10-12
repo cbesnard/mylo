@@ -91,3 +91,161 @@ function storeDataInAndroid(){
 	var stringData = JSON.stringify(dataToWrite);
     Android.storeDatas(stringData);
 }
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	LAUNCH LOADER
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function launchLoader(){
+	$('#loader_container').css({display:'block'});
+	mylo_UI_init_variables[0].loading=1;
+	animateLoader();
+	mylo_UI_init_variables[0].searching_position=1;
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	STOP LOADER
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function stopLoader(showEndOfLoad){
+	if(showEndOfLoad){
+		$('#loader').css({display:'none'});
+		$('#loader_end').css({display:'block'});
+		mylo_UI_init_variables[0].loading=0;
+		step=0;
+	}else{
+		//LOADER: hide loader
+	    mylo_UI_init_variables[0].searching_position=0;
+	    $('#loader_container').css({display:'none'});
+		$('#loader').css({display:'block'});
+		$('#loader_end').css({display:'none'});
+		mylo_UI_init_variables[0].loading=0;
+		step=0;
+	}
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	ADD GPS POSITION FROM LINK
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function addGPSFromLink(lat,lon, addrEncoded){
+	$('#loader_container').css({display:'block'});
+	mylo_UI_init_variables[0].loading=1;
+	animateLoader();
+	mylo_UI_init_variables[0].searching_position=1;
+	//GET USER LOCATION in lat lng
+	mylo_UI_init_variables[0].addingGPS = {lat:lat,lon:lon};
+	var addr = null;
+	//DECODE NAME & ADDR
+	if(addrEncoded.length>0){
+        //RETRIEVE USER DATA
+        var d = window.atob(addrEncoded);
+        addr = _utf8_decode(d);
+    }
+	//GET ADR of lat & lng
+	$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+addr);
+	$('#gps_txt').css('display','block');
+	$('#gps_img').css('display','block');
+	//hide search field
+	$('#input_container').css('display','none');
+	$('#nameField').val('New GPS location');
+	validate();
+	//OPEN ADD PLACE SCREEN
+	stopLoader();
+	displayAddPlaceScreen();
+
+    /*var latlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
+	var geocoder = new google.maps.Geocoder();
+	geocoder.geocode( {'location': latlng}, function(results, status){
+	    if (status == google.maps.GeocoderStatus.OK) {
+	        //FILL the fields with data
+	  		var address = results[0].formatted_address;
+	   		//$('#gps_txt').text(address);
+			$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+address);
+	   		$('#gps_txt').css('display','block');
+	   		$('#gps_img').css('display','block');
+	   		//hide search field
+	   		$('#input_container').css('display','none');
+	   		$('#nameField').val('New GPS location');
+	   		validate();
+	   		//OPEN ADD PLACE SCREEN
+	   		step=0;
+			displayAddPlaceScreen();
+	    }else{
+	        //TOAST NOTIF ERROR LOCATION NOT FOUND
+	        showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
+			//GA
+	        GATrackerEvent("Action_fail", "find_location_err", status);
+	        //
+	    }
+	  	//LOADER: hide loader
+	    mylo_UI_init_variables[0].searching_position=0;
+	    $('#loader_container').css({display:'none'});
+		$('#loader').css({display:'block'});
+		$('#loader_end').css({display:'none'});
+		mylo_UI_init_variables[0].loading=0;
+		step=0;
+	});*/
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*	ADD PUBLIC PLACE FROM LINK
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function addPublicPlaceFromLink(name,addr){
+	$('#loader_container').css({display:'block'});
+	mylo_UI_init_variables[0].loading=1;
+	animateLoader();
+	mylo_UI_init_variables[0].searching_position=1;
+	var locname = null;
+	var locaddr = null;
+	//DECODE NAME & ADDR
+	if(name.length>0){
+        //RETRIEVE USER DATA
+        var d = window.atob(name);
+        locname = _utf8_decode(d);
+    }
+    if(addr.length>0){
+        //RETRIEVE USER DATA
+        var e = window.atob(addr);
+        locaddr = _utf8_decode(e);
+    }
+	//NAME
+	mylo_UI_init_variables[0].addingPublicName=locname;
+	//ADDR
+	$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+locaddr);
+	$('#gps_txt').find('.name').text(locname);
+	$('#gps_txt').css('display','block');
+	$('#gps_img').css('display','block');
+	//hide search field
+	$('#input_container').css('display','none');
+	//
+	$('#nameField').val(locname);
+	$('#addressField').val(locaddr);
+	validate();
+	
+	try {
+    	var geocoder = new google.maps.Geocoder();
+		geocoder.geocode( {'address': locaddr}, function(results, status){
+		    if (status == google.maps.GeocoderStatus.OK) {
+		        //LAT LON
+		        mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
+		        mylo_UI_init_variables[0].currentGPS.lat = results[0].geometry.location.lat();
+		        mylo_UI_init_variables[0].currentGPS.lon = results[0].geometry.location.lng();
+		        //latlon.adr = results[0].formatted_address;
+		        //OPEN ADD PLACE SCREEN
+				displayAddPlaceScreen();
+		    }else{
+		        //TOAST NOTIF ERROR ADDRESS NOT FOUND
+				showAndroidToast(mylo_textes[0].error_add_place_form_addr_not_found);
+		    }
+		    //LOADER: Hide loader
+		    $('#loader_container').css({display:'none'});
+			$('#loader').css({display:'block'});
+			$('#loader_end').css({display:'none'});
+			mylo_UI_init_variables[0].loading=0;
+			step=0;
+		});    
+    }catch(err){
+    	//TOAST NOTIF ERROR CONNEXION PB
+		showAndroidToast(mylo_textes[0].error_add_place_form_connexion_pb);
+        //LOADER: Hide loader
+		$('#loader_container').css({display:'none'});
+		$('#loader').css({display:'block'});
+		$('#loader_end').css({display:'none'});
+		mylo_UI_init_variables[0].loading=0;
+		step=0;
+    }
+}

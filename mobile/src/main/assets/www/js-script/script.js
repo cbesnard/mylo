@@ -108,6 +108,7 @@ $(document).ready(function(){
 			   
 					$('#addressField').val(place.formatted_address);
 					mylo_UI_init_variables[0].addingGPS=null;
+					mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
 					mylo_UI_init_variables[0].currentGPS.lat = place.geometry.location.lat();
 					mylo_UI_init_variables[0].currentGPS.lon = place.geometry.location.lng();
 					console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
@@ -158,14 +159,14 @@ $(document).ready(function(){
     
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    *	LOADER
-    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    var canvas = document.getElementById("loader");
-    canvas.width=200;
-    canvas.height=200;
-    canvas.style.width=100;
-    canvas.style.height=100;
-	var ctx = canvas.getContext("2d");
+	*   LOADER
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	canvas = document.getElementById("loader");
+	canvas.width=200;
+	canvas.height=200;
+	canvas.style.width=100;
+	canvas.style.height=100;
+	ctx = canvas.getContext("2d");
 	// set context styles
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#2FBA90';
@@ -173,62 +174,7 @@ $(document).ready(function(){
 	ctx.shadowOffsetX = 0;
 	ctx.shadowOffsetY = 0;
 	ctx.shadowBlur = 0;
-	
-	var quart = Math.PI / 2;
-	var PI2 = Math.PI * 2;
-	var complete = Math.PI*1.5;
-	var step = 0;
 
-	var circle = {
-    x: 100,
-    y: 100,
-    radius: 88,
-    start: 0,
-    end: 30,
-    color: "#2FBA90"
-	}
-
-	function easeInOutCirc(t, b, c, d){
-		t /= d/2;
-		if (t < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
-		t -= 2;
-		return c/2 * (Math.sqrt(1 - t*t) + 1) + b;
-	};
-	function easeOutCirc(t, b, c, d){
-		t /= d;
-		t--;
-		return c * Math.sqrt(1 - t*t) + b;
-	};
-
-	function render(guage, step){
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	    ctx.beginPath();
-	    if(step<=guage.end){
-			var current = easeOutCirc(step, -quart, PI2, guage.end);
-	    	ctx.arc(guage.x, guage.y, guage.radius, -quart, current);
-		}else{
-			var current = easeOutCirc(step-guage.end, -quart, PI2, guage.end);
-	    	ctx.arc(guage.x, guage.y, guage.radius, current, complete);
-		}
-	    ctx.strokeStyle = guage.color;
-	    ctx.stroke();
-	}
-
-	function animateLoader(){
-	    //if loading's not finished: request another frame
-	    if(mylo_UI_init_variables[0].loading){
-		    // if animation finished : back to the beggining step=0
-		    if(step<circle.end*2){
-		        requestAnimationFrame(animateLoader);
-		    }else{
-		    	step=0;
-		    	requestAnimationFrame(animateLoader);
-			}
-			render(circle, step);
-	    	step+=1;
-		}
-	}
-	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	*	BEHAVIOR : Bind droppable & Click behavior of groups !
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -262,8 +208,7 @@ $(document).ready(function(){
 				//cleaning fields
 				$('#addressField').blur();
 				$('#nameField').blur();
-				mylo_UI_init_variables[0].currentGPS.lat=null;
-				mylo_UI_init_variables[0].currentGPS.lon=null;
+				mylo_UI_init_variables[0].currentGPS=null;
 				step=0;
 				//DISPLAY ADD PLACE SCREEN
 				displayAddPlaceScreen();

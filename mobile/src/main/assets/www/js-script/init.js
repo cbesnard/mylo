@@ -94,6 +94,24 @@ var imgLocButtonsPaddingTop = Math.floor((locButtonHeight-mylo_UI_init_variables
 var imgLocButtonsPaddingLeft = Math.floor((mylo_UI_init_variables[0].locButtonsWidth-mylo_UI_init_variables[0].imgLocButtonsWidth)/2);
 var locContainerWidth = screenWidth-mylo_UI_init_variables[0].locContainerPaddingLeft-mylo_UI_init_variables[0].locContainerPaddingRight-mylo_UI_init_variables[0].locBorder-mylo_UI_init_variables[0].locButtonsWidth;
 /*
+* LOADER ANIMATION
+*/
+var canvas;
+var ctx;
+var step = 0;
+var quart = Math.PI / 2;
+var PI2 = Math.PI * 2;
+var complete = Math.PI*1.5;
+
+var circle = {
+x: 100,
+y: 100,
+radius: 88,
+start: 0,
+end: 30,
+color: "#2FBA90"
+}
+/*
 * INITIALIZE DEFAULT GROUPS 
 */
 /*********** GROUPS COLORS ************/
@@ -322,6 +340,8 @@ function setUI(callback){
         height:mylo_UI_init_variables[0].loader_size+'px',
         'margin-left': marginLeft+'px',
     });
+
+
     /*
     * INPUT FIELDS
     */

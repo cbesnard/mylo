@@ -43,6 +43,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     public static int appState;
     public static boolean updated;
     private LocationHandler myLocationObject;
+    private Uri intentData=null;
     private static final String TAG = MyActivity.class.getSimpleName();
     private static final String PROPERTY_ID = "UA-51649868-2";
 
@@ -52,6 +53,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
+        /*get intent*/
+        intentData = getIntent().getData();
         /*Create Webview*/
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
@@ -64,23 +67,26 @@ public class MyActivity extends Activity implements LocationUpdateListener{
                     //Set Javascript user Position
                     w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
                 }
-                readDatas();
+                readData();
             }
         });
         w.loadUrl("file:///android_asset/www/index.html");
         w.addJavascriptInterface(new myJsInterface(this), "Android");
         setContentView(w);
-        /**/
+        //
         myJsInterface.webview = w;
 
+        /*SET APP STATE*/
         appState=0;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG,"onResume called");
         myJsInterface.activity=this;
         MyloWearService.activity=this;
+        Helper.activity = this;
         /*CREATION LOCATION OBJECT*/
         Context con = getApplicationContext();
         myLocationObject = new LocationHandler(con,this);
@@ -92,6 +98,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         if(onCreate){
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
+            checkForIntent();
         }
     }
 
@@ -102,6 +109,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         myLocationObject.disconnectLocationHandler();
         myJsInterface.activity = null;
         MyloWearService.activity = null;
+        Helper.activity = null;
     }
 
     @Override
@@ -123,13 +131,53 @@ public class MyActivity extends Activity implements LocationUpdateListener{
 
     public void refreshUserDatas(){
         if(updated){
-            Log.i(TAG, "updates detected: calling readDatas");
-            readDatas();
+            Log.i(TAG, "updates detected: calling readData");
+            readData();
             updated=false;
         }else {Log.i(TAG, "No updates");}
     }
 
-    private void readDatas() {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        intentData = intent.getData();
+        Log.i(TAG,"onNewIntent called");
+    }
+
+    private void checkForIntent() {
+        /*CHECK FOR INTENT*/
+        Log.i(TAG,"CheckForIntent called");
+        //if(getIntent()!=null){
+        final Uri data = intentData;
+        //Log.i(TAG,data.toString());
+        if(data!=null){
+            callJS("javascript:launchLoader()");
+            Thread thread = new Thread(new Runnable(){
+                //private Uri data
+                @Override
+                public void run(){
+                    final String url = Helper.extractIntent(data);
+                    if(url!=null){
+                        runOnUiThread(new Runnable(){
+                            public void run() {
+                                callJS(url);
+                            }
+                        });
+                    }/*else {
+                        //UNKNOWN URL FORMAT
+                        // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
+                    }*/
+                }
+            });
+            thread.start();
+        }
+    }
+    public void callJS(String url) {
+        if(url!=null){
+            w.loadUrl(url);
+        }
+    }
+    private void readData() {
         String FILENAME = "data.txt";
 
         if(isExternalStorageReadable()){
@@ -158,6 +206,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
                             String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             String url="javascript:initUserDatas('"+converted+"')";
                             w.loadUrl(url);
+                            checkForIntent();
                         }
                         onCreate=true;
                     }else{

@@ -611,7 +611,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	font-family: 'Roboto thin';
 	font-size: 16px;
 	text-transform: capitalize;
-	/*width: 319px;*/
+	word-wrap: break-word;
+	width: 300px;
 	/*height: 75px;*/
 	margin: 0px;
 	/*margin-top: 20px;*/
