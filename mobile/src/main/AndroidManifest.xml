@@ -19,6 +19,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="http" android:host="maps.google.com"/>
+                <data android:scheme="http" android:host="goo.gl" android:pathPrefix="/maps"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>

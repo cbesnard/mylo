@@ -147,44 +147,11 @@ function addGPSFromLink(lat,lon, addrEncoded){
 	//OPEN ADD PLACE SCREEN
 	stopLoader();
 	displayAddPlaceScreen();
-
-    /*var latlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
-	var geocoder = new google.maps.Geocoder();
-	geocoder.geocode( {'location': latlng}, function(results, status){
-	    if (status == google.maps.GeocoderStatus.OK) {
-	        //FILL the fields with data
-	  		var address = results[0].formatted_address;
-	   		//$('#gps_txt').text(address);
-			$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+address);
-	   		$('#gps_txt').css('display','block');
-	   		$('#gps_img').css('display','block');
-	   		//hide search field
-	   		$('#input_container').css('display','none');
-	   		$('#nameField').val('New GPS location');
-	   		validate();
-	   		//OPEN ADD PLACE SCREEN
-	   		step=0;
-			displayAddPlaceScreen();
-	    }else{
-	        //TOAST NOTIF ERROR LOCATION NOT FOUND
-	        showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
-			//GA
-	        GATrackerEvent("Action_fail", "find_location_err", status);
-	        //
-	    }
-	  	//LOADER: hide loader
-	    mylo_UI_init_variables[0].searching_position=0;
-	    $('#loader_container').css({display:'none'});
-		$('#loader').css({display:'block'});
-		$('#loader_end').css({display:'none'});
-		mylo_UI_init_variables[0].loading=0;
-		step=0;
-	});*/
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	ADD PUBLIC PLACE FROM LINK
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-function addPublicPlaceFromLink(name,addr){
+function addPublicPlaceFromLink(name,addr,lat,lon){
 	$('#loader_container').css({display:'block'});
 	mylo_UI_init_variables[0].loading=1;
 	animateLoader();
@@ -214,9 +181,15 @@ function addPublicPlaceFromLink(name,addr){
 	//
 	$('#nameField').val(locname);
 	$('#addressField').val(locaddr);
+	//
+	mylo_UI_init_variables[0].currentGPS = {lat:lat,lon:lon};
 	validate();
+	//STOP LOADER
+	stopLoader();
+	//OPEN ADD PLACE SCREEN
+	displayAddPlaceScreen();
 	
-	try {
+	/*try {
     	var geocoder = new google.maps.Geocoder();
 		geocoder.geocode( {'address': locaddr}, function(results, status){
 		    if (status == google.maps.GeocoderStatus.OK) {
@@ -247,5 +220,5 @@ function addPublicPlaceFromLink(name,addr){
 		$('#loader_end').css({display:'none'});
 		mylo_UI_init_variables[0].loading=0;
 		step=0;
-    }
+    }*/
 }

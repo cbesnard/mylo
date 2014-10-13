@@ -474,30 +474,6 @@ function bindLocsEvents(){
    		$('#gps_txt').css('display','block');
    		$('#gps_img').css('display','block');
    		$('#addressField').val(adr2);
-   		//$('#nameField').val(loc.name);
-
-   		 
-		/*var mapOptions = {
-	    zoom: 16,
-	    center: myLatlng,
-	    disableDefaultUI: true,
-	    }
-	    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-	    mylo_UI_init_variables[0].marker = new google.maps.Marker({
-	      position: myLatlng,
-	      map: mylo_UI_init_variables[0].map,
-	      title: 'Hello World!'
-	    });
-	    $('#map-canvas').css('display','block');
-	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map, 'idle', function(){
-	        // do something only the first time the map is loaded
-	        //@mapCopyright - gets the google copyright tags
-	        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
-	        $(mapCopyright).click(function(){
-	            return false;
-	        });
-	    });*/
    		//hide search field
    		$('#input_container').css('display','none');
    		validate();

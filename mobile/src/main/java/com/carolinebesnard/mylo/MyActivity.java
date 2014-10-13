@@ -110,6 +110,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         myJsInterface.activity = null;
         MyloWearService.activity = null;
         Helper.activity = null;
+        //w=null;
     }
 
     @Override
@@ -156,24 +157,27 @@ public class MyActivity extends Activity implements LocationUpdateListener{
                 //private Uri data
                 @Override
                 public void run(){
-                    final String url = Helper.extractIntent(data);
-                    if(url!=null){
-                        runOnUiThread(new Runnable(){
-                            public void run() {
-                                callJS(url);
-                            }
-                        });
-                    }/*else {
-                        //UNKNOWN URL FORMAT
-                        // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
-                    }*/
+                final String url = IntentUriAnalyser.extractIntent(data);
+                runOnUiThread(new Runnable(){
+                    public void run() {
+                        if(url!=null){
+                            callJS(url);
+                        }else {
+                            //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING
+                            callJS("javascript:stopLoader()");
+                            // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
+                            Helper.showToast("Sorry couldn't retrieve location :/");
+                        }
+                    }
+                });
                 }
             });
             thread.start();
+            intentData = null;
         }
     }
     public void callJS(String url) {
-        if(url!=null){
+        if(url!=null && w!=null && webviewEndOfLoad){
             w.loadUrl(url);
         }
     }
