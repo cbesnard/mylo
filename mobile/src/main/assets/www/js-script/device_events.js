@@ -169,6 +169,9 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
         var e = window.atob(addr);
         locaddr = _utf8_decode(e);
     }
+    if(locname==null){
+    	locname = "New Place";
+    }
 	//NAME
 	mylo_UI_init_variables[0].addingPublicName=locname;
 	//ADDR

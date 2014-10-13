@@ -60,7 +60,7 @@ public class Helper {
         }
     }
 
-    public static Address getAddressObject(String address){
+    public static MyloPlace getMyloPlaceFromQ(String address){
         //GET CONTEXT
         context = activity.getBaseContext();
         //GET ADDR FROM LOCATION
@@ -74,8 +74,23 @@ public class Helper {
                 return null;
             }else {
                 Address addr = addresses.get(0);
+                MyloPlace myloPlace = new MyloPlace(Locale.getDefault());
+                myloPlace.setFeatureName(addr.getFeatureName());
+                myloPlace.setLatitude(addr.getLatitude());
+                myloPlace.setLongitude(addr.getLongitude());
+                //
+                String addressString = String.format(
+                        "%s, %s, %s",
+                        // If there's a street address, add it
+                        addr.getMaxAddressLineIndex() > 0 ?
+                                addresses.get(0).getAddressLine(0) : "",
+                        // Locality is usually a city
+                        addr.getLocality(),
+                        // The country of the address
+                        addr.getCountryName());
+                myloPlace.setAddress(addressString);
                 //LatLng gps = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-                return addr;
+                return myloPlace;
             }
         } catch (Exception e) {
             e.printStackTrace();
