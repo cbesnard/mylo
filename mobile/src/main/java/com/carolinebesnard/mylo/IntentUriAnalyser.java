@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
@@ -164,9 +165,24 @@ public class IntentUriAnalyser {
             Log.i(TAG,text);
             String t = text.replace("while(1);","");
             JSONObject jsonobject = new JSONObject(t);
-            String test = jsonobject.getString("title");
-            Log.i(TAG,test);
-
+            JSONObject obj = (JSONObject) jsonobject.getJSONObject("overlays").getJSONArray("markers").get(0);
+            Double lat = obj.getJSONObject("latlng").getDouble("lat");
+            Double lng = obj.getJSONObject("latlng").getDouble("lng");
+            String name = obj.getString("name");
+            JSONArray addressline = obj.getJSONObject("infoWindow").getJSONArray("addressLines");
+            String addr = "";
+            for (int i=0;i<addressline.length();i++){
+                addr+=" ";
+                addr+=addressline.get(i);
+            }
+            //String test = jsonobject.getString("title");
+            Log.i(TAG,name+" "+lat.toString()+" "+lng.toString()+" "+addr);
+            MyloPlace myloplace = new MyloPlace(Locale.getDefault());
+            myloplace.setAddress(addr);
+            myloplace.setFeatureName(name);
+            myloplace.setLatitude(lat);
+            myloplace.setLongitude(lng);
+            return myloplace;
         }catch (Exception e){
 
         }
