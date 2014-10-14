@@ -71,9 +71,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         }
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(loc==null){
-            LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
-            String locationProvider = LocationManager.GPS_PROVIDER;
-            loc = locationManager.getLastKnownLocation(locationProvider);
+            loc = getLocationFromGPSProvider();
         }
         return loc;
     }

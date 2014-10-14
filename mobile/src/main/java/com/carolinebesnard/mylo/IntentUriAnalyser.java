@@ -13,6 +13,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -148,6 +149,20 @@ public class IntentUriAnalyser {
         Log.i(TAG,"in getMyloPlaceFromCid");
         //TODO: FIND HOW TO ANALYSE CID
         try{
+            final String URL_FORMAT = "http://maps.google.com/maps?cid=%s&q=a&output=json";
+            final String LATLNG_BEFORE = "viewport:{center:{";
+            final String LATLNG_AFTER = "}";
+            final String LATLNG_SEPARATOR = ",";
+            final String LAT_PREFIX = "lat:";
+            final String LNG_PREFIX = "lng:";
+
+            HttpClient client = new DefaultHttpClient();
+            HttpGet get = new HttpGet(String.format(URL_FORMAT, cid));
+            HttpResponse response = client.execute(get);
+
+            String text = EntityUtils.toString(response.getEntity(), "UTF-8");
+
+            Log.i(TAG,text);
 
         }catch (Exception e){
 
