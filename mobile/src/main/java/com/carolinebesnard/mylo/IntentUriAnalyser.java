@@ -150,18 +150,7 @@ public class IntentUriAnalyser {
         Log.i(TAG,"in getMyloPlaceFromCid");
         //TODO: FIND HOW TO ANALYSE CID
         try{
-            //HTTP REQUEST TO GET LONG URL
-            /*String URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+cid+"&key=AIzaSyB60Ax0BPa8GaJFTSpJ3QuIkL3KP7IqviM";
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response = httpclient.execute(new HttpGet(URL));
-            StatusLine statusLine = response.getStatusLine();
-            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                response.getEntity().writeTo(out);
-                out.close();
-                String responseString = out.toString();
-                Log.i(TAG,"responseString= "+responseString);
-            }*/
+
         }catch (Exception e){
 
         }

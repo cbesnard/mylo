@@ -175,7 +175,7 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	//NAME
 	mylo_UI_init_variables[0].addingPublicName=locname;
 	//ADDR
-	$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+locaddr);
+	$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt"></span>'+locaddr);
 	$('#gps_txt').find('.name').text(locname);
 	$('#gps_txt').css('display','block');
 	$('#gps_img').css('display','block');
@@ -191,37 +191,4 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	stopLoader();
 	//OPEN ADD PLACE SCREEN
 	displayAddPlaceScreen();
-	
-	/*try {
-    	var geocoder = new google.maps.Geocoder();
-		geocoder.geocode( {'address': locaddr}, function(results, status){
-		    if (status == google.maps.GeocoderStatus.OK) {
-		        //LAT LON
-		        mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
-		        mylo_UI_init_variables[0].currentGPS.lat = results[0].geometry.location.lat();
-		        mylo_UI_init_variables[0].currentGPS.lon = results[0].geometry.location.lng();
-		        //latlon.adr = results[0].formatted_address;
-		        //OPEN ADD PLACE SCREEN
-				displayAddPlaceScreen();
-		    }else{
-		        //TOAST NOTIF ERROR ADDRESS NOT FOUND
-				showAndroidToast(mylo_textes[0].error_add_place_form_addr_not_found);
-		    }
-		    //LOADER: Hide loader
-		    $('#loader_container').css({display:'none'});
-			$('#loader').css({display:'block'});
-			$('#loader_end').css({display:'none'});
-			mylo_UI_init_variables[0].loading=0;
-			step=0;
-		});    
-    }catch(err){
-    	//TOAST NOTIF ERROR CONNEXION PB
-		showAndroidToast(mylo_textes[0].error_add_place_form_connexion_pb);
-        //LOADER: Hide loader
-		$('#loader_container').css({display:'none'});
-		$('#loader').css({display:'block'});
-		$('#loader_end').css({display:'none'});
-		mylo_UI_init_variables[0].loading=0;
-		step=0;
-    }*/
 }
