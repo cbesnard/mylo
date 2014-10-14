@@ -161,8 +161,11 @@ public class IntentUriAnalyser {
             HttpResponse response = client.execute(get);
 
             String text = EntityUtils.toString(response.getEntity(), "UTF-8");
-
             Log.i(TAG,text);
+            String t = text.replace("while(1);","");
+            JSONObject jsonobject = new JSONObject(t);
+            String test = jsonobject.getString("title");
+            Log.i(TAG,test);
 
         }catch (Exception e){
 
