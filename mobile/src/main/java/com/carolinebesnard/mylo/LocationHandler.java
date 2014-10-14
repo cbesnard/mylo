@@ -135,44 +135,54 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             GPSlocationManager.removeUpdates(GPSlocationListener);
         }
     }
-
+    private Location getLocationFromGPSProvider(){
+        LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.GPS_PROVIDER;
+        Location loc = locationManager.getLastKnownLocation(locationProvider);
+        return loc;
+    }
     @Override
     public void onLocationChanged(Location location) {
         //Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
-        if(location!=null){
+        Location loc = getLocationFromGPSProvider();
+        if(location!=null && loc!=null){
+            Log.i(TAG,"Both fused and GPS location not null");
             if(currentLocation !=null){
                 if(isBetterLocation(location,currentLocation)){
                     //Log.v(TAG, "new best location: lat="+location.getLatitude()+"lon="+location.getLongitude());
                     currentLocation=location;
+                    Log.i(TAG,"Fused location better than current");
+                }else if(isBetterLocation(loc,currentLocation)){
+                    currentLocation=loc;
+                    Log.i(TAG,"GPS location better than current");
                 }
-            }else{
-                currentLocation = location;
+            }else if(isBetterLocation(loc,location)){
+                currentLocation = loc;
+                Log.i(TAG,"GPS location better than fused");
+            }else {
+                currentLocation=location;
+                Log.i(TAG,"Fused location better than GPS");
             }
             if(myListener!=null){
                 myListener.onLocationUpdate(currentLocation);
             }
-        }else{
-            Log.i(TAG,"Location Update didn't return anything trying with patch");
-            LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
-            String locationProvider = LocationManager.GPS_PROVIDER;
-            Location loc = locationManager.getLastKnownLocation(locationProvider);
-            if(loc!=null){
-                if(currentLocation !=null){
-                    if(isBetterLocation(loc,currentLocation)){
-                        currentLocation=loc;
-                        Log.i(TAG,"Patch SUCCESS");
-                    }else{
-                        Log.i(TAG,"Patch returned location but less accurate");
-                    }
-                }else{
-                    currentLocation = loc;
+        }else if(loc!=null){
+            if(currentLocation !=null){
+                if(isBetterLocation(loc,currentLocation)){
+                    currentLocation=loc;
                     Log.i(TAG,"Patch SUCCESS");
+                }else{
+                    Log.i(TAG,"Patch returned location but less accurate");
                 }
-                if(myListener!=null){
-                    myListener.onLocationUpdate(currentLocation);
-                    Log.i(TAG,"Transmitting new loc to listener");
-                }
+            }else{
+                currentLocation = loc;
+                Log.i(TAG,"Patch SUCCESS");
             }
+            if(myListener!=null){
+                myListener.onLocationUpdate(currentLocation);
+                Log.i(TAG,"Transmitting new loc to listener");
+            }
+
         }
     }
 
