@@ -1,12 +1,17 @@
 package com.carolinebesnard.mylo;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -26,11 +31,15 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     private LocationRequest locationrequest;
     private GoogleApiClient mGoogleApiClient;
     private LocationListener myLocationListener;
+    private LocationManager GPSlocationManager;
+    private android.location.LocationListener GPSlocationListener;
 
     public Context applicationContext;
     public LocationUpdateListener myListener;
 
     public Location currentLocation;
+
+    private Boolean isRequestOnGPSProvider =false;
 
     private static final String TAG = LocationHandler.class.getSimpleName();
 
@@ -61,6 +70,11 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             return null;
         }
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(loc==null){
+            LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
+            String locationProvider = LocationManager.GPS_PROVIDER;
+            loc = locationManager.getLastKnownLocation(locationProvider);
+        }
         return loc;
     }
 
@@ -73,12 +87,53 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         locationrequest = LocationRequest.create();
         locationrequest.setInterval(debugUpdateInterval);
         locationrequest.setFastestInterval(debugUpdateInterval);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,locationrequest, this);
+        PendingResult pendingresult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,locationrequest, this);
+        pendingresult.setResultCallback(new ResultCallback() {
+            @Override
+            public void onResult(Result result) {
+                Log.i(TAG,"location update request result= "+result.getStatus().getStatus());
+                if(result.getStatus().isSuccess()){
+                    Log.i(TAG,"Request for Loction update with fusedLocationApi is SUCCESS");
+                }else{
+                    //START location update with GPS provider
+                    isRequestOnGPSProvider = true;
+                    GPSlocationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
+                    String locationProvider = LocationManager.GPS_PROVIDER;
+                    GPSlocationListener = new android.location.LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            onLocationChanged(location);
+                            Log.i(TAG,"In on locationUpdate of GPS provider");
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    };
+                    // Register the listener with the Location Manager to receive location updates
+                    GPSlocationManager.requestLocationUpdates(locationProvider, 5000, 5, GPSlocationListener);
+                }
+            }
+        });
         return 1;
     }
 
     public void stopLocationRequest() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+        if(isRequestOnGPSProvider){
+            GPSlocationManager.removeUpdates(GPSlocationListener);
+        }
     }
 
     @Override
@@ -95,6 +150,28 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             }
             if(myListener!=null){
                 myListener.onLocationUpdate(currentLocation);
+            }
+        }else{
+            Log.i(TAG,"Location Update didn't return anything trying with patch");
+            LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
+            String locationProvider = LocationManager.GPS_PROVIDER;
+            Location loc = locationManager.getLastKnownLocation(locationProvider);
+            if(loc!=null){
+                if(currentLocation !=null){
+                    if(isBetterLocation(loc,currentLocation)){
+                        currentLocation=loc;
+                        Log.i(TAG,"Patch SUCCESS");
+                    }else{
+                        Log.i(TAG,"Patch returned location but less accurate");
+                    }
+                }else{
+                    currentLocation = loc;
+                    Log.i(TAG,"Patch SUCCESS");
+                }
+                if(myListener!=null){
+                    myListener.onLocationUpdate(currentLocation);
+                    Log.i(TAG,"Transmitting new loc to listener");
+                }
             }
         }
     }

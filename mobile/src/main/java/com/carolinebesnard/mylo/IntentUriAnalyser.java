@@ -1,8 +1,6 @@
 package com.carolinebesnard.mylo;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;

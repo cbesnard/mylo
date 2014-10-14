@@ -268,7 +268,7 @@ function setUI(callback){
     /*
     * GOOGLE MAPS
     */
-    $('#map-canvas').css({
+    /*$('#map-canvas').css({
         //width: addPlaceWidth-1+'px',
         //height: mylo_UI_init_variables[0].locMapHeight+'px',
         width: '100%',
@@ -317,7 +317,7 @@ function setUI(callback){
         $(mapCopyright).click(function(){
             return false;
         });
-    });
+    });*/
 
     
     /*

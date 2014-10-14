@@ -13,6 +13,123 @@ $(document).ready(function(){
 			filter: 'alpha(opacity=100)',
 		});
 	});
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	* GOOGLE MAPS LAZY LOAD
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	var s = document.createElement("script");
+	s.type = "text/javascript";
+	s.src  = "https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC4QjL6Ba54J2kY9SfprjB7UWol-Es-xbc&libraries=places&language=en&callback=gmap_draw";
+
+	window.gmap_draw = function(){
+       //MAPS
+       $('#map-canvas').css({
+	        //width: addPlaceWidth-1+'px',
+	        //height: mylo_UI_init_variables[0].locMapHeight+'px',
+	        width: '100%',
+	        height: '120px',
+	    });
+	    
+	    var styles = [
+	        {
+	          featureType: "poi",
+	          stylers: [
+	            {visibility: "off"}
+	          ]
+	        }
+	    ];
+
+	    var styledMapOptions = {
+	        name: 'Custom Style'
+	    };
+
+	    var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
+	    var mapOptions = {
+	        zoom: mylo_UI_init_variables[0].map_zoom_level,
+	        center: myLatlng,
+	        disableDefaultUI: true,
+	        mapTypeId: MY_MAPTYPE_ID,
+	    }
+	    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+	    var customMapType = new google.maps.StyledMapType(styles, styledMapOptions);
+
+	    mylo_UI_init_variables[0].map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+
+	    mylo_UI_init_variables[0].marker = new google.maps.Marker({
+	      position: myLatlng,
+	      map: mylo_UI_init_variables[0].map,
+	      title: 'Hello World!'
+	    });
+
+	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map, 'idle', function(){
+	        // do something only the first time the map is loaded
+	        //@mapCopyright - gets the google copyright tags
+	        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
+	        $(mapCopyright).click(function(){
+	            return false;
+	        });
+	    });
+
+	    //AUTOCOMPLETE
+	    //searchbox
+	    try{
+	    	//options of google searchbox
+	    	var defaultBounds = new google.maps.LatLngBounds(
+			  new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat-mylo_UI_init_variables[0].searchbox_bounds, mylo_UI_init_variables[0].userpos.lon-mylo_UI_init_variables[0].searchbox_bounds),
+			  new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat+mylo_UI_init_variables[0].searchbox_bounds, mylo_UI_init_variables[0].userpos.lon+mylo_UI_init_variables[0].searchbox_bounds));
+
+			var options = {
+			  bounds: defaultBounds
+			};
+	    	//searchBox powered by google
+			var searchBox = new google.maps.places.SearchBox(document.getElementById('addressField'),options);
+			
+			google.maps.event.addListener(searchBox, 'places_changed', function() {
+			  	try{
+				  	var place = searchBox.getPlaces()[0];
+					if(!place.geometry){
+						console.log('currentGPS=plae has no geometry');
+					}else{
+						
+				   		if(!$('#nameField').val()){
+				  			$('#nameField').val(place.name);
+				  		}
+				   
+						$('#addressField').val(place.formatted_address);
+						mylo_UI_init_variables[0].addingGPS=null;
+						mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
+						mylo_UI_init_variables[0].currentGPS.lat = place.geometry.location.lat();
+						mylo_UI_init_variables[0].currentGPS.lon = place.geometry.location.lng();
+						console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
+						console.log('currentGPS='+mylo_UI_init_variables[0].currentGPS.lat+', '+mylo_UI_init_variables[0].currentGPS.lon);
+						
+						//Update map infos
+						var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
+						if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+						    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+						    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+						    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+						    //$('#map-canvas').css('display','block');
+						}
+
+						if(place.formatted_address.substring(0,8) != place.name.substring(0,8)){
+				    		mylo_UI_init_variables[0].addingPublicName=place.name;
+				  		}else{
+				  			mylo_UI_init_variables[0].addingPublicName="";
+				  		}
+						validate();
+				  	}
+			  	}catch(err){
+			    	//GATrackerEvent("Init_fail", "searchBoxError", err.message);
+			    }
+			});
+	    }catch(err){
+	    	mylo_UI_init_variables[0].searchBoxInitError=1;
+	    	GATrackerEvent("Init_fail", "searchBoxError", err.message);
+	    }
+	};
+	$("head").append(s);
+
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	*	SET UI ELEMENTS BEHAVIOR
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -59,15 +176,6 @@ $(document).ready(function(){
     $('#nameField').on('keypress keyup change paste textInput input',function(){
     	validate();
     });
-    //LIMIT GROUP NAME FIELD IN LENGTH
-    //$('#nameField').attr('onkeypress','if(this.value.length >= mylo_UI_init_variables[0].nameLimitLength) return false;');
-    /*$('#nameField').bind('keypress keyup', function () {
-        if($('#nameField').val().length > mylo_UI_init_variables[0].nameLimitLength){
-			var content = $('#nameField').val().slice(0, mylo_UI_init_variables[0].nameLimitLength);
-	        $('#nameField').val(content);
-	    }else{}
-    });*/
-
     $('#addressField').on('change keypress paste textInput input',function(){
     	if($('#nameField').val()){
 	    	$('#validateButton').css({
@@ -83,7 +191,7 @@ $(document).ready(function(){
     });
     //MAPS API
     //searchbox
-    try{
+    /*try{
     	//options of google searchbox
     	var defaultBounds = new google.maps.LatLngBounds(
 		  new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat-mylo_UI_init_variables[0].searchbox_bounds, mylo_UI_init_variables[0].userpos.lon-mylo_UI_init_variables[0].searchbox_bounds),
@@ -137,7 +245,7 @@ $(document).ready(function(){
     }catch(err){
     	mylo_UI_init_variables[0].searchBoxInitError=1;
     	GATrackerEvent("Init_fail", "searchBoxError", err.message);
-    }
+    }*/
     
     /*
     * ADD GROUP FORM BEHAVIOR

@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -72,6 +73,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         });
         w.loadUrl("file:///android_asset/www/index.html");
         w.addJavascriptInterface(new myJsInterface(this), "Android");
+
+        FrameLayout container = new FrameLayout(this.getApplicationContext());
         setContentView(w);
         //
         myJsInterface.webview = w;
