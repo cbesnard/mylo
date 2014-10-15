@@ -148,7 +148,7 @@ public class IntentUriAnalyser {
 
     private static MyloPlace getMyloPlaceFromCid(String cid){
         Log.i(TAG,"in getMyloPlaceFromCid");
-        //TODO: FIND HOW TO ANALYSE CID
+        //TODO: check all error case
         try{
             final String URL_FORMAT = "http://maps.google.com/maps?cid=%s&q=a&output=json";
             final String LATLNG_BEFORE = "viewport:{center:{";
@@ -166,6 +166,7 @@ public class IntentUriAnalyser {
             String t = text.replace("while(1);","");
             JSONObject jsonobject = new JSONObject(t);
             JSONObject obj = (JSONObject) jsonobject.getJSONObject("overlays").getJSONArray("markers").get(0);
+            //
             Double lat = obj.getJSONObject("latlng").getDouble("lat");
             Double lng = obj.getJSONObject("latlng").getDouble("lng");
             String name = obj.getString("name");
@@ -175,8 +176,8 @@ public class IntentUriAnalyser {
                 addr+=" ";
                 addr+=addressline.get(i);
             }
-            //String test = jsonobject.getString("title");
             Log.i(TAG,name+" "+lat.toString()+" "+lng.toString()+" "+addr);
+            //
             MyloPlace myloplace = new MyloPlace(Locale.getDefault());
             myloplace.setAddress(addr);
             myloplace.setFeatureName(name);

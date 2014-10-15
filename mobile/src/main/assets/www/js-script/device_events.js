@@ -9,6 +9,7 @@ function setUserPosition(lat,lon){
     var d = new Date();
     mylo_UI_init_variables[0].userpos_time=d.getTime();
     refreshLocsdist();
+    updateUserMarkerPosition(lat,lon);
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

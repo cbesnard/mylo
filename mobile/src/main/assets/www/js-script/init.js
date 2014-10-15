@@ -75,6 +75,8 @@ locMapHeight:100,
 map:null,//mylo_UI_init_variables[0].map
 marker:null,//mylo_UI_init_variables[0].marker
 map_zoom_level:15,//between (min) 0<-->19 (max)  mylo_UI_init_variables[0].map_zoom_level
+map_tab_map:null,//mylo_UI_init_variables[0].map_tab_map
+map_user_marker:null,//mylo_UI_init_variables[0].map_user_marker
 });
 var MY_MAPTYPE_ID ="my maptype id";
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
@@ -112,6 +114,11 @@ end: 30,
 color: "#2FBA90"
 }
 /*
+*   MAPS MARKERS
+*/
+var markers = new Array();
+
+/*
 * INITIALIZE DEFAULT GROUPS 
 */
 /*********** GROUPS COLORS ************/
@@ -119,11 +126,11 @@ var c0 = "#DDDDDD";
 var c1 = "#0099CC";
 var c2 = "#FFDB59";
 var c3 = "#DE1F89";
-var c4 = "#33B5E5";
-var c5 = "#9B67D0";
+var c4 = "#9B67D0";//
+var c5 = "#33B5E5";//
 var c6 = "#F26BBC";
-var c7 = "#FF8800";
-var c8 = "#FF4444";
+var c7 = "#FF4444";//
+var c8 = "#FF8800";//
 var c9 = "#FFBB33";
 
 var groups = new Array();
@@ -131,11 +138,11 @@ var g0 = {id:0,name:"All",color:c0};
 var g1 = {id:1,name:"",color:c1};
 var g2 = {id:2,name:"",color:c2};
 var g3 = {id:3,name:"",color:c3};
-var g4 = {id:4,name:"",color:c5};
-var g5 = {id:5,name:"",color:c4};
+var g4 = {id:4,name:"",color:c4};
+var g5 = {id:5,name:"",color:c5};
 var g6 = {id:6,name:"",color:c6};
-var g7 = {id:7,name:"",color:c8};
-var g8 = {id:8,name:"",color:c7};
+var g7 = {id:7,name:"",color:c7};
+var g8 = {id:8,name:"",color:c8};
 var g9 = {id:9,name:"",color:c9};//c9
 
 groups.push(g0);
@@ -176,6 +183,12 @@ function setUI(callback){
         height: screenHeight+'px',
         width: screenWidth+'px',
     });
+    $('#add_place').css({
+        left: (screenWidth-10)-54+'px',
+    });
+    $('#add_gps').css({
+        left: (screenWidth-80)-54+'px',
+    });
     $('#header').css({
         height: mylo_UI_init_variables[0].headerHeight+'px',
         width: mylo_UI_init_variables[0].headerWidth+'px',
@@ -190,6 +203,22 @@ function setUI(callback){
         height:addPlaceButtonHeight+'px',
         'line-height':addPlaceButtonHeight+'px',
     }); 
+    $('.tab').css({
+        height: addPlaceButtonHeight-4+'px',
+        width:screenWidth/2+'px',
+    });
+    $('.tab').click(function() {
+        switch_tab($(this).attr('id'));
+    });
+    $('#indicator').css({
+        width:screenWidth/2+'px',
+    });
+    $('.tab_icon').css({
+        'margin-left':(screenWidth/2-26)/2+'px',
+    });
+    $('.addPlace').find('#list').addClass('active');
+    
+    /*******************************************************************************/
     var locsdivHeight = screenHeight-mylo_UI_init_variables[0].headerHeight-$('#groupsDiv').outerHeight()-$('.addPlace').outerHeight();
     $('#locsDiv').css('height',locsdivHeight+'px');
     $('#locsDiv').css('width',screenWidth+'px');
@@ -239,6 +268,14 @@ function setUI(callback){
     $('#locsWraper').css({
         'width': screenWidth*2+'px',
         //'overflow-x':'auto',
+    });
+
+    /*
+    *   MAP TAB CONTAINER
+    */
+    $('#map_tab').css({
+        width: addPlaceWidth-1+'px',
+        height: locsdivHeight+'px',
     });
 
     /*
@@ -386,6 +423,8 @@ function initUserDatas(stringDatas){
         {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
             groups[userGroups[i].id].name = userGroups[i].name; 
         }
+        //INITE MAP
+        setMarkers(0);
     }catch(e){
        console.log("error : "+e.message);
     }

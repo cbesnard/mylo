@@ -11,7 +11,9 @@ function bindGroupEvents(){
 			var idGroupToDisplay = parseInt(groupToDisplay);
 			var locToDisplay = getPositions(idGroupToDisplay);
 			printUserLocation(idGroupToDisplay,locToDisplay,fadeIN2);
-			
+			//
+			setMarkers(idGroupToDisplay);
+			//
 			var nameCurrent = $('.currentGroup').attr('name');
 			$('[name="'+nameCurrent+'"]').removeClass('currentGroup');
 			$(this).addClass('currentGroup');
@@ -749,7 +751,9 @@ function displayNewGroup(id,name){
 			var idGroupToDisplay = parseInt(groupToDisplay);
 			var locToDisplay = getPositions(idGroupToDisplay);
 			printUserLocation(idGroupToDisplay,locToDisplay,fadeIN2);
-
+			//
+			setMarkers(idGroupToDisplay);
+			//
 			var nameCurrent = $('.currentGroup').attr('name');
 			$('[name="'+nameCurrent+'"]').removeClass('currentGroup');
 			$(this).addClass('currentGroup');

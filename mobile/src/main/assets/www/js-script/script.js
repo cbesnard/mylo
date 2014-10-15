@@ -50,10 +50,14 @@ $(document).ready(function(){
 	        mapTypeId: MY_MAPTYPE_ID,
 	    }
 	    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
+	    
 	    var customMapType = new google.maps.StyledMapType(styles, styledMapOptions);
 
 	    mylo_UI_init_variables[0].map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+	    
+	    //INIT MAP TAB
+	    setMap();
+	    setMarkers(0);
 
 	    mylo_UI_init_variables[0].marker = new google.maps.Marker({
 	      position: myLatlng,
@@ -133,7 +137,7 @@ $(document).ready(function(){
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	*	SET UI ELEMENTS BEHAVIOR
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	$("#locsDiv").on("scroll", function () {
+	/*$("#locsDiv").on("scroll", function () {
         var cur = $(this).scrollTop();
         if (cur == 0) {
             $('#shadow').css({
@@ -148,8 +152,47 @@ $(document).ready(function(){
 			});
         }
     });
-    $("#locsDiv").trigger("scroll");
+    $("#locsDiv").trigger("scroll");*/
+    var lastScrollTop = 0,
+        st,
+        direction;
 
+    function detectDirection() {
+        st = $("#locsDiv").scrollTop();
+        if (st > lastScrollTop) {
+            direction = "down";
+        } else {
+            direction = "up";
+        }
+        lastScrollTop = st;
+        return  direction;
+    }
+
+    $("#locsDiv").on("scroll", function () {
+        var dir = detectDirection();
+    	console.log(dir);
+        console.log($(".add_buttons").css("bottom"));
+        if (dir == "down") {
+        	if($(".add_buttons").css("bottom")=="10px"){
+        		$('.add_buttons').stopAnima(true);
+        		$('.add_buttons').anima({
+					'bottom': '-100px',
+					}, 200, 'linear',{complete:function(){
+
+				}});
+        	}
+        } else {
+        	if($(".add_buttons").css("bottom")!="10px"){
+        		console.log("anima called");
+        		$('.add_buttons').stopAnima(true);
+        		$('.add_buttons').anima({
+					'bottom': '10px',
+					}, 200, 'linear',{complete:function(){
+
+				}});
+        	}
+        }
+    });
 	$('body').mousemove(function(e){
 		if(isDragging){
 			drag(e.pageX, e.pageY);
@@ -298,6 +341,9 @@ $(document).ready(function(){
 			var idGroupToDisplay = parseInt(groupToDisplay);
 			var locToDisplay = getPositions(idGroupToDisplay);
 			printUserLocation(idGroupToDisplay,locToDisplay,fadeIN2);
+			//
+			setMarkers(idGroupToDisplay);
+			//
 			var nameCurrent = $('.currentGroup').attr('name');
 			$('[name="'+nameCurrent+'"]').removeClass('currentGroup');
 			$(this).addClass('currentGroup');

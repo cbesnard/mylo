@@ -71,6 +71,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         }
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(loc==null){
+            Log.i(TAG, "Fused location is null, get the GPS provider last known loc");
             loc = getLocationFromGPSProvider();
         }
         return loc;
