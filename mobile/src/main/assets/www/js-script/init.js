@@ -77,6 +77,8 @@ marker:null,//mylo_UI_init_variables[0].marker
 map_zoom_level:15,//between (min) 0<-->19 (max)  mylo_UI_init_variables[0].map_zoom_level
 map_tab_map:null,//mylo_UI_init_variables[0].map_tab_map
 map_user_marker:null,//mylo_UI_init_variables[0].map_user_marker
+edit_map:null,
+edit_loc_marker:null,
 });
 var MY_MAPTYPE_ID ="my maptype id";
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
@@ -183,6 +185,10 @@ function setUI(callback){
         height: screenHeight+'px',
         width: screenWidth+'px',
     });
+    $('#container').css({
+        height: screenHeight+'px',
+        width: screenWidth+'px',
+    });
     $('#add_place').css({
         left: (screenWidth-10)-54+'px',
     });
@@ -217,13 +223,11 @@ function setUI(callback){
         'margin-left':(screenWidth/2-26)/2+'px',
     });
     $('.addPlace').find('#list').addClass('active');
-    
-    /*******************************************************************************/
+    //
     var locsdivHeight = screenHeight-mylo_UI_init_variables[0].headerHeight-$('#groupsDiv').outerHeight()-$('.addPlace').outerHeight();
     $('#locsDiv').css('height',locsdivHeight+'px');
     $('#locsDiv').css('width',screenWidth+'px');
     $('#locContainer').css('width',screenWidth+'px');
-    /*****************************************************************************/
     $('#groupsDiv').css({width: $(window).width()+'px'});
     $('#addGroup').css({
         height: mylo_UI_init_variables[0].groupsDivHeight+'px',
@@ -240,7 +244,7 @@ function setUI(callback){
         width: $('#groupsContainer').outerWidth()+$('#addGroup').outerWidth()+'px',
         height:mylo_UI_init_variables[0].groupsDivHeight+'px',
     });  
-    /******************************************************************************/
+    //
     $('.loc').css({width: $(window).width()+'px'});
     /*
     * DEFAULT GROUP
@@ -267,7 +271,6 @@ function setUI(callback){
     $('#locContainer').children().wrapAll('<div id="locsWraper"></div>');
     $('#locsWraper').css({
         'width': screenWidth*2+'px',
-        //'overflow-x':'auto',
     });
 
     /*
@@ -281,82 +284,8 @@ function setUI(callback){
     /*
     * ADD PLACE CONTAINER
     */
-    $('#close_add_loc').anima({
-        perspective: '100px',
-        rotateX: '90deg',
-        rotateY: '0deg',
-    }, 0, 'linear');
-    $('#close_txt').anima({
-        perspective: '100px',
-        rotateX: '90deg',
-        rotateY: '0deg',
-    }, 0, 'linear');
-    /********/
-    //$('#addPlace').css({height: locsdivHeight-1-mylo_UI_init_variables[0].addPlacePadding*2+'px'});
-    $('#addPlace').css({height: locsdivHeight-1+'px'}); 
-    $('#addPlace').css({
-        width: addPlaceWidth-1+'px',
-        //padding: mylo_UI_init_variables[0].addPlacePadding+'px',
-    });
-    $('.form').css({
-        'margin-left': mylo_UI_init_variables[0].addPlacePadding+'px',
-        'margin-right': mylo_UI_init_variables[0].addPlacePadding+'px',
-    });
-    /*
-    * GOOGLE MAPS
-    */
-    /*$('#map-canvas').css({
-        //width: addPlaceWidth-1+'px',
-        //height: mylo_UI_init_variables[0].locMapHeight+'px',
-        width: '100%',
-        height: '120px',
-    });
-    
-    var styles = [
-        {
-          featureType: "poi",
-          stylers: [
-            {visibility: "off"}
-          ]
-        }
-    ];
-
-    var styledMapOptions = {
-        name: 'Custom Style'
-    };
-
-    var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
-    var mapOptions = {
-        zoom: mylo_UI_init_variables[0].map_zoom_level,
-        center: myLatlng,
-        disableDefaultUI: true,
-        mapTypeId: MY_MAPTYPE_ID,
-    }
-    mylo_UI_init_variables[0].map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-    var customMapType = new google.maps.StyledMapType(styles, styledMapOptions);
-
-    mylo_UI_init_variables[0].map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
-
-    mylo_UI_init_variables[0].marker = new google.maps.Marker({
-      position: myLatlng,
-      map: mylo_UI_init_variables[0].map,
-      title: 'Hello World!'
-    });
-
-    //$('#map-canvas').css('display','block');
-    
-
-    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map, 'idle', function(){
-        // do something only the first time the map is loaded
-        //@mapCopyright - gets the google copyright tags
-        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
-        $(mapCopyright).click(function(){
-            return false;
-        });
-    });*/
-
-    
+    initAddWindows();
+    initForms();
     /*
     * LOADER
     */
@@ -377,18 +306,6 @@ function setUI(callback){
         height:mylo_UI_init_variables[0].loader_size+'px',
         'margin-left': marginLeft+'px',
     });
-
-
-    /*
-    * INPUT FIELDS
-    */
-    $('#addPlace').find('.textInput').css({width: screenWidth-7-mylo_UI_init_variables[0].addPlacePadding*2+'px'});
-    $('#validateButton').text(mylo_textes[0].add_place_form_validate_button);
-    $('#validateButton').css({width: screenWidth-mylo_UI_init_variables[0].addPlacePadding*2.2+'px'});
-    $('#saveButton').text(mylo_textes[0].edit_place_form_validate_button);
-    $('#saveButton').css({width: screenWidth-mylo_UI_init_variables[0].addPlacePadding*2.2+'px'});
-    $('#addressField').attr("placeholder",mylo_textes[0].add_place_form_addr_field_helper);
-    $('#nameField').attr("placeholder",mylo_textes[0].add_place_form_place_name_field_helper);
     /*
     * TRASH
     */

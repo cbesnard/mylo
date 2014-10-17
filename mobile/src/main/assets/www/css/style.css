@@ -6,19 +6,22 @@ body {
 	margin: 0px;
 	background-color:#fbfbfb;
 	background-color: #f2F1F1;
-	/*background-color: #FF0000;*/
-
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);	/*no default highlight on tap*/
 }
 
+#container{
+	overflow: hidden;
+	position: relative;
+}
+
 #loader_container, #loader_container_gps{
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 2000;
+	z-index: 9000;
 	display: none;
 	background: rgba(255, 255, 255, 0.8);
 }
@@ -433,16 +436,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
     transition: all 0.4s cubic-bezier(0.120, 0.715, 0.355, 0.875);*/
 }
 
-.addPlace #close_txt{
-	position: absolute;
-	top:0px;
-	left:10px;
-	line-height:50px;
-
-	/*display: none;*/
-	opacity: 0; 
-	filter: alpha(opacity=0);
-}
 .addPlace .icon{
 	width: 54px;
 	height: 25px;
@@ -526,18 +519,31 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #add_place{
 	
 }
-
+.pac-container{
+	z-index: 8000;
+}
+#add_header{
+	width: 100%;
+	position: relative;
+	height:50px;
+	border-bottom: 1px solid #f2f1f1;
+	overflow: hidden;
+}
 #close_add_loc{
-	position: absolute;
-	right: -54px;
-	top: 12px;
-
+	float: right;
+	margin-top: 12px;
 	width: 54px;
 	height: 25px;
-
-	/*display: none;*/
-	opacity: 0; 
-	filter: alpha(opacity=0);
+}
+#add_header #close_txt{
+	float: left;
+	margin-left: 10px;
+	font-family: 'Roboto thin';
+	text-transform:capitalize;
+	font-size: 25px;
+	color:#777;
+	height: 50px;
+	line-height:50px;
 }
 /****TRASH**********/
 #trash{
@@ -552,7 +558,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	left: 0px;
 	text-align: center;
 	overflow: hidden;
-	z-index: 1000;
+	z-index: 6000;
 }
 #trash_bouncer{
 	position: absolute;
@@ -583,14 +589,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 
 
 
-#addPlace{
-	display: none;
-	position: relative;
-	float:left;
+.add_window{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
 	font-family: 'Roboto thin';
 	background-color: #fff;
-	border-top: 1px solid #f2f1f1;
-	border-left: 1px solid #f2f1f1;
+}
+#addGPS{
+	z-index: -200;
+}
+#editPlace{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	font-family: 'Roboto thin';
+	background-color: #fff;
+	z-index: -200;
+}
+#addPlace{
+	z-index: 6000;
+	display: none;
 }
 #map-canvas {
 	/*display: none;*/
@@ -598,6 +617,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	top: 0px;
 	left: 0px;
 	z-index:7000;*/
+}
+
+#background{
+	display: none;
+	z-index: 6000;
+	background-color: rgba(51,51,51,0.5);
 }
 .form{
 }
@@ -677,8 +702,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	vertical-align: middle;
 }
 
-#gps_txt{
-	display: none;
+#gps_txt #edit_gps_txt{
 	font-family: 'Roboto thin';
 	font-size: 16px;
 	text-transform: capitalize;
@@ -689,12 +713,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	/*margin-top: 20px;*/
 	/*margin-left: 10px;*/
 }
+#edit_gps_txt .name{
+	font-size: 20px;
+}
+
 #gps_txt .name{
 	font-size: 20px;
 }
 
 #gps_img{
-	display: none;
 	float: left;
 	height: 35px;
 	width: 35px;
@@ -720,9 +747,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 
 	border-radius: 2px;
 }
-#saveButton{
-	display: none;
-}
 #validateButton:active{
 	background-color: #ac1c28;
 	border: 1px solid #ac1c28;
@@ -743,6 +767,6 @@ input:focus{
 pointer-events: none;
 }
 .clone{
-	z-index: 2100;
+	z-index: 6100;
 	box-shadow: 0px 4px 10px 2px rgba(85,85,85,0.2);
 }
