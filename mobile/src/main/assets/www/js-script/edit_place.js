@@ -3,6 +3,7 @@ function initEditPlaceWindow(){
     $('#editPlace').css({
         width : screenWidth-20,
         top: screenHeight,
+        left:10,
     });
     $('#editPlace').find('#nameField').css({
         width : $('#editPlace').outerWidth()-mylo_UI_init_variables[0].addPlacePadding*2.2+'px',

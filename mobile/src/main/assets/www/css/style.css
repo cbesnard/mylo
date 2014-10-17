@@ -595,6 +595,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	left: 0px;
 	font-family: 'Roboto thin';
 	background-color: #fff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 #addGPS{
 	z-index: -200;
@@ -606,6 +609,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	font-family: 'Roboto thin';
 	background-color: #fff;
 	z-index: -200;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 #addPlace{
 	z-index: 6000;

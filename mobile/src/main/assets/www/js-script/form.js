@@ -13,7 +13,7 @@ function initForms(){
     $('#saveButton').css({width: $('.add_window').outerWidth()-mylo_UI_init_variables[0].addPlacePadding*2.2+'px'});
     $('.add_window').find('#addressField').attr("placeholder",mylo_textes[0].add_place_form_addr_field_helper);
     $('.add_window').find('#nameField').attr("placeholder",mylo_textes[0].add_place_form_place_name_field_helper);
-    $('.formButton').css('margin-bottom','10px');
+    $('.formButton').css('margin-bottom','15px');
 }
 
 function setFormBehavior(){
