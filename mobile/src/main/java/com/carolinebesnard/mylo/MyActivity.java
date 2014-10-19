@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +30,7 @@ import android.widget.FrameLayout;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.maps.model.LatLng;
 
 
 public class MyActivity extends Activity implements LocationUpdateListener{
@@ -44,7 +46,10 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     public static int appState;
     public static boolean updated;
     private LocationHandler myLocationObject;
+    private Intent myintent=null;
+    private String intentAction=null;
     private Uri intentData=null;
+    private String intentType=null;
     private static final String TAG = MyActivity.class.getSimpleName();
     private static final String PROPERTY_ID = "UA-51649868-2";
 
@@ -55,6 +60,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         updated = false;
         onCreate=false;
         /*get intent*/
+        myintent = getIntent();
         intentData = getIntent().getData();
         /*Create Webview*/
         w = new WebView(this);
@@ -144,6 +150,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        myintent = intent;
         intentData = intent.getData();
         Log.i(TAG,"onNewIntent called");
     }
@@ -152,31 +159,67 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         /*CHECK FOR INTENT*/
         Log.i(TAG,"CheckForIntent called");
         //if(getIntent()!=null){
-        final Uri data = intentData;
-        //Log.i(TAG,data.toString());
-        if(data!=null){
-            callJS("javascript:launchLoader()");
-            Thread thread = new Thread(new Runnable(){
-                //private Uri data
-                @Override
-                public void run(){
-                final String url = IntentUriAnalyser.extractIntent(data);
-                runOnUiThread(new Runnable(){
+        if(myintent==null){return;}
+        if(Intent.ACTION_VIEW.equals(myintent.getAction())) {
+            final Uri data = intentData;
+            //Log.i(TAG,data.toString());
+            if (data != null) {
+                callJS("javascript:launchLoader()");
+                Thread thread = new Thread(new Runnable() {
+                    //private Uri data
+                    @Override
                     public void run() {
-                        if(url!=null){
-                            callJS(url);
-                        }else {
-                            //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING
-                            callJS("javascript:stopLoader()");
-                            // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
-                            Helper.showToast("Sorry couldn't retrieve location :/");
-                        }
+                        final String url = IntentUriAnalyser.extractIntent(data);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (url != null) {
+                                    callJS(url);
+                                } else {
+                                    //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING
+                                    callJS("javascript:stopLoader()");
+                                    // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
+                                    Helper.showToast("Sorry couldn't retrieve location :/");
+                                }
+                            }
+                        });
                     }
                 });
+                thread.start();
+                intentData = null;
+                myintent = null;
+            }
+        }else if (Intent.ACTION_SEND.equals(myintent.getAction()) && myintent.getType() != null){
+            Log.i(TAG,"Shared Action Intent received");
+            Log.i(TAG,"intent type="+myintent.getType());
+            if ("text/plain".equals(myintent.getType())) {
+                final String sharedText = myintent.getStringExtra(Intent.EXTRA_TEXT);
+                if (sharedText != null) {
+                    Log.i(TAG,"Text="+sharedText);
+                    callJS("javascript:launchLoader()");
+                    Thread thread = new Thread(new Runnable() {
+                        //private Uri data
+                        @Override
+                        public void run() {
+                            final String url = Helper.parseShareIntentText(sharedText);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    if (url != null) {
+                                        callJS(url);
+                                    } else {
+                                        //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING
+                                        callJS("javascript:stopLoader()");
+                                        // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
+                                        Helper.showToast("Sorry couldn't retrieve location :/");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    thread.start();
                 }
-            });
-            thread.start();
-            intentData = null;
+            }
+            myintent = null;
+            intentData=null;
         }
     }
     public void callJS(String url) {
@@ -396,5 +439,39 @@ class myJsInterface {
             return true;
         }
         return false;
+    }
+
+    @JavascriptInterface
+    public void getNewGPSPlaceAddrFromGPS(String lat, String lon){
+        final Double latitude = Double.parseDouble(lat);
+        final Double longitude = Double.parseDouble(lon);
+        Log.i(TAG,"lat:"+lat+", lon:"+lon);
+        Log.i(TAG,"latitude:"+latitude+", longitude:"+longitude);
+        Thread thread = new Thread(new Runnable(){
+            //private Uri data
+            @Override
+            public void run(){
+                MyloPlace myloPlace = new MyloPlace(Locale.getDefault());
+                myloPlace.setLatitude(latitude);
+                myloPlace.setLongitude(longitude);
+                //GET ADDRESS FROM GPS
+                final String addr = Helper.getAddrFromGPS(latitude, longitude);
+                myloPlace.setAddress(addr);
+                final String url = IntentUriAnalyser.urlBuilderFromMyloPlace(myloPlace);;
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (addr != null) {
+                            activity.callJS(url);
+                        } else {
+                            //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING
+                            activity.callJS("javascript:stopLoader()");
+                            // SEND TOAST NOTIFICATION "Sorry, couldn't retrieve location"
+                            Helper.showToast("Sorry couldn't retrieve location :/");
+                        }
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 }

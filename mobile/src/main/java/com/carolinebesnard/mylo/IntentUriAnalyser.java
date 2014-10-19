@@ -81,7 +81,7 @@ public class IntentUriAnalyser {
         return null;
     }
 
-    private static String shortUrlCase(String data){
+    public static String shortUrlCase(String data){
         Log.i(TAG,data);
         try{
             //HTTP REQUEST TO GET LONG URL
@@ -117,7 +117,7 @@ public class IntentUriAnalyser {
         }
     }
 
-    private static String urlBuilderFromMyloPlace(MyloPlace myloPlace){
+    public static String urlBuilderFromMyloPlace(MyloPlace myloPlace){
         if(myloPlace!=null) {
             String address = myloPlace.getAddress();
             LatLng gps = new LatLng(myloPlace.getLatitude(), myloPlace.getLongitude());

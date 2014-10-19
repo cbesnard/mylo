@@ -143,45 +143,22 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     @Override
     public void onLocationChanged(Location location) {
         //Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
-        Location loc = getLocationFromGPSProvider();
-        if(location!=null && loc!=null){
-            Log.i(TAG,"Both fused and GPS location not null");
+        //Location loc = getLocationFromGPSProvider();
+        if(location!=null){
+            //Log.i(TAG,"Both fused and GPS location not null");
             if(currentLocation !=null){
                 if(isBetterLocation(location,currentLocation)){
                     //Log.v(TAG, "new best location: lat="+location.getLatitude()+"lon="+location.getLongitude());
                     currentLocation=location;
-                    Log.i(TAG,"Fused location better than current");
-                }else if(isBetterLocation(loc,currentLocation)){
-                    currentLocation=loc;
-                    Log.i(TAG,"GPS location better than current");
+                    //Log.i(TAG,"Fused location better than current");
                 }
-            }else if(isBetterLocation(loc,location)){
-                currentLocation = loc;
-                Log.i(TAG,"GPS location better than fused");
             }else {
                 currentLocation=location;
-                Log.i(TAG,"Fused location better than GPS");
+                //Log.i(TAG,"Fused location better than GPS");
             }
             if(myListener!=null){
                 myListener.onLocationUpdate(currentLocation);
             }
-        }else if(loc!=null){
-            if(currentLocation !=null){
-                if(isBetterLocation(loc,currentLocation)){
-                    currentLocation=loc;
-                    Log.i(TAG,"Patch SUCCESS");
-                }else{
-                    Log.i(TAG,"Patch returned location but less accurate");
-                }
-            }else{
-                currentLocation = loc;
-                Log.i(TAG,"Patch SUCCESS");
-            }
-            if(myListener!=null){
-                myListener.onLocationUpdate(currentLocation);
-                Log.i(TAG,"Transmitting new loc to listener");
-            }
-
         }
     }
 

@@ -138,4 +138,24 @@ public class Helper {
         }
 
     }
+
+    public static String parseShareIntentText(String sharedText){
+        String text = sharedText.replace("\n"," ");
+
+        String[] words = text.split(" ");
+        int index =-1;
+        for(int i=0; i<words.length;i++){
+            if(words[i].matches(".*http://goo.gl/maps/.*")){
+                Log.i(TAG,"Maps url detected! txt="+sharedText);
+                index = i;
+                break;
+            }
+        }
+        if(index!=-1){
+            Log.i(TAG,words[index]);
+            String url = IntentUriAnalyser.shortUrlCase(words[index]);
+            return url;
+        }
+        return null;
+    }
 }

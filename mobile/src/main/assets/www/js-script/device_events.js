@@ -8,8 +8,14 @@ function setUserPosition(lat,lon){
     mylo_UI_init_variables[0].userpos=p;
     var d = new Date();
     mylo_UI_init_variables[0].userpos_time=d.getTime();
-    refreshLocsdist();
-    updateUserMarkerPosition(lat,lon);
+    var id_active = $('.tabs').find('.active').attr('id');
+    if( id_active == "map"){
+    	updateUserMarkerPosition(lat,lon);
+    }else{
+    	refreshLocsdist();
+    }
+    
+    
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -92,6 +98,9 @@ function storeDataInAndroid(){
 	var stringData = JSON.stringify(dataToWrite);
     Android.storeDatas(stringData);
 }
+function addGPSLocation(lat,lon){
+	Android.getNewGPSPlaceAddrFromGPS(""+lat,""+lon);
+}
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	LAUNCH LOADER
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -124,10 +133,6 @@ function stopLoader(showEndOfLoad){
 *	ADD GPS POSITION FROM LINK
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function addGPSFromLink(lat,lon, addrEncoded){
-	$('#loader_container').css({display:'block'});
-	mylo_UI_init_variables[0].loading=1;
-	animateLoader();
-	mylo_UI_init_variables[0].searching_position=1;
 	//GET USER LOCATION in lat lng
 	mylo_UI_init_variables[0].addingGPS = {lat:lat,lon:lon};
 	var addr = null;
@@ -144,18 +149,15 @@ function addGPSFromLink(lat,lon, addrEncoded){
 	//hide search field
 	$('#addGPS').find('#nameField').val('New GPS location');
 	validate();
-	//OPEN ADD PLACE SCREEN
+	//STOP LOADER
 	stopLoader();
+	//OPEN ADD PLACE SCREEN
 	displayAddPlaceScreen();
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *	ADD PUBLIC PLACE FROM LINK
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function addPublicPlaceFromLink(name,addr,lat,lon){
-	$('#loader_container').css({display:'block'});
-	mylo_UI_init_variables[0].loading=1;
-	animateLoader();
-	mylo_UI_init_variables[0].searching_position=1;
 	var locname = null;
 	var locaddr = null;
 	//DECODE NAME & ADDR
@@ -185,8 +187,8 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	//
 	mylo_UI_init_variables[0].addingGPS = {lat:lat,lon:lon};
 	validate();
-	//STOP LOADER
-	stopLoader();
 	//OPEN ADD PLACE SCREEN
 	displayAddPlaceScreen();
+	//STOP LOADER
+	stopLoader();
 }

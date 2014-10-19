@@ -21,11 +21,14 @@ function initAddWindows(){
 
 function initAddPlaceWindow(){
 	$('#addPlace').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_place);
+	$('#addPlace').css("bottom",10);
+	$('#addPlace').css("left",10);
 }
 function initAddGPSWindow(){
 	$('#addGPS').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
 }
 function setAddPlaceScreen(){
+	$('#addPlace').stopAnima(true);
 	//add marker + center map on user location
 	var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
 	if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
@@ -34,8 +37,6 @@ function setAddPlaceScreen(){
 	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
 	}
 	$('#addPlace').css("display","block");
-	$('#addPlace').css("bottom",10);
-	$('#addPlace').css("left",10);
 }
 
 function setAddGPSScreen(){
@@ -58,6 +59,7 @@ function displayAddPlaceScreen(){
 	mylo_UI_init_variables[0].addingPublicName="";
 	changeAndroidAppState(1);
 	$('#background').css("display","block");
+	//$('#background').stop().clearQueue().fadeIn(200);
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		setAddGPSScreen();
 	}else if(mylo_UI_init_variables[0].editPlace!=null){
@@ -70,8 +72,7 @@ function displayAddPlaceScreen(){
 }
 
 function closeAddPlaceWindow(){
-	$('#addPlace').css("display","none");
-	$('#addPlace').css("bottom",-screenHeight);
+    $('#addPlace').css("display","none");
 }
 
 function closeAddGPSWindow(){
@@ -85,6 +86,7 @@ function hideAddPlaceScreen(delay){
 		$('#loader_container').css({display:'none'});
 		$('#loader').css({display:'block'});
 		$('#loader_end').css({display:'none'});
+		//
 		$('#background').css("display","none");
 		//CLOSE ADD WINDOW
 		if(mylo_UI_init_variables[0].addingGPS!=null){
@@ -103,6 +105,7 @@ function hideAddPlaceScreen(delay){
 		$('#gps_txt').html('');
 		mylo_UI_init_variables[0].addingGPS=null;
 		mylo_UI_init_variables[0].currentGPS=null;
+		mylo_UI_init_variables[0].editPlace=null;
 		mylo_UI_init_variables[0].addingPublicName="";
 		validate();
 		changeAndroidAppState(0);
@@ -233,11 +236,12 @@ function initAddButtons(){
         lastScrollTop = st;
         return  direction;
     }
-
+    var delay = 1500;
+	var timeout = null;
     $("#locsDiv").on("scroll", function () {
         var dir = detectDirection();
-    	console.log(dir);
-        console.log($(".add_buttons").css("bottom"));
+    	//console.log(dir);
+        //console.log($(".add_buttons").css("bottom"));
         if (dir == "down") {
         	if($(".add_buttons").css("bottom")=="10px"){
         		$('.add_buttons').stopAnima(true);
@@ -258,5 +262,13 @@ function initAddButtons(){
 				}});
         	}
         }
+        clearTimeout(timeout);
+	    timeout = setTimeout(function(){
+	        $('.add_buttons').stopAnima(true);
+        	$('.add_buttons').anima({
+				'bottom': '10px',
+				}, 150, 'linear',{complete:function(){
+			}});
+	    },delay);
     });
 }

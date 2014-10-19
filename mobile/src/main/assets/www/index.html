@@ -15,6 +15,7 @@
 <script src="js-script/jquery/jquery-2.1.0.min.js"></script>
 <script src="js-script/jquery/minimit-anima.min.js"></script>
 <script src="js-script/init.js"></script>
+<script src="js-script/customAnimationWithRequest.js"></script>
 <script src="js-script/display.js"></script>
 <script src="js-script/edit_place.js"></script>
 <script src="js-script/place_adder.js"></script>
@@ -32,6 +33,11 @@
 </head>
 <body>
 	<div id="container">
+		<div id="loader_container">
+			<!--IMG id="loader" SRC="./png/mylo-asset_loader.png" width="100" height="100"-->
+			<canvas id="loader" width="" height=""></canvas>
+			<IMG id="loader_end" SRC="./png/mylo-asset_loader-end.png" width="100" height="100">
+		</div>
 		<div id='header'>
 			<IMG id="logo" SRC="png/Mylo-Logo-decli-fond-transparent.png">
 			<p>Mylo</p>
@@ -70,11 +76,6 @@
 				<IMG class="button_icon" id="add_place_icon" SRC="./png/mylo-icon-add-place.png">
 			</div>
 			<!--div id="shadow"></div-->
-			<div id="loader_container">
-				<!--IMG id="loader" SRC="./png/mylo-asset_loader.png" width="100" height="100"-->
-				<canvas id="loader" width="" height=""></canvas>
-				<IMG id="loader_end" SRC="./png/mylo-asset_loader-end.png" width="100" height="100">
-			</div>
 			<div id='locsDiv'>
 				<div class="" id="firstTimeGroup">
 					<p id="title"></p>
@@ -129,26 +130,7 @@
 			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
 			<a class="formButton form" id="validateButton"></a>
 		</div>
-		<div id='editPlace' class="">
-			<div id="add_header">
-				<div id="close_txt" class=""></div>
-				<IMG id="close_add_loc" class="" SRC="./png/mylo-icon-V2_add-loc-close.png">
-			</div>
-			<div id="edit-map-canvas"></div>
-			
-			<div id="table" class="form">
-				<div class="table_cell" ><IMG id="gps_img" SRC="./png/go_dark_filled.png"></div>
-				<div class="table_cell" ><p id="edit_gps_txt"></p></div>
-			</div>
-			
-			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
-			<a class="formButton form" id="saveButton"></a>
-		</div>
-		<div id='trash' name="trash" class='trash droppable'>
-			<div id="trash_bouncer"></div>
-			<IMG id="off" SRC="png/delete_dark.png">
-			<IMG id="focus" SRC="png/delete_OFF_white.png">
-		</div>
+		
 	</div>
 </body>
 </html>

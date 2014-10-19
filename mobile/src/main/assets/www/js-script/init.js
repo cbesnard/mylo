@@ -8,7 +8,8 @@ add_place_form_validate_button:"Add",
 add_place_form_title_gps:"Add gps location",
 add_place_form_title_place:"Add place",
 edit_place_form_title:"Edit location's name",
-edit_place_form_validate_button:"Rename",
+edit_place_form_validate_button:"Save",
+edit_place_form_place_name_field_helper:"Choose a new name",
 error_add_place_form_location_not_found:"Sorry, your position couldn't be found! Try again later :/",
 error_add_place_form_addr_not_found:"Address not recognized!",
 error_add_place_form_connexion_pb:"Sorry, your place couldn't be added due to connexion problems :/ \nTry again later!",
@@ -80,6 +81,8 @@ map_user_marker:null,//mylo_UI_init_variables[0].map_user_marker
 edit_map:null,
 edit_loc_marker:null,
 });
+var w = $('#addPlace').outerWidth();
+    var h = $('#addPlace').outerHeight();
 var MY_MAPTYPE_ID ="my maptype id";
 var gMarginTop = (mylo_UI_init_variables[0].groupsDivHeight-(mylo_UI_init_variables[0].groupSize+2*mylo_UI_init_variables[0].gborerSize))/2;
 /**************BUTTON ADD GROUP**************************/
@@ -100,6 +103,10 @@ var locContainerWidth = screenWidth-mylo_UI_init_variables[0].locContainerPaddin
 /*
 * LOADER ANIMATION
 */
+var requestAnimationFrame = window.requestAnimationFrame || 
+                            window.mozRequestAnimationFrame || 
+                            window.webkitRequestAnimationFrame || 
+                            window.msRequestAnimationFrame;
 var canvas;
 var ctx;
 var step = 0;
@@ -289,7 +296,7 @@ function setUI(callback){
     /*
     * LOADER
     */
-    var marginTop = Math.ceil((locsdivHeight-mylo_UI_init_variables[0].loader_size)/2.8);
+    var marginTop = Math.ceil((screenHeight-mylo_UI_init_variables[0].loader_size)/1.8);
     var marginLeft = Math.ceil((screenWidth-mylo_UI_init_variables[0].loader_size)/2);
     $('#loader_container').css({
         width: screenWidth+'px',
@@ -353,7 +360,7 @@ function initUserDatas(stringDatas){
 * * * * * * * * * * * * */
 function displayUserDatas(){
     var locsToPrint = getPositions();
-    printUserLocation(0,locsToPrint,fadeIN2);
+    printUserLocation(0,locsToPrint,fadeIn1);
     //after datas init is done
     $('body').anima({
         opacity: '1', 
@@ -623,6 +630,9 @@ function dragEnd(xpos, ypos){
                         mylo_UI_init_variables[0].ready_to_delete=0;
                         $('#trash_bouncer').anima({scaleX:1, scaleY:1}, 0,'0.6, 0.04, 0.98, 0.335');
                         $('#trash_bouncer').css('display','none');
+                        //REFRESH LOC ON MAP
+                        var idGroup = parseInt($('.currentGroup').attr('name'));
+                        setMarkers(idGroup);
                     }else{
                         //GA
                         GATrackerEvent("Drag_end", "loc_drag_end", "delete_loc_not_ready");

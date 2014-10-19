@@ -1,10 +1,13 @@
 function initEditPlaceWindow(){
-    $('#editPlace').find('#add_header').find('#close_txt').text(mylo_textes[0].edit_place_form_title);
+    /*$('#editPlace').find('#add_header').find('#close_txt').text(mylo_textes[0].edit_place_form_title);
     $('#editPlace').css({
         width : screenWidth-20,
         top: screenHeight,
         left:10,
+        //opacity: '0', 
+        //filter: 'alpha(opacity=0)',
     });
+    //
     $('#editPlace').find('#nameField').css({
         width : $('#editPlace').outerWidth()-mylo_UI_init_variables[0].addPlacePadding*2.2+'px',
     });
@@ -19,13 +22,17 @@ function initEditPlaceWindow(){
         }
     });
     //FORMULAIRE
+    $('#editPlace').find('#nameField').attr("placeholder",mylo_textes[0].edit_place_form_place_name_field_helper);
     $('#editPlace').find('#nameField').focusout(validateEditPlaceForm);
-
     $('#editPlace').find('#nameField').on('keypress keyup change paste textInput input',function(){
         validateEditPlaceForm();
-    });
+    });*/
 }
 function setEditPlaceScreen(){
+    /*$('#editPlace').stopAnima(true);
+    var startTop = screenHeight;
+    $('#editPlace').css("top",startTop);
+    var top = (screenHeight - $('#editPlace').outerHeight())/2;
     //display map
     var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].editPlace.lat,mylo_UI_init_variables[0].editPlace.lon);
     if(mylo_UI_init_variables[0].edit_map!=null && mylo_UI_init_variables[0].edit_loc_marker!=null){
@@ -33,21 +40,32 @@ function setEditPlaceScreen(){
         mylo_UI_init_variables[0].edit_map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
         mylo_UI_init_variables[0].edit_loc_marker.setPosition(myLatlng);
     }
+    //ANIMATE
     $('#editPlace').css("z-index","6000");
-    $('#editPlace').css("top",10);
-    $('#editPlace').css("left",10);
+    $('#editPlace').anima({
+        'top': top,
+        }, 200, '0.120, 0.715, 0.355, 0.875',{complete:function(){
+    }});*/
+    /*$('#editPlace').css("z-index","6000");
+    $('#editPlace').css("top",top);
+    $('#editPlace').css("left",10);*/
 }
 function closeEditPlaceWindow(){
-    $('#editPlace').css("z-index","-200");
-    $('#editPlace').css("top",screenHeight);
+    /*$('#editPlace').stopAnima(true);
+    $('#editPlace').anima({
+        'top': screenHeight,
+        }, 200, '0.120, 0.715, 0.355, 0.875',{complete:function(){
+            $('#editPlace').css("z-index","-200");
+    }});
+    
+    //$('#editPlace').css("top",screenHeight);
     //
     $('#editPlace').find('#nameField').blur();
     $('#editPlace').find('#nameField').val('');
-    mylo_UI_init_variables[0].editPlace=null;
-    $('#edit_gps_txt').html('');
+    $('#edit_gps_txt').html('');*/
 }
 function setEditPlaceMap(){
-	$('#editPlace').find('#edit-map-canvas').css({
+	/*$('#editPlace').find('#edit-map-canvas').css({
         width: '100%',
         height: '120px',
     });
@@ -91,5 +109,5 @@ function setEditPlaceMap(){
         $(mapCopyright).click(function(){
             return false;
         });
-    });
+    });*/
 }

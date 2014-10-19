@@ -103,8 +103,6 @@ $(document).ready(function(){
         //
 		if(mylo_UI_init_variables[0].isAddingGroup || mylo_UI_init_variables[0].loading){}else{
 			//STOP ANY POSSIBLE ONGOING AND AWAITING ANIMATIONS
-			//$('#locsWraper').stopAnima(true);
-
 			if(mylo_UI_init_variables[0].isAddingPlace){//already adding place=> close addingPlace
 			}else{//Not already adding place => OPEN add place
 				//cleaning fields
@@ -140,39 +138,9 @@ $(document).ready(function(){
 			animateLoader();
 			mylo_UI_init_variables[0].searching_position=1;
 			//GET USER LOCATION in lat lng
-			mylo_UI_init_variables[0].addingGPS=mylo_UI_init_variables[0].userpos;
-			//GET ADR of lat & lng
-	        var latlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
-			var geocoder = new google.maps.Geocoder();
-			geocoder.geocode( {'location': latlng}, function(results, status){
-			    if (status == google.maps.GeocoderStatus.OK) {
-			        //FILL the fields with data
-			  		var address = results[0].formatted_address;
-			   		//$('#gps_txt').text(address);
-					$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+address);
-			   		$('#gps_txt').css('display','block');
-			   		$('#gps_img').css('display','block');
-			   		//hide search field
-			   		validateAddGPSForm();
-			   		//OPEN ADD PLACE SCREEN
-			   		step=0;
-					displayAddPlaceScreen();
-			    }else{
-			        //TOAST NOTIF ERROR LOCATION NOT FOUND
-			        showAndroidToast(mylo_textes[0].error_add_place_form_location_not_found);
-					//GA
-			        GATrackerEvent("Action_fail", "find_location_err", status);
-			        //
-			    }
-			  	//LOADER: hide loader
-			    mylo_UI_init_variables[0].searching_position=0;
-			    $('#loader_container').css({display:'none'});
-				$('#loader').css({display:'block'});
-				$('#loader_end').css({display:'none'});
-				mylo_UI_init_variables[0].loading=0;
-				step=0;
-			});
-			
+			//mylo_UI_init_variables[0].addingGPS=mylo_UI_init_variables[0].userpos;
+			console.log("lat:"+mylo_UI_init_variables[0].userpos.lat+", lon:"+mylo_UI_init_variables[0].userpos.lon)
+			addGPSLocation(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
 		}
 		return 1;
 	});
@@ -204,7 +172,8 @@ $(document).ready(function(){
 				$('#loader_end').css({display:'block'});
 				mylo_UI_init_variables[0].loading=0;
 				step=0;
-
+				//REFRESH LOC ON MAP
+				setMarkers(idGroup);
 				// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
 				var locsToPrint = getPositions(idGroup);
 				printUserLocation(idGroup,locsToPrint,fadeIn1);
@@ -221,6 +190,8 @@ $(document).ready(function(){
 				$('#loader_end').css({display:'block'});
 				mylo_UI_init_variables[0].loading=0;
 				step=0;
+				//REFRESH LOC ON MAP
+				setMarkers(idGroup);
 				// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
 				var locsToPrint = getPositions(idGroup);
 				printUserLocation(idGroup,locsToPrint,fadeIn1);
@@ -248,7 +219,8 @@ $(document).ready(function(){
 			$('#loader_end').css({display:'block'});
 			mylo_UI_init_variables[0].loading=0;
 			step=0;
-
+			//REFRESH LOC ON MAP
+			setMarkers(idGroup);
 			// CLOSE EDIT PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
 			var idGroup = parseInt($('.currentGroup').attr('name'));
 			var locsToPrint = getPositions(idGroup);

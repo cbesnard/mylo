@@ -23,7 +23,10 @@ body {
 	left: 0px;
 	z-index: 9000;
 	display: none;
-	background: rgba(255, 255, 255, 0.8);
+	/*background: rgba(255,255,255,0);/*opacity 0.7*/
+	background: rgba(51,51,51,0.1);
+	width: 100%;
+	height: 100%;
 }
 #loader_end, #loader, #loader_end_gps, #loader_gps{
 	margin: auto;
@@ -537,7 +540,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 }
 #add_header #close_txt{
 	float: left;
-	margin-left: 10px;
+	margin-left: 15px;
 	font-family: 'Roboto thin';
 	text-transform:capitalize;
 	font-size: 25px;
@@ -628,7 +631,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #background{
 	display: none;
 	z-index: 6000;
-	background-color: rgba(51,51,51,0.5);
+	background-color: rgba(51,51,51,0.4);
 }
 .form{
 }
@@ -684,8 +687,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	
 	font-family: 'Roboto thin';
 	font-size: 20px;
-	text-transform: capitalize;
-	
 	padding-left: 5px;
 }
 #nameField{

@@ -20,8 +20,11 @@ public class HelperTest extends AndroidTestCase {
     }
 
     public void test1() {
-
-        //Assert.assertEquals(Helper.extractIntent(), "tota");
+        Assert.assertEquals(null, Helper.parseShareIntentText(""));
+        Assert.assertEquals("success", Helper.parseShareIntentText("Le motel http://goo.gl/maps/tzq1G zan dkz"));
+        Assert.assertEquals("success", Helper.parseShareIntentText("Le motel \n http://goo.gl/maps/tzq1G"));
+        Assert.assertEquals(null, Helper.parseShareIntentText("Yo moma"));
+        Assert.assertEquals("success", Helper.parseShareIntentText("http://goo.gl/maps/tzq1G"));
     }
 
 
