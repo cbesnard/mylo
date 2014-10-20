@@ -407,17 +407,15 @@ function getPositions(group){
 * * * RECURSIVE FADEIN FUNCTION
 * * * * * * * * * * * * * * * * * * */
 function fadeIN2(){
-	$('.loc').css('display','table');
+	//$('.loc').css('display','table');
 	var tab = $('.loc');
-	var length = tab.length;
-	//var element = document.getElementById(tab[0].id);
-	//horizontalTranslateAnimation(element,-screenWidth,0,300);
+	//cascadeTranslationAnimation(tab,-screenWidth,0,250,"marginLeft","easeOutCircNew",100);
 	var i=0;
-	for(i=0;i<length;i++){ //-1
-		console.log("loc id="+tab[i].id);
-		var element = document.getElementById(tab[i].id);
-		//window.setTimeout(horizontalTranslateAnimation(element,-screenWidth,0,300), 100*i);
-		horizontalTranslateAnimation(element,-screenWidth,0,250+100*i,"marginLeft");
+	for(i=0;i<$('.loc').length;i++){ //-1
+		$('#'+tab[i].id).css('display','block');
+		$('#'+tab[i].id).delayAnima(100*i).anima({
+			'margin-left': '0px',
+		  	}, 350, "0.075,0.82,0.165,1");
 	}
 }
 

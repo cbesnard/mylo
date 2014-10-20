@@ -489,15 +489,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	background-color: #fff;
 	border-left: 1px solid #f2f1f1;
 }
-
+#addButtons{
+	position: absolute;
+	width: 135px;
+	bottom: 10px;
+	z-index: 5000;	
+}
 .add_buttons{
 	width: 54px;
 	height: 54px;
-
+	float: left;
+	margin-right: 12px;
 	background-color: #2FBA90;
 
-	position: absolute;
-	bottom: 10px;
 	z-index: 5000;
 	/* * CIRCLE * */
     border-radius:50%;

@@ -222,10 +222,12 @@ function setAddPlaceAutocomplete(){
 }
 
 function initAddButtons(){
+	var globalID;
 	var lastScrollTop = 0,
         st,
         direction;
-
+    var element = document.getElementById("addButtons");
+    var queryElement = $('#addButtons');
     function detectDirection() {
         st = $("#locsDiv").scrollTop();
         if (st > lastScrollTop) {
@@ -242,33 +244,46 @@ function initAddButtons(){
         var dir = detectDirection();
     	//console.log(dir);
         //console.log($(".add_buttons").css("bottom"));
+        console.log("adButtons bottom: "+element.style.bottom);
         if (dir == "down") {
-        	if($(".add_buttons").css("bottom")=="10px"){
-        		$('.add_buttons').stopAnima(true);
+        	//if($(".add_buttons").css("bottom")=="10px"){
+        	if(queryElement.css("bottom")=="10px"){
+        		/*$('.add_buttons').stopAnima(true);
         		$('.add_buttons').anima({
 					'bottom': '-100px',
 					}, 200, 'linear',{complete:function(){
 
-				}});
+				}});*/
+    			window.cancelAnimationFrame(globalID);
+    			var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			globalID = translationAnimation(element,addButtonsPos,-100,200,"bottom","linear");
         	}
+
         } else {
-        	if($(".add_buttons").css("bottom")=="-100px"){
-        		console.log("anima called");
-        		$('.add_buttons').stopAnima(true);
+        	if(queryElement.css("bottom")=="-100px"){
+        		//console.log("anima called");
+        		/*$('.add_buttons').stopAnima(true);
         		$('.add_buttons').anima({
 					'bottom': '10px',
 					}, 150, 'linear',{complete:function(){
 
-				}});
+				}});*/
+    			window.cancelAnimationFrame(globalID);
+    			var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
         	}
         }
         clearTimeout(timeout);
 	    timeout = setTimeout(function(){
-	        $('.add_buttons').stopAnima(true);
+	    	if(queryElement.css("bottom")=="-100px"){
+	    		var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
+	    	}
+	        /*$('.add_buttons').stopAnima(true);
         	$('.add_buttons').anima({
 				'bottom': '10px',
 				}, 150, 'linear',{complete:function(){
-			}});
+			}});*/
 	    },delay);
     });
 }

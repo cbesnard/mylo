@@ -24,8 +24,8 @@ function switch_tab(id_clicked){
 				}, 200, '0.120, 0.715, 0.355, 0.875',{complete:function(){
 	
 			}});*/
-			globalID = horizontalTranslateAnimation(element,locsWraperPos,-screenWidth,250,"marginLeft");
-			globalID2 = horizontalTranslateAnimation(element2,indicatorPos,screenWidth/2,250,"left");
+			globalID = translationAnimation(element,locsWraperPos,-screenWidth,200,"marginLeft","easeOutCircNew");
+			globalID2 = translationAnimation(element2,indicatorPos,screenWidth/2,200,"left","easeOutCircNew");
 			/*$('#indicator').anima({
 				'left': screenWidth/2+'px',
 				}, 200, '0.120, 0.715, 0.355, 0.875',{complete:function(){
@@ -33,8 +33,8 @@ function switch_tab(id_clicked){
 			}});*/
 		}else{
 			//slide locsContainer from right to left
-			globalID = horizontalTranslateAnimation(element,locsWraperPos,0,250,"marginLeft");
-			globalID2 = horizontalTranslateAnimation(element2,indicatorPos,0,250,"left");
+			globalID = translationAnimation(element,locsWraperPos,0,200,"marginLeft","easeOutCircNew");
+			globalID2 = translationAnimation(element2,indicatorPos,0,200,"left","easeOutCircNew");
 			/*
 			$('#locsWraper').anima({
 				'margin-left': '0px',

@@ -196,12 +196,15 @@ function setUI(callback){
         height: screenHeight+'px',
         width: screenWidth+'px',
     });
-    $('#add_place').css({
+    $('#addButtons').css({
+        left: (screenWidth-80)-54+'px',
+    });
+    /*$('#add_place').css({
         left: (screenWidth-10)-54+'px',
     });
     $('#add_gps').css({
         left: (screenWidth-80)-54+'px',
-    });
+    });*/
     $('#header').css({
         height: mylo_UI_init_variables[0].headerHeight+'px',
         width: mylo_UI_init_variables[0].headerWidth+'px',
