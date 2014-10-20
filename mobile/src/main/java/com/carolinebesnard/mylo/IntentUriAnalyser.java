@@ -120,6 +120,7 @@ public class IntentUriAnalyser {
     public static String urlBuilderFromMyloPlace(MyloPlace myloPlace){
         if(myloPlace!=null) {
             String address = myloPlace.getAddress();
+            if(address==null){return null;}
             LatLng gps = new LatLng(myloPlace.getLatitude(), myloPlace.getLongitude());
             String name = myloPlace.getFeatureName();
             if (gps != null) {

@@ -1,4 +1,4 @@
-function horizontalTranslateAnimation(HTMLElement,startPos,endPos,endTime){
+function horizontalTranslateAnimation(HTMLElement,startPos,endPos,endTime,propertyToAnimate){
 	//console.log("In horizontalTranslateAnimation function");
 	var startTime;
 	var start = startPos;
@@ -19,20 +19,25 @@ function horizontalTranslateAnimation(HTMLElement,startPos,endPos,endTime){
 		var t = timestamp-startTime;
 		console.log("t="+t+", marginLeft="+easeOutCircNew(t, start, end, duration)+", endPos="+endPos);
 		//translate
-		var newMarginLeft = easeOutCircNew(t, start, end, duration);
+		var newLeft = easeOutCircNew(t, start, end, duration);
 		if(endSuperiorToStart){
-			if(newMarginLeft>endPos){newMarginLeft=endPos;}
+			if(newLeft>endPos){newLeft=endPos;}
 		}else{
-			if(newMarginLeft<endPos){newMarginLeft=endPos;}
+			if(newLeft<endPos){newLeft=endPos;}
 		}
-		HTMLElement.style.marginLeft= newMarginLeft+"px";
+		if(propertyToAnimate=="marginLeft"){
+			HTMLElement.style.marginLeft= newLeft+"px";	
+		}else if(propertyToAnimate=="left"){
+			HTMLElement.style.left= newLeft+"px";	
+		}
+		
 		if(endSuperiorToStart){
-			if(newMarginLeft<endPos){
+			if(newLeft<endPos){
 				//repeat
 				requestAnimationFrame(horizontalTranslate);
 			}
 		}else{
-			if(newMarginLeft>endPos){
+			if(newLeft>endPos){
 				//repeat
 				requestAnimationFrame(horizontalTranslate);
 			}
@@ -40,7 +45,8 @@ function horizontalTranslateAnimation(HTMLElement,startPos,endPos,endTime){
 	}
 	//ANIMATE
 	initHorizontalTranslate();
-	requestAnimationFrame(horizontalTranslate);
+	var id = requestAnimationFrame(horizontalTranslate);
+	return id;
 }
 
 function linear(t,deb,fin,endTime){//t, b, c, d

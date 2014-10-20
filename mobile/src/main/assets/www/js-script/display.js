@@ -417,7 +417,7 @@ function fadeIN2(){
 		console.log("loc id="+tab[i].id);
 		var element = document.getElementById(tab[i].id);
 		//window.setTimeout(horizontalTranslateAnimation(element,-screenWidth,0,300), 100*i);
-		horizontalTranslateAnimation(element,-screenWidth,0,250+100*i);
+		horizontalTranslateAnimation(element,-screenWidth,0,250+100*i,"marginLeft");
 	}
 }
 

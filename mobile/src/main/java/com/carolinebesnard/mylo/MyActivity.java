@@ -457,10 +457,10 @@ class myJsInterface {
                 //GET ADDRESS FROM GPS
                 final String addr = Helper.getAddrFromGPS(latitude, longitude);
                 myloPlace.setAddress(addr);
-                final String url = IntentUriAnalyser.urlBuilderFromMyloPlace(myloPlace);;
+                final String url = IntentUriAnalyser.urlBuilderFromMyloPlace(myloPlace);
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
-                        if (addr != null) {
+                        if (url != null) {
                             activity.callJS(url);
                         } else {
                             //UNKNOWN URL FORMAT OR SERVER NOT RESPONDING

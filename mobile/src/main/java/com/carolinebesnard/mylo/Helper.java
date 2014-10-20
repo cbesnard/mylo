@@ -41,6 +41,11 @@ public class Helper {
         geocoder = new Geocoder(context, Locale.getDefault());
         try {
             addresses = geocoder.getFromLocation(lat, lng, 1);
+            if(addresses==null){
+                //error case
+                Log.i(TAG,"Get location address ERROR: Couldn't get location address, send error message to wear service");
+                return null;
+            }
             String address = String.format(
                     "%s, %s, %s",
                     // If there's a street address, add it
