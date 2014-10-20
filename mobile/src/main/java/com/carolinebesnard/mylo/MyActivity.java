@@ -1,6 +1,8 @@
 package com.carolinebesnard.mylo;
 
 import android.app.Activity;
+import android.app.backup.BackupManager;
+import android.app.backup.RestoreObserver;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -53,15 +55,85 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     private static final String TAG = MyActivity.class.getSimpleName();
     private static final String PROPERTY_ID = "UA-51649868-2";
 
+    private BackupManager bm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "MYLO V2.6.6");
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
+
+        init();
+
+        migrate();
+
+        setContentView(w);
+
+        /**/
+        myJsInterface.webview = w;
+
+        appState=0;
+    }
+
+    private void init() {
         /*get intent*/
         myintent = getIntent();
         intentData = getIntent().getData();
+
+        bm = new BackupManager(this);
+        FrameLayout container = new FrameLayout(this.getApplicationContext());
+
+        initLocationData();
+        initWebView();
+    }
+
+    /**
+     * Method that takes location information form external storage directory
+     * to Android usual file directory
+     */
+    private void migrate() {
+        Log.d(TAG, "File migration check");
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+
+        if (myDir.exists ()) {
+            File file = new File(myDir, MyloBackupAgentHelper.LOCATION_FILE_NAME);
+            File dataFile = new File(this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
+
+            if (file.exists() && !dataFile.exists()) {
+                Log.i(TAG, "Migration needed");
+                try {
+                    FileOutputStream fos = new FileOutputStream(dataFile);
+
+                    FileInputStream fis = new FileInputStream(file);
+                    InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+                    BufferedReader bufferedReader = new BufferedReader(isr);
+
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line);
+                    }
+
+                    Log.w(TAG, "Migrating : " + sb.toString());
+                    fos.write(sb.toString().getBytes());
+
+                    fos.close();
+                    fis.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "Migration successful");
+            } else {
+                Log.i(TAG, "No migration needed");
+            }
+        }
+
+        /*file.delete();*/
+    }
+
+    private void initWebView() {
         /*Create Webview*/
         w = new WebView(this);
         w.getSettings().setJavaScriptEnabled(true);
@@ -78,15 +150,33 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             }
         });
         w.loadUrl("file:///android_asset/www/index.html");
-        w.addJavascriptInterface(new myJsInterface(this), "Android");
+        w.addJavascriptInterface(new myJsInterface(this, bm), "Android");
+    }
 
-        FrameLayout container = new FrameLayout(this.getApplicationContext());
-        setContentView(w);
-        //
-        myJsInterface.webview = w;
+    /**
+     * Creates the data location file if needed
+     */
+    private void initLocationData() {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
 
-        /*SET APP STATE*/
-        appState=0;
+        if (!myDir.exists ()) {
+            Log.i(TAG, "STORE DATA: DIRECTORY DOESN'T EXISTS creating directory: " + root);
+            myDir.mkdirs();
+        }
+
+        File file = new File (this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
+
+        if (!file.exists()) {
+            synchronized (MyloBackupAgentHelper.locationDataLock) {
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.close();
+                } catch (java.io.IOException e) {
+                    Log.e("error while writing file", "error while writing file");
+                }
+            }
+        }
     }
 
     @Override
@@ -234,56 +324,52 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         String FILENAME = "data.txt";
 
         if(isExternalStorageReadable()){
-            String root = Environment.getExternalStorageDirectory().toString();
+            /*String root = Environment.getExternalStorageDirectory().toString();
             File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+            */
 
-            File file = new File (myDir, FILENAME);
-            if (file.exists ()){
-                try {
-                    FileInputStream fis = new FileInputStream(file);
-                    InputStreamReader isr = new InputStreamReader(fis,"UTF-8");
-                    BufferedReader bufferedReader = new BufferedReader(isr);
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    isr.close();
-                    fis.close();
-
-                    if(!onCreate){
-                        Log.i(TAG,"onCreate=false => calling javascript init");
-                        //Log.v(TAG,"read data= '"+sb.toString()+"'");
-                        //Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
-                        if(webviewEndOfLoad){
-                            String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
-                            String url="javascript:initUserDatas('"+converted+"')";
-                            w.loadUrl(url);
-                            checkForIntent();
-                        }
-                        onCreate=true;
-                    }else{
-                        Log.i(TAG,"onCreate=true");
-                        if(webviewEndOfLoad){
-                            //Log.v(TAG,"onCreate=true => webviewEndOfLoad");
-                            String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
-                            w.loadUrl("javascript:refreshData('"+converted+"')");
-                            checkForIntent();
-                        }
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sendGATrackerEvent("Action_fail", "read_data", "error while reading data");
+            File file = new File (this.getFilesDir(), FILENAME);
+            /*if (file.exists ()){*/
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                InputStreamReader isr = new InputStreamReader(fis,"UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
                 }
-            }else{
-                Log.i(TAG,"file"+FILENAME+" doesn't exist, creating one new file data.txt");
-                w.loadUrl("javascript:initUserDatas('')");
-                checkForIntent();
-                onCreate=true;
+                isr.close();
+                fis.close();
+
+                if(!onCreate){
+                    Log.i(TAG,"onCreate=false => calling javascript init");
+                    //Log.v(TAG,"read data= '"+sb.toString()+"'");
+                    //Log.i(TAG,"webviewEndOfLoad="+webviewEndOfLoad);
+                    if(webviewEndOfLoad){
+                        String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
+                        String url="javascript:initUserDatas('"+converted+"')";
+                        w.loadUrl(url);
+                        checkForIntent();
+                    }
+                    onCreate=true;
+                }else{
+                    Log.i(TAG,"onCreate=true");
+                    if(webviewEndOfLoad){
+                        //Log.v(TAG,"onCreate=true => webviewEndOfLoad");
+                        String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
+                        w.loadUrl("javascript:refreshData('"+converted+"')");
+                        checkForIntent();
+                    }
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendGATrackerEvent("Action_fail", "read_data", "error while reading data");
             }
-        }else{
+
+        } else {
             Log.e(TAG,"error while reading file: external storage not readable");
             sendGATrackerEvent("Action_fail", "read_data", "not_readable");
         }
@@ -330,6 +416,12 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             w.loadUrl("javascript:setUserPosition("+location.getLatitude()+","+location.getLongitude()+")");
         }
     }
+
+    public void requestBackUp() {
+        Log.i(TAG, "Requesting Backup");
+        bm.dataChanged();
+        Log.i(TAG, "Backup Requested");
+    }
 }
 
 class myJsInterface {
@@ -337,10 +429,13 @@ class myJsInterface {
     private Context con;
     public static MyActivity activity;
     public static WebView webview;
+    private final BackupManager bm;
+
     private static final String TAG = myJsInterface.class.getSimpleName();
 
-    public myJsInterface(Context con) {
+    public myJsInterface(Context con, BackupManager bm) {
         this.con = con;
+        this.bm = bm;
     }
 
     @JavascriptInterface
@@ -415,21 +510,26 @@ class myJsInterface {
         if(isExternalStorageWritable()){
             String root = Environment.getExternalStorageDirectory().toString();
             File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
-            //myDir.mkdirs();
-            if (!myDir.exists ()){
-                Log.i(TAG, "STORE DATA: DIRECTORY DOESN'T EXISTS creating directory: " + root);
-                myDir.mkdirs();
-            }
-            File file = new File (myDir, FILENAME);
 
-            try{
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(datas.getBytes());
-                fos.close();
-            }catch (java.io.IOException e){
-                Log.e("error while writing file","error while writing file");
-                e.printStackTrace();
-                addGAEvent("Action_fail", "write_data", "error while writing file");
+            Log.i(TAG, activity.getFilesDir().getAbsolutePath());
+            File file = new File (activity.getFilesDir(), FILENAME);
+
+            boolean backupNeeded = true;
+            synchronized (MyloBackupAgentHelper.locationDataLock) {
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(datas.getBytes());
+                    fos.close();
+                } catch (java.io.IOException e) {
+                    Log.e("error while writing file", "error while writing file");
+                    backupNeeded = false;
+                    e.printStackTrace();
+                    addGAEvent("Action_fail", "write_data", "error while writing file");
+                }
+            }
+
+            if (backupNeeded) {
+                activity.requestBackUp();
             }
         }else{
             Log.e("error while writing file","external storage not writable");
