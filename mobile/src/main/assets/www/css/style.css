@@ -652,7 +652,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #google_logo {
 	float: left;
 	margin-top: 5px;
-	margin-bottom: 20px;
 	opacity: 0.6; 
 	filter: alpha(opacity=60);
 	width:104px; 
@@ -679,8 +678,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 }
 #input_container{
 	height:35px;
-	margin-top: 10px;
 	position:relative;	
+	margin-bottom: 25px;
 }
 
 #input_container #place_search_img{
@@ -749,7 +748,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	/*margin-top: 24px;*/
 }
 
-
+.input_container_title{
+	margin: 0px;
+	font-family: 'Roboto thin';
+	font-size: 22px;
+	color:#777;
+	margin-top: 10px;
+	margin-bottom: 2px;
+	margin-left: 15px;
+}
+#nameField_title{
+	margin-top: 50px;
+}
 #validateButton, #saveButton{
 	display: block;
 	height: 32px;

@@ -1,13 +1,15 @@
 var mylo_textes = new Array();
 mylo_textes.push({default_group_name:"All",
 add_button_txt:"Quick Add:",
-add_place_form_addr_field_helper:"Enter a place or an address",
+add_place_form_addr_field_helper:"Enter a name or an address",
 add_place_form_place_name_field_helper:"Choose a name",
 error_add_place_form_empty_fields:"Both name and address have to be completed to add a place!",
 add_place_form_validate_button:"Add",
 add_place_form_title_gps:"Add a GPS location",
 add_place_from_URL_title:"Add a new place",//mylo_textes[0].add_place_from_URL_title
-add_place_form_title_place:"Find a new place",
+add_place_form_title_place:"Place's search",
+add_place_form_searchField_title:"Find a place by name or address",
+add_place_form_nameField_title:"Name for this place",
 edit_place_form_title:"Edit location's name",
 edit_place_form_validate_button:"Save",
 edit_place_form_place_name_field_helper:"Choose a new name",

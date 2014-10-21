@@ -23,6 +23,9 @@ function initAddPlaceWindow(){
 	$('#addPlace').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_place);
 	$('#addPlace').css("bottom",10);
 	$('#addPlace').css("left",10);
+	//
+	$('#addPlace').find('#searchField_title').text(mylo_textes[0].add_place_form_searchField_title);
+	$('#addPlace').find('#nameField_title').text(mylo_textes[0].add_place_form_nameField_title);
 }
 function initAddGPSWindow(){
 	$('#addGPS').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
