@@ -56,6 +56,8 @@ function setAddGPSScreen(){
 		
 		var group;
 		if(mylo_UI_init_variables[0].editPlace!=null){
+			$('#addGPS').find('#edit_place').html('');
+			$('#addGPS').find('#edit_place').html('<span>'+mylo_UI_init_variables[0].editPlace.name+'</span>');
 			group = mylo_UI_init_variables[0].editPlace.group;
 		}else{
 			group = parseInt($('.currentGroup').attr('name'));
