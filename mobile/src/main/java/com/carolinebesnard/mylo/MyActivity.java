@@ -89,19 +89,69 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     }
 
     /**
+     * Creates the data location file if needed
+     */
+    private void initLocationData() {
+        /*String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+
+        if (!myDir.exists ()) {
+            Log.i(TAG, "STORE DATA: DIRECTORY DOESN'T EXISTS creating directory: " + root);
+            myDir.mkdirs();
+        }*/
+
+        File file = new File (this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
+
+        if (!file.exists()) {
+            synchronized (MyloBackupAgentHelper.locationDataLock) {
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.close();
+                } catch (java.io.IOException e) {
+                    Log.e("error while writing file", "error while writing file");
+                }
+            }
+        }
+    }
+
+    private void initWebView() {
+        /*Create Webview*/
+        w = new WebView(this);
+        w.getSettings().setJavaScriptEnabled(true);
+        WebView.setWebContentsDebuggingEnabled(true);
+        w.setWebViewClient(new WebViewClient() {
+
+            public void onPageFinished(WebView view, String url) {
+                webviewEndOfLoad=true;
+                if(currentLoc!=null){
+                    //Set Javascript user Position
+                    w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+                }
+                readData();
+            }
+        });
+        w.loadUrl("file:///android_asset/www/index.html");
+        w.addJavascriptInterface(new myJsInterface(this, bm), "Android");
+    }
+
+    /**
      * Method that takes location information form external storage directory
      * to Android usual file directory
      */
     private void migrate() {
-        Log.d(TAG, "File migration check");
+        Log.i(TAG, "File migration check");
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
 
         if (myDir.exists ()) {
+
             File file = new File(myDir, MyloBackupAgentHelper.LOCATION_FILE_NAME);
             File dataFile = new File(this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
+            //dataFile.delete();
 
-            if (file.exists() && !dataFile.exists()) {
+            boolean empty = !dataFile.exists() || dataFile.length() == 0;
+
+            if (file.exists() && empty) {
                 Log.i(TAG, "Migration needed");
                 try {
                     FileOutputStream fos = new FileOutputStream(dataFile);
@@ -131,52 +181,6 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         }
 
         /*file.delete();*/
-    }
-
-    private void initWebView() {
-        /*Create Webview*/
-        w = new WebView(this);
-        w.getSettings().setJavaScriptEnabled(true);
-        WebView.setWebContentsDebuggingEnabled(true);
-        w.setWebViewClient(new WebViewClient() {
-
-            public void onPageFinished(WebView view, String url) {
-                webviewEndOfLoad=true;
-                if(currentLoc!=null){
-                    //Set Javascript user Position
-                    w.loadUrl("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
-                }
-                readData();
-            }
-        });
-        w.loadUrl("file:///android_asset/www/index.html");
-        w.addJavascriptInterface(new myJsInterface(this, bm), "Android");
-    }
-
-    /**
-     * Creates the data location file if needed
-     */
-    private void initLocationData() {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
-
-        if (!myDir.exists ()) {
-            Log.i(TAG, "STORE DATA: DIRECTORY DOESN'T EXISTS creating directory: " + root);
-            myDir.mkdirs();
-        }
-
-        File file = new File (this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
-
-        if (!file.exists()) {
-            synchronized (MyloBackupAgentHelper.locationDataLock) {
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.close();
-                } catch (java.io.IOException e) {
-                    Log.e("error while writing file", "error while writing file");
-                }
-            }
-        }
     }
 
     @Override
