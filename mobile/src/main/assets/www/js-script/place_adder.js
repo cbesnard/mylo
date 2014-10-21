@@ -39,7 +39,7 @@ function setAddPlaceScreen(){
 	if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
 	    mylo_UI_init_variables[0].map.setCenter(myLatlng);
 	    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
-	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);  
 	}
 	$('#addPlace').css("display","block");
 }
@@ -53,6 +53,22 @@ function setAddGPSScreen(){
 	    mylo_UI_init_variables[0].map.setCenter(myLatlng);
 	    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
 	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+		
+		var group;
+		if(mylo_UI_init_variables[0].editPlace!=null){
+			group = mylo_UI_init_variables[0].editPlace.group;
+		}else{
+			group = parseInt($('.currentGroup').attr('name'));
+		}
+	    var image = {
+			url: "png/mylo-icon-marker-g"+group+".png",
+			size: new google.maps.Size(30,41), // the size it should be on the map
+			scaledSize: new google.maps.Size(30,41), // the normal size of the image is 90x1100 because Retina asks double size.
+			origin: new google.maps.Point(0, 0), // position in the sprite
+			// The anchor for this image is the base of the flagpole at 0,32.
+	    	anchor: new google.maps.Point(15, 41)                   
+		};
+	    mylo_UI_init_variables[0].marker.setIcon(image);
 	}
 	$('#addGPS').css("z-index","6000");
 	$('#addGPS').css("bottom",10);

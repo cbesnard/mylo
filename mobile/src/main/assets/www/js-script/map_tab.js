@@ -155,12 +155,55 @@ function setMarkers(group_id){
 					// The anchor for this image is the base of the flagpole at 0,32.
 			    	anchor: new google.maps.Point(15, 41)                   
 				};
-			    var marker = new google.maps.Marker({
-			      position: myLatlng,
-			      map: mylo_UI_init_variables[0].map_tab_map,
-			      icon: image
-			    });
-			    markers.push(marker);
+				(function(z){
+				    var marker = new google.maps.Marker({
+				      position: myLatlng,
+				      map: mylo_UI_init_variables[0].map_tab_map,
+				      icon: image
+				    });
+				    markers.push(marker);
+				    marker.metadata = {id: locations[z].id};
+				    console.log("marker metadata="+marker.metadata.id);
+				    markers.push(marker);
+				    //
+			    
+				    google.maps.event.addListener(marker, 'click', function() {
+					    //Open edit place's screen
+					    console.log("marker clicked and marker id="+marker.metadata.id);
+					    //GA
+				        GATrackerEvent("Marker_click", "edit_place", "");
+				        //
+				        var indice = marker.metadata.id;
+				        //var indice = indiceOfMarker(marker);
+				        //if(indice==-1){return;}
+						mylo_UI_init_variables[0].editPlace=getLoc(indice);
+						var loc = mylo_UI_init_variables[0].editPlace;
+						var adr = loc.adr;
+						var adr1 = "";
+						if(loc.gps==1){
+							adr1 = mylo_textes[0].location_gps_addr_txt;
+						}
+						var adr2 = adr.replace(adr1, "");
+						var name = "New location";
+						if(loc.name!=""){
+							name=loc.name;
+						}
+						$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+adr1+'</span>'+adr2);
+				   		$('#gps_txt').find('.name').text(name);
+				   		//
+				   		$("#addGPS").find("#validateButton").css("display","none");
+				   		$("#saveButton").css("display","block");
+				   		//
+				   		$('#addGPS').find('#close_txt').css("display","none");
+						$('#addGPS').find('#edit_place').css("display","block");
+				   		//
+				   		mylo_UI_init_variables[0].addingGPS = {lat:loc.lat,lon:loc.lon};
+				   		//hide search field
+				   		validate();
+				   		//OPEN ADD PLACE SCREEN
+				   		displayAddPlaceScreen();
+					});
+				})(i);
 			}
 		}
 	}
