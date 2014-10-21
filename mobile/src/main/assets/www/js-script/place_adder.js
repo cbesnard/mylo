@@ -256,7 +256,7 @@ function initAddButtons(){
         var dir = detectDirection();
     	//console.log(dir);
         //console.log($(".add_buttons").css("bottom"));
-        console.log("adButtons bottom: "+element.style.bottom);
+        //console.log("adButtons bottom: "+element.style.bottom);
         if (dir == "down") {
         	//if($(".add_buttons").css("bottom")=="10px"){
         	if(queryElement.css("bottom")=="10px"){
