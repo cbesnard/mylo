@@ -100,10 +100,20 @@ public class IntentUriAnalyser {
                 String longUrl = obj.getString("longUrl");
                 //GET CID
                 Uri uri=Uri.parse(longUrl);
-                String value = uri.getQueryParameter("cid");
-                Log.i(TAG,"value cid= "+value);
-                //GET MyloPlace from CID
-                MyloPlace myloPlace = getMyloPlaceFromCid(value);
+                Log.i(TAG,"url = "+longUrl);
+                MyloPlace myloPlace = new MyloPlace(Locale.getDefault());
+                String value = uri.getQueryParameter("q");
+                if(value!=null){
+                    Log.i(TAG,"Q = "+value);
+                    myloPlace = getMyloPlaceFromQ(value);
+                }else {
+                    value = uri.getQueryParameter("cid");
+                    if(value!=null){
+                        Log.i(TAG,"value cid= "+value);
+                        //GET MyloPlace from CID
+                        myloPlace = getMyloPlaceFromCid(value);
+                    }
+                }
                 //GET url from MyloPlace
                 String url = urlBuilderFromMyloPlace(myloPlace);
                 return url;

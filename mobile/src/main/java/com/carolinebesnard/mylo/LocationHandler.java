@@ -64,7 +64,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     }
 
     public Location getLocation() {
-        Log.i(TAG, "getLocation called");
+        //Log.i(TAG, "getLocation called");
         if(mGoogleApiClient == null){
             Log.e(TAG, "ERROR mGoogleApiClient is null");
             return null;
@@ -90,9 +90,9 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         pendingresult.setResultCallback(new ResultCallback() {
             @Override
             public void onResult(Result result) {
-                Log.i(TAG,"location update request result= "+result.getStatus().getStatus());
+                //Log.i(TAG,"location update request result= "+result.getStatus().getStatus());
                 if(result.getStatus().isSuccess()){
-                    Log.i(TAG,"Request for Loction update with fusedLocationApi is SUCCESS");
+                    //Log.i(TAG,"Request for Loction update with fusedLocationApi is SUCCESS");
                 }else{
                     //START location update with GPS provider
                     isRequestOnGPSProvider = true;
@@ -164,7 +164,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "onConnected");
+        //Log.i(TAG, "onConnected");
         if(myListener!=null){
             startLocationRequest();
         }
@@ -172,7 +172,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(TAG, "onConnectionSuspended");
+        //Log.i(TAG, "onConnectionSuspended");
         if(myListener!=null){
             stopLocationRequest();
         }

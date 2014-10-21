@@ -105,9 +105,12 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         // Acquire a reference to the system Location Manager
         sendGATrackerEvent("Flags", "Resume_App", "");
         if(onCreate){
+            Log.i(TAG,"onCreate = true");
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
             checkForIntent();
+        }else{
+            Log.i(TAG,"onCreate = false");
         }
     }
 
@@ -265,6 +268,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
                             //Log.v(TAG,"onCreate=true => webviewEndOfLoad");
                             String converted = Base64.encodeToString(sb.toString().getBytes("UTF-8"), Base64.DEFAULT);
                             w.loadUrl("javascript:refreshData('"+converted+"')");
+                            checkForIntent();
                         }
                     }
 
@@ -276,6 +280,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             }else{
                 Log.i(TAG,"file"+FILENAME+" doesn't exist, creating one new file data.txt");
                 w.loadUrl("javascript:initUserDatas('')");
+                checkForIntent();
+                onCreate=true;
             }
         }else{
             Log.e(TAG,"error while reading file: external storage not readable");
