@@ -457,7 +457,6 @@ function bindLocsEvents(){
 		return false; 
 	});
 	$('.loc').click(function(){
-
 		//GA
         GATrackerEvent("Button_click", "edit_place", $(this).attr('id'));
         //
@@ -473,8 +472,16 @@ function bindLocsEvents(){
 		if(loc.name!=""){
 			name=loc.name;
 		}
-		$('#edit_gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+adr1+'</span>'+adr2);
-   		$('#edit_gps_txt').find('.name').text(name);
+		$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt">'+adr1+'</span>'+adr2);
+   		$('#gps_txt').find('.name').text(name);
+   		//
+   		$("#addGPS").find("#validateButton").css("display","none");
+   		$("#saveButton").css("display","block");
+   		//
+   		$('#addGPS').find('#close_txt').css("display","none");
+		$('#addGPS').find('#edit_place').css("display","block");
+   		//
+   		mylo_UI_init_variables[0].addingGPS = {lat:loc.lat,lon:loc.lon};
    		//hide search field
    		validate();
    		//OPEN ADD PLACE SCREEN

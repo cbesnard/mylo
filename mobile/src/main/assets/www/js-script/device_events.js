@@ -185,6 +185,9 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	$('#addGPS').find('#nameField').val(locname);
 	$('#addGPS').find('#addressField').val(locaddr);
 	//
+	$('#addGPS').find('#close_txt').css("display","none");
+	$('#addGPS').find('#add_from_url').css("display","block");
+	//
 	mylo_UI_init_variables[0].addingGPS = {lat:lat,lon:lon};
 	validate();
 	//OPEN ADD PLACE SCREEN

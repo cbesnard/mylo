@@ -180,7 +180,7 @@ function validateEditPlaceForm(){
 function checkFields(){
 	if( mylo_UI_init_variables[0].editPlace!=null){
 		console.log('IN CHECKFIELDS ');
-		if($('#editPlace').find('#nameField').val()){
+		if($('#addGPS').find('#nameField').val()){
 			return 1;
 		}else{
 			return 0;

@@ -26,6 +26,8 @@ function initAddPlaceWindow(){
 }
 function initAddGPSWindow(){
 	$('#addGPS').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
+	$('#addGPS').find('#add_header').find('#add_from_url').text(mylo_textes[0].add_place_from_URL_title);
+	$('#addGPS').find('#add_header').find('#edit_place').text(mylo_textes[0].edit_place_form_title);
 }
 function setAddPlaceScreen(){
 	$('#addPlace').stopAnima(true);
@@ -63,7 +65,7 @@ function displayAddPlaceScreen(){
 	if(mylo_UI_init_variables[0].addingGPS!=null){
 		setAddGPSScreen();
 	}else if(mylo_UI_init_variables[0].editPlace!=null){
-		setEditPlaceScreen();
+		setAddGPSScreen();
 	}else{
 		setAddPlaceScreen();
 	}
@@ -78,6 +80,13 @@ function closeAddPlaceWindow(){
 function closeAddGPSWindow(){
 	$('#addGPS').css("z-index","-200");
 	$('#addGPS').css("bottom",-screenHeight);
+	//
+	$('#addGPS').find('#close_txt').css("display","block");
+	$('#addGPS').find('#add_from_url').css("display","none");
+	$('#addGPS').find('#edit_place').css("display","none");
+	//
+	$("#addGPS").find("#validateButton").css("display","block");
+   	$("#saveButton").css("display","none");
 }
 
 function hideAddPlaceScreen(delay){

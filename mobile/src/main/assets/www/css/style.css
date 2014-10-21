@@ -546,11 +546,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	float: left;
 	margin-left: 15px;
 	font-family: 'Roboto thin';
-	text-transform:capitalize;
 	font-size: 25px;
 	color:#777;
 	height: 50px;
 	line-height:50px;
+}
+
+#add_header .add_window_title{
+	float: left;
+	margin-left: 15px;
+	font-family: 'Roboto thin';
+	font-size: 25px;
+	color:#777;
+	height: 50px;
+	line-height:50px;
+	display: none;	
 }
 /****TRASH**********/
 #trash{
@@ -757,6 +767,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	border: 1px solid #f1f1f1;
 
 	border-radius: 2px;
+}
+#saveButton{
+	display: none;
 }
 #validateButton:active{
 	background-color: #ac1c28;

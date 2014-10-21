@@ -213,7 +213,7 @@ $(document).ready(function(){
         GATrackerEvent("Button_click", "Save_place", "");
         //
 		if(checkFields()){
-			editPlacesName(mylo_UI_init_variables[0].editPlace.id,$('#editPlace').find('#nameField').val());
+			editPlacesName(mylo_UI_init_variables[0].editPlace.id,$('#addGPS').find('#nameField').val());
 			//LOADER: Display end of load
 			$('#loader').css({display:'none'});
 			$('#loader_end').css({display:'block'});
