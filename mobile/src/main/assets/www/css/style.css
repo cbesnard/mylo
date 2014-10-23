@@ -486,8 +486,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #map_tab {
 	float:left;
 	font-family: 'Roboto thin';
-	background-color: #fff;
+	background-color: #f2f1f1;
 	border-left: 1px solid #f2f1f1;
+}
+#map_error_txt{
+	text-align: center;
+	font-family: 'Roboto thin';
+	color: #777777;
+	font-size: 22px;
+	height: 40px;
+	margin: auto;
 }
 #addButtons{
 	position: absolute;

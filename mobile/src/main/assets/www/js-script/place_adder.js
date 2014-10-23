@@ -35,42 +35,54 @@ function initAddGPSWindow(){
 function setAddPlaceScreen(){
 	$('#addPlace').stopAnima(true);
 	//add marker + center map on user location
-	var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
-	if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
-	    mylo_UI_init_variables[0].map.setCenter(myLatlng);
-	    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
-	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);  
+	try{
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
+		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);  
+		}
+	}catch(err){
+
 	}
 	$('#addPlace').css("display","block");
 }
 
 function setAddGPSScreen(){
-	if(mylo_UI_init_variables[0].addingGPS!=null){
-		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
+	if(mylo_UI_init_variables[0].editPlace!=null){
+		$('#addGPS').find('#edit_place').html('');
+		$('#addGPS').find('#edit_place').html('<span>'+mylo_UI_init_variables[0].editPlace.name+'</span>');
 	}
-
-	if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
-	    mylo_UI_init_variables[0].map.setCenter(myLatlng);
-	    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
-	    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
-		
-		var group;
-		if(mylo_UI_init_variables[0].editPlace!=null){
-			$('#addGPS').find('#edit_place').html('');
-			$('#addGPS').find('#edit_place').html('<span>'+mylo_UI_init_variables[0].editPlace.name+'</span>');
-			group = mylo_UI_init_variables[0].editPlace.group;
-		}else{
-			group = parseInt($('.currentGroup').attr('name'));
+	try{
+		if(mylo_UI_init_variables[0].addingGPS!=null){
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
 		}
-	    var image = {
-			url: "png/mylo-icon-marker-g"+group+".png",
-			size: new google.maps.Size(30,41), // the size it should be on the map
-			scaledSize: new google.maps.Size(30,41), // the normal size of the image is 90x1100 because Retina asks double size.
-			origin: new google.maps.Point(0, 0), // position in the sprite
-			// The anchor for this image is the base of the flagpole at 0,32.
-	    	anchor: new google.maps.Point(15, 41)                   
-		};
-	    mylo_UI_init_variables[0].marker.setIcon(image);
+
+		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
+		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
+		    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
+		    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
+			
+			var group;
+			if(mylo_UI_init_variables[0].editPlace!=null){
+				$('#addGPS').find('#edit_place').html('');
+				$('#addGPS').find('#edit_place').html('<span>'+mylo_UI_init_variables[0].editPlace.name+'</span>');
+				group = mylo_UI_init_variables[0].editPlace.group;
+			}else{
+				group = parseInt($('.currentGroup').attr('name'));
+			}
+		    var image = {
+				url: "png/mylo-icon-marker-g"+group+".png",
+				size: new google.maps.Size(30,41), // the size it should be on the map
+				scaledSize: new google.maps.Size(30,41), // the normal size of the image is 90x1100 because Retina asks double size.
+				origin: new google.maps.Point(0, 0), // position in the sprite
+				// The anchor for this image is the base of the flagpole at 0,32.
+		    	anchor: new google.maps.Point(15, 41)                   
+			};
+		    mylo_UI_init_variables[0].marker.setIcon(image);
+		}
+	}catch(err){
+
 	}
 	$('#addGPS').css("z-index","6000");
 	$('#addGPS').css("bottom",10);
@@ -204,20 +216,19 @@ function setAddPlaceAutocomplete(){
 		  bounds: defaultBounds
 		};
     	//searchBox powered by google
-		var searchBox = new google.maps.places.SearchBox(document.getElementById('addressField'),options);
+		var searchBox = new google.maps.places.Autocomplete(document.getElementById('addressField'),options);
 		
-		google.maps.event.addListener(searchBox, 'places_changed', function() {
+		google.maps.event.addListener(searchBox, 'place_changed', function() {
 		  	try{
-			  	var place = searchBox.getPlaces()[0];
+			  	var place = searchBox.getPlace();
 				if(!place.geometry){
-					console.log('currentGPS=plae has no geometry');
+					//console.log('currentGPS=place has no geometry');
 				}else{
-					
-			   		if(!$('#nameField').val()){
-			  			$('#nameField').val(place.name);
+					if(!$("#addPlace").find('#nameField').val()){
+			  			$("#addPlace").find('#nameField').val(place.name);
 			  		}
 			   
-					$('#addressField').val(place.formatted_address);
+					$("#addPlace").find('#addressField').val(place.formatted_address);
 					mylo_UI_init_variables[0].addingGPS=null;
 					mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
 					mylo_UI_init_variables[0].currentGPS.lat = place.geometry.location.lat();
@@ -227,11 +238,9 @@ function setAddPlaceAutocomplete(){
 					
 					//Update map infos
 					var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
-					if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
-					    mylo_UI_init_variables[0].map.setCenter(myLatlng);
-					    mylo_UI_init_variables[0].map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
-					    mylo_UI_init_variables[0].marker.setPosition(myLatlng);
-					    //$('#map-canvas').css('display','block');
+					if(mylo_UI_init_variables[0].map_tab_map!=null){
+					    mylo_UI_init_variables[0].map_tab_map.setCenter(myLatlng);
+					    mylo_UI_init_variables[0].map_tab_map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
 					}
 
 					if(place.formatted_address.substring(0,8) != place.name.substring(0,8)){

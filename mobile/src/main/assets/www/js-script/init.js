@@ -23,7 +23,9 @@ first_time_all_txt_phrase:"Add your favourites places now!",
 add_group_form_name_field_helper:"Name",
 add_group_form_validate_button:"Add",
 error_add_group_form_empty_fields:"You have to choose a name to add a group :)",
-location_gps_addr_txt:"GPS location near: "}); //mylo_textes[0].
+location_gps_addr_txt:"GPS location near: ",
+error_map_tab_not_loaded:"Sorry, map cannot load offline :/"
+}); //mylo_textes[0].error_map_tab_not_loaded
 /*
 * INIT : SCREEN SIZE
 */
@@ -293,7 +295,8 @@ function setUI(callback){
         width: addPlaceWidth-1+'px',
         height: locsdivHeight+'px',
     });
-
+    $("#map_error_txt").html("<span>"+mylo_textes[0].error_map_tab_not_loaded+"</span>");
+    $("#map_error_txt").css("margin-top",locsdivHeight/3+"px");
     /*
     * ADD PLACE CONTAINER
     */
@@ -600,6 +603,9 @@ function dragEnd(xpos, ypos){
                     var groupId = selectedDroppable.attr('name');
                     //Place draggedloc in selected group
                     changeLocGroup(selectedDraggable.attr('id'), groupId);
+                    //REFRESH LOC ON MAP
+                    var idGroup = parseInt($('.currentGroup').attr('name'));
+                    setMarkers(idGroup);
                     //mouseleave of slected group
                     selectedDroppable.stopAnima(true);
                     selectedDroppable.anima({
