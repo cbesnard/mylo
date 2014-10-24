@@ -40,9 +40,6 @@ function setMap(){
 	      map: mylo_UI_init_variables[0].map_tab_map,
 	      icon: image
 	    });
-
-	    setMarkers(0);
-
 	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map_tab_map, 'idle', function(){
 	        // do something only the first time the map is loaded
 	        //@mapCopyright - gets the google copyright tags
@@ -51,6 +48,7 @@ function setMap(){
 	            return false;
 	        });
 	    });
+	    setMarkers(0);
 	}catch(err){
 		//TOAST ERROR MAP COULDNT INITIALIZE DUE TO CONNETION PBs
 		console.log("error, couldn't load map due to connection pbs");

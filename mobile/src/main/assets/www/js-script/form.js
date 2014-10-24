@@ -150,7 +150,7 @@ function validateAddPlaceForm(){
 }
 
 function validateAddGPSForm(){
-	if($('#addGPS').find('#nameField').val() && mylo_UI_init_variables[0].addingGPS){
+	if($('#addGPS').find('#nameField').val() && (mylo_UI_init_variables[0].addingGPS || mylo_UI_init_variables[0].currentGPS)){
         $('#addGPS').find('.formButton').css({
 			'background-color': '#'+mylo_UI_init_variables[0].formActiveColor,
 			border: '1px solid #'+mylo_UI_init_variables[0].formActiveColor,
@@ -177,22 +177,25 @@ function validateEditPlaceForm(){
 	}
 }
 
-function checkFields(){
-	if( mylo_UI_init_variables[0].editPlace!=null){
-		console.log('IN CHECKFIELDS ');
-		if($('#addGPS').find('#nameField').val()){
-			return 1;
-		}else{
-			return 0;
-		}
-	}else if(mylo_UI_init_variables[0].addingGPS){
-		if($('#addGPS').find('#nameField').val()){
-			return 1;
-		}else{
-			return 0;
-		}
+function checkFields(el){
+	console.log(el.attr('id'));
+	if(el.attr('id')=="addGPS"){
+		if( mylo_UI_init_variables[0].editPlace!=null){
+			console.log('IN CHECKFIELDS ');
+			if(el.find('#nameField').val()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}else if(mylo_UI_init_variables[0].addingGPS || mylo_UI_init_variables[0].currentGPS){
+			if(el.find('#nameField').val()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}	
 	}else{
-		if($('#addPlace').find('#nameField').val() && $('#addPlace').find('#addressField').val()){
+		if(el.find('#nameField').val() && el.find('#addressField').val()){
 			return 1;
 		}else{
 			return 0;

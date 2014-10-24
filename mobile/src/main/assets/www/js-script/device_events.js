@@ -148,7 +148,7 @@ function addGPSFromLink(lat,lon, addrEncoded){
 	$('#gps_img').css('display','block');
 	//hide search field
 	$('#addGPS').find('#nameField').val('New GPS location');
-	validate();
+	validateAddGPSForm();
 	//STOP LOADER
 	stopLoader();
 	//OPEN ADD PLACE SCREEN
@@ -188,8 +188,8 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	$('#addGPS').find('#close_txt').css("display","none");
 	$('#addGPS').find('#add_from_url').css("display","block");
 	//
-	mylo_UI_init_variables[0].addingGPS = {lat:lat,lon:lon};
-	validate();
+	mylo_UI_init_variables[0].currentGPS = {lat:lat,lon:lon};
+	validateAddGPSForm();
 	//OPEN ADD PLACE SCREEN
 	displayAddPlaceScreen();
 	//STOP LOADER

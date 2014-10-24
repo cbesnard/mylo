@@ -570,6 +570,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	line-height:50px;
 	display: none;	
 }
+#add_header #edit_place{
+	white-space:nowrap;
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
 /****TRASH**********/
 #trash{
 	border-top: 1px solid #f2F1F1;

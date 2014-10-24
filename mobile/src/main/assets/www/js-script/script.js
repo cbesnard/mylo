@@ -24,7 +24,7 @@ $(document).ready(function(){
        	//MAPS
        	setAddnEditPlaceMap();
        	//EDIT PLACE MAP
-       	setEditPlaceMap();
+       	//setEditPlaceMap();
         //INIT MAP TAB
 	    setMap();
 	    setMarkers(0);
@@ -148,11 +148,55 @@ $(document).ready(function(){
 	/*
 	*	Validate the form, add the place to loc Array, display current group with new loc
 	*/
-	$('.add_window').find('#validateButton').click(function() {
+	$('#addPlace').find('#validateButton').click(function() {
 		//GA
         GATrackerEvent("Button_click", "Validate_place", "");
         //
-		if(checkFields()){
+		if(checkFields($(this).parent())) {
+			//LOADER: launch the loader
+			$('#loader_container').css({display:'block'});
+			mylo_UI_init_variables[0].loading=1;
+			animateLoader();
+			//ADD NEW LOC TO STORAGE AND LOC ARRAY
+			var latlon = {lat:0,lon:0,adr:"",country:""};
+			var country ="";
+			var idGroup = parseInt($('.currentGroup').attr('name'));
+
+			var name = $('#addPlace').find('#nameField').val();
+			var adr = $('#addPlace').find('#addressField').val();
+			//check addr and get lat & lon of addr
+			console.log('IN VALIDATE: adr='+adr);
+			addLocation(name, adr, idGroup, mylo_UI_init_variables[0].addPlace_currentGPS.lat, mylo_UI_init_variables[0].addPlace_currentGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
+			//LOADER: Display end of load
+			$('#loader').css({display:'none'});
+			$('#loader_end').css({display:'block'});
+			mylo_UI_init_variables[0].loading=0;
+			step=0;
+			//REFRESH LOC ON MAP
+			setMarkers(idGroup);
+			// CLOSE ADDING PLACE AND DISPLAY CURRENT GROUP WITH NEW LOC
+			var locsToPrint = getPositions(idGroup);
+			printUserLocation(idGroup,locsToPrint,fadeIn1);
+			//CLOSE ADDING PLACE
+			hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
+			
+		}else{
+			//TOAST NOTIF ERROR MISSING FIELDS
+			showAndroidToast(mylo_textes[0].error_add_place_form_empty_fields);
+			//GA
+	        GATrackerEvent("Action_fail", "add_location_err", "missing fields");
+	        //
+		}
+	});
+
+	/*
+	*	Validate the form, add the place to loc Array, display current group with new loc
+	*/
+	$('#addGPS').find('#validateButton').click(function() {
+		//GA
+        GATrackerEvent("Button_click", "Validate_place", "");
+        //
+		if(checkFields($(this).parent())){
 			//LOADER: launch the loader
 			$('#loader_container').css({display:'block'});
 			mylo_UI_init_variables[0].loading=1;
@@ -180,8 +224,8 @@ $(document).ready(function(){
 				//CLOSE ADDING PLACE
 				hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
 			}else{
-				var name = $('#addPlace').find('#nameField').val();
-				var adr = $('#addPlace').find('#addressField').val();
+				var name = $('#addGPS').find('#nameField').val();
+				var adr = $('#addGPS').find('#addressField').val();
 				//check addr and get lat & lon of addr
 				console.log('IN VALIDATE: adr='+adr);
 				addLocation(name, adr, idGroup, mylo_UI_init_variables[0].currentGPS.lat, mylo_UI_init_variables[0].currentGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
@@ -212,7 +256,7 @@ $(document).ready(function(){
 		//GA
         GATrackerEvent("Button_click", "Save_place", "");
         //
-		if(checkFields()){
+		if(checkFields($(this).parent())){
 			editPlacesName(mylo_UI_init_variables[0].editPlace.id,$('#addGPS').find('#nameField').val());
 			//LOADER: Display end of load
 			$('#loader').css({display:'none'});

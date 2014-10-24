@@ -4,6 +4,9 @@ function initAddWindows(){
         width: screenWidth-20+'px',
         bottom: -screenHeight,
     });
+    $('.add_window_title').css({
+        width: screenWidth-89+'px',
+    });
     $('#background').css({
         height: screenHeight+'px',
         width: screenWidth+'px',
@@ -56,7 +59,9 @@ function setAddGPSScreen(){
 	try{
 		if(mylo_UI_init_variables[0].addingGPS!=null){
 		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addingGPS.lat,mylo_UI_init_variables[0].addingGPS.lon);
-		}
+		}else if(mylo_UI_init_variables[0].currentGPS!=null){
+		var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
+		} 
 
 		if(mylo_UI_init_variables[0].map!=null && mylo_UI_init_variables[0].marker!=null){
 		    mylo_UI_init_variables[0].map.setCenter(myLatlng);
@@ -95,7 +100,7 @@ function displayAddPlaceScreen(){
 	changeAndroidAppState(1);
 	$('#background').css("display","block");
 	//$('#background').stop().clearQueue().fadeIn(200);
-	if(mylo_UI_init_variables[0].addingGPS!=null){
+	if(mylo_UI_init_variables[0].addingGPS!=null || mylo_UI_init_variables[0].currentGPS!=null){
 		setAddGPSScreen();
 	}else if(mylo_UI_init_variables[0].editPlace!=null){
 		setAddGPSScreen();
@@ -131,10 +136,10 @@ function hideAddPlaceScreen(delay){
 		//
 		$('#background').css("display","none");
 		//CLOSE ADD WINDOW
-		if(mylo_UI_init_variables[0].addingGPS!=null){
+		if(mylo_UI_init_variables[0].addingGPS!=null || mylo_UI_init_variables[0].currentGPS!=null){
 			closeAddGPSWindow();
 		}else if(mylo_UI_init_variables[0].editPlace!=null){
-			closeEditPlaceWindow();
+			closeAddGPSWindow();
 		}else{
 			closeAddPlaceWindow();
 		}
@@ -230,14 +235,14 @@ function setAddPlaceAutocomplete(){
 			   
 					$("#addPlace").find('#addressField').val(place.formatted_address);
 					mylo_UI_init_variables[0].addingGPS=null;
-					mylo_UI_init_variables[0].currentGPS = {lat:0,lon:0};
-					mylo_UI_init_variables[0].currentGPS.lat = place.geometry.location.lat();
-					mylo_UI_init_variables[0].currentGPS.lon = place.geometry.location.lng();
+					mylo_UI_init_variables[0].addPlace_currentGPS = {lat:0,lon:0};
+					mylo_UI_init_variables[0].addPlace_currentGPS.lat = place.geometry.location.lat();
+					mylo_UI_init_variables[0].addPlace_currentGPS.lon = place.geometry.location.lng();
 					console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
-					console.log('currentGPS='+mylo_UI_init_variables[0].currentGPS.lat+', '+mylo_UI_init_variables[0].currentGPS.lon);
+					console.log('currentGPS='+mylo_UI_init_variables[0].addPlace_currentGPS.lat+', '+mylo_UI_init_variables[0].addPlace_currentGPS.lon);
 					
 					//Update map infos
-					var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].currentGPS.lat,mylo_UI_init_variables[0].currentGPS.lon);
+					var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addPlace_currentGPS.lat,mylo_UI_init_variables[0].addPlace_currentGPS.lon);
 					if(mylo_UI_init_variables[0].map_tab_map!=null){
 					    mylo_UI_init_variables[0].map_tab_map.setCenter(myLatlng);
 					    mylo_UI_init_variables[0].map_tab_map.setZoom(mylo_UI_init_variables[0].map_zoom_level);
