@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final long updateInterval=120000;//in milliseconds
+    private static final long updateInterval=120000;//2 minutes in milliseconds
     private static final long debugUpdateInterval=1000;//in milliseconds
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -84,8 +84,9 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             return 0;
         }
         locationrequest = LocationRequest.create();
-        locationrequest.setInterval(debugUpdateInterval);
-        locationrequest.setFastestInterval(debugUpdateInterval);
+        locationrequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationrequest.setInterval(updateInterval);
+        locationrequest.setFastestInterval(updateInterval);
         PendingResult pendingresult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,locationrequest, this);
         pendingresult.setResultCallback(new ResultCallback() {
             @Override
@@ -142,7 +143,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     }
     @Override
     public void onLocationChanged(Location location) {
-        //Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
+        Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
         //Location loc = getLocationFromGPSProvider();
         if(location!=null){
             //Log.i(TAG,"Both fused and GPS location not null");
