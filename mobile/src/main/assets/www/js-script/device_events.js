@@ -158,6 +158,7 @@ function addGPSFromLink(lat,lon, addrEncoded){
 *	ADD PUBLIC PLACE FROM LINK
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function addPublicPlaceFromLink(name,addr,lat,lon){
+	//console.log("in addPublicPlaceFromLink");
 	var locname = null;
 	var locaddr = null;
 	//DECODE NAME & ADDR
@@ -178,17 +179,18 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 	mylo_UI_init_variables[0].addingPublicName=locname;
 	//ADDR
 	$('#gps_txt').html('<span class="name"></span><br/><span class="gpsTxt"></span>'+locaddr);
-	$('#gps_txt').find('.name').text(locname);
+	$('#gps_txt').find('.name').text(mylo_UI_init_variables[0].addingPublicName);
 	$('#gps_txt').css('display','block');
 	$('#gps_img').css('display','block');
 	//
-	$('#addGPS').find('#nameField').val(locname);
+	$('#addGPS').find('#nameField').val(mylo_UI_init_variables[0].addingPublicName);
 	$('#addGPS').find('#addressField').val(locaddr);
 	//
 	$('#addGPS').find('#close_txt').css("display","none");
 	$('#addGPS').find('#add_from_url').css("display","block");
 	//
 	mylo_UI_init_variables[0].currentGPS = {lat:lat,lon:lon};
+
 	validateAddGPSForm();
 	//OPEN ADD PLACE SCREEN
 	displayAddPlaceScreen();

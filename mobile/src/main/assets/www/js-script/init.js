@@ -362,6 +362,8 @@ function initUserDatas(stringDatas){
     }catch(e){
        console.log("error : "+e.message);
     }
+    //STATS GA
+    GATrackerEvent("Flags", "NB_LOC", ""+locations.length);
     //DISPLAY USER DATA;
     showUserGroups(displayUserDatas);
 }

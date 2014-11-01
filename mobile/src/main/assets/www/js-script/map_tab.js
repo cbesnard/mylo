@@ -43,12 +43,14 @@ function setMap(){
 	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map_tab_map, 'idle', function(){
 	        // do something only the first time the map is loaded
 	        //@mapCopyright - gets the google copyright tags
-	        var mapCopyright=document.getElementById('map-canvas').getElementsByTagName("a");   
+	        var mapCopyright=document.getElementById('map_tab').getElementsByTagName("a");   
 	        $(mapCopyright).click(function(){
 	            return false;
 	        });
 	    });
 	    setMarkers(0);
+	    //$("#map_tab").find("a").css("pointer-events","none");
+	    $("#map_tab").append('<div id="map_patch"></div>');
 	}catch(err){
 		//TOAST ERROR MAP COULDNT INITIALIZE DUE TO CONNETION PBs
 		console.log("error, couldn't load map due to connection pbs");
@@ -83,7 +85,7 @@ function updateUserMarkerPosition(lat,lon){
 }
 
 function clearMarkers(){
-	console.log("ClearMarkers called");
+	//console.log("ClearMarkers called");
 	try{
 		var i=0;
 		for(i=0;i<markers.length;i++){
@@ -118,13 +120,13 @@ function setMarkers(group_id){
 				      icon: image,
 				    });
 				    marker.metadata = {id: locations[z].id};
-				    console.log("marker metadata="+marker.metadata.id);
+				    //console.log("marker metadata="+marker.metadata.id);
 				    markers.push(marker);
 				    //
 			    
 				    google.maps.event.addListener(marker, 'click', function() {
 					    //Open edit place's screen
-					    console.log("marker clicked and marker id="+marker.metadata.id);
+					    //console.log("marker clicked and marker id="+marker.metadata.id);
 					    //GA
 				        GATrackerEvent("Marker_click", "edit_place", "");
 				        //
@@ -182,13 +184,13 @@ function setMarkers(group_id){
 					    });
 					    markers.push(marker);
 					    marker.metadata = {id: locations[z].id};
-					    console.log("marker metadata="+marker.metadata.id);
+					    //console.log("marker metadata="+marker.metadata.id);
 					    markers.push(marker);
 					    //
 				    
 					    google.maps.event.addListener(marker, 'click', function() {
 						    //Open edit place's screen
-						    console.log("marker clicked and marker id="+marker.metadata.id);
+						    //console.log("marker clicked and marker id="+marker.metadata.id);
 						    //GA
 					        GATrackerEvent("Marker_click", "edit_place", "");
 					        //

@@ -1,6 +1,9 @@
 var globalID;
 var globalID2;
 function switch_tab(id_clicked){
+	//STATS GA
+	GATrackerEvent("Button_click", "switch_tab", id_clicked);
+	//
 	var id_active = $('.tabs').find('.active').attr('id');
 	var lat = mylo_UI_init_variables[0].userpos.lat;
 	var lon = mylo_UI_init_variables[0].userpos.lon;
@@ -10,13 +13,13 @@ function switch_tab(id_clicked){
 	var element = document.getElementById("locsWraper");
 	var element2 = document.getElementById("indicator");
 	if(id_active != id_clicked){
-		$('#locsWraper').stopAnima(true);
-		$('#indicator').stopAnima(true);
+		//$('#locsWraper').stopAnima(true);
+		//$('#indicator').stopAnima(true);
 		window.cancelAnimationFrame(globalID);
 		window.cancelAnimationFrame(globalID2);
 		var locsWraperPos = parseInt($('#locsWraper').css("marginLeft"));
 		var indicatorPos = parseInt($('#indicator').css("left"));
-		console.log("locsWraperPos: "+locsWraperPos+", indicatorPos:"+indicatorPos);
+		//console.log("locsWraperPos: "+locsWraperPos+", indicatorPos:"+indicatorPos);
 		if( id_clicked == "map"){
 			//slide locsContainer from right to left
 			/*$('#locsWraper').anima({

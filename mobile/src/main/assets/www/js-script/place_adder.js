@@ -27,8 +27,9 @@ function initAddPlaceWindow(){
 	$('#addPlace').css("bottom",10);
 	$('#addPlace').css("left",10);
 	//
-	$('#addPlace').find('#searchField_title').text(mylo_textes[0].add_place_form_searchField_title);
-	$('#addPlace').find('#nameField_title').text(mylo_textes[0].add_place_form_nameField_title);
+	$('#addPlace').find('#search_icon').css("margin-left",($('.add_window').outerWidth()-100)/2+"px");
+	//$('#addPlace').find('#searchField_title').text(mylo_textes[0].add_place_form_searchField_title);
+	//$('#addPlace').find('#nameField_title').text(mylo_textes[0].add_place_form_nameField_title);
 }
 function initAddGPSWindow(){
 	$('#addGPS').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
@@ -95,8 +96,6 @@ function setAddGPSScreen(){
 }
 
 function displayAddPlaceScreen(){
-	//CLEAR ALL ADDING PLACE VARIABLES
-	mylo_UI_init_variables[0].addingPublicName="";
 	changeAndroidAppState(1);
 	$('#background').css("display","block");
 	//$('#background').stop().clearQueue().fadeIn(200);
@@ -113,6 +112,8 @@ function displayAddPlaceScreen(){
 
 function closeAddPlaceWindow(){
     $('#addPlace').css("display","none");
+    //CLEAR ALL ADDING PLACE VARIABLES
+	mylo_UI_init_variables[0].addingPublicName="";
 }
 
 function closeAddGPSWindow(){
@@ -282,7 +283,7 @@ function initAddButtons(){
         lastScrollTop = st;
         return  direction;
     }
-    var delay = 1500;
+    var delay = 3500;
 	var timeout = null;
     $("#locsDiv").on("scroll", function () {
         var dir = detectDirection();
@@ -292,42 +293,41 @@ function initAddButtons(){
         if (dir == "down") {
         	//if($(".add_buttons").css("bottom")=="10px"){
         	if(queryElement.css("bottom")=="10px"){
-        		/*$('.add_buttons').stopAnima(true);
-        		$('.add_buttons').anima({
+        		queryElement.stopAnima(true);
+        		queryElement.anima({
 					'bottom': '-100px',
 					}, 200, 'linear',{complete:function(){
-
-				}});*/
-    			window.cancelAnimationFrame(globalID);
-    			var addButtonsPos = parseInt(queryElement.css("bottom"));
-    			globalID = translationAnimation(element,addButtonsPos,-100,200,"bottom","linear");
+				}});
+    			//window.cancelAnimationFrame(globalID);
+    			//var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			//globalID = translationAnimation(element,addButtonsPos,-100,200,"bottom","linear");
         	}
 
         } else {
         	if(queryElement.css("bottom")=="-100px"){
         		//console.log("anima called");
-        		/*$('.add_buttons').stopAnima(true);
-        		$('.add_buttons').anima({
+        		queryElement.stopAnima(true);
+        		queryElement.anima({
 					'bottom': '10px',
 					}, 150, 'linear',{complete:function(){
 
-				}});*/
-    			window.cancelAnimationFrame(globalID);
-    			var addButtonsPos = parseInt(queryElement.css("bottom"));
-    			globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
+				}});
+    			//window.cancelAnimationFrame(globalID);
+    			//var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			//globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
         	}
         }
         clearTimeout(timeout);
 	    timeout = setTimeout(function(){
 	    	if(queryElement.css("bottom")=="-100px"){
-	    		var addButtonsPos = parseInt(queryElement.css("bottom"));
-    			globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
+	    		//var addButtonsPos = parseInt(queryElement.css("bottom"));
+    			//globalID = translationAnimation(element,addButtonsPos,10,200,"bottom","linear");
+    			queryElement.stopAnima(true);
+	        	queryElement.anima({
+					'bottom': '10px',
+					}, 150, 'linear',{complete:function(){
+				}});
 	    	}
-	        /*$('.add_buttons').stopAnima(true);
-        	$('.add_buttons').anima({
-				'bottom': '10px',
-				}, 150, 'linear',{complete:function(){
-			}});*/
 	    },delay);
     });
 }

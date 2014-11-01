@@ -489,6 +489,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	background-color: #f2f1f1;
 	border-left: 1px solid #f2f1f1;
 }
+#map_tab a{
+	pointer-events: none;
+}
+#map_patch{
+	position: absolute;
+	height: 30px;
+	width: 80px;
+	left: 0px;
+	bottom: 0px;
+	z-index: 5000;
+}
 #map_error_txt{
 	text-align: center;
 	font-family: 'Roboto thin';
@@ -693,8 +704,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	height:35px;
 	position:relative;	
 	margin-bottom: 25px;
+	margin-top: 15px;
 }
-
+#addPlace #search_icon{
+	width:100px;
+	height: 46px;
+	margin: auto;
+	margin-top: 30px;
+	margin-bottom: 35px;
+	opacity: 0.2; 
+	filter: alpha(opacity=20);
+}
 #input_container #place_search_img{
 	height:46px;
 	width: 100px;

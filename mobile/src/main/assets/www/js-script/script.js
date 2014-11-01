@@ -149,8 +149,7 @@ $(document).ready(function(){
 	*	Validate the form, add the place to loc Array, display current group with new loc
 	*/
 	$('#addPlace').find('#validateButton').click(function() {
-		//GA
-        GATrackerEvent("Button_click", "Validate_place", "");
+		
         //
 		if(checkFields($(this).parent())) {
 			//LOADER: launch the loader
@@ -165,7 +164,7 @@ $(document).ready(function(){
 			var name = $('#addPlace').find('#nameField').val();
 			var adr = $('#addPlace').find('#addressField').val();
 			//check addr and get lat & lon of addr
-			console.log('IN VALIDATE: adr='+adr);
+			//console.log('IN VALIDATE: adr='+adr);
 			addLocation(name, adr, idGroup, mylo_UI_init_variables[0].addPlace_currentGPS.lat, mylo_UI_init_variables[0].addPlace_currentGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
 			//LOADER: Display end of load
 			$('#loader').css({display:'none'});
@@ -179,7 +178,8 @@ $(document).ready(function(){
 			printUserLocation(idGroup,locsToPrint,fadeIn1);
 			//CLOSE ADDING PLACE
 			hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
-			
+			//GA
+        	GATrackerEvent("Button_click", "Validate_place", "PUBLIC_PLACE");	
 		}else{
 			//TOAST NOTIF ERROR MISSING FIELDS
 			showAndroidToast(mylo_textes[0].error_add_place_form_empty_fields);
@@ -193,8 +193,7 @@ $(document).ready(function(){
 	*	Validate the form, add the place to loc Array, display current group with new loc
 	*/
 	$('#addGPS').find('#validateButton').click(function() {
-		//GA
-        GATrackerEvent("Button_click", "Validate_place", "");
+		
         //
 		if(checkFields($(this).parent())){
 			//LOADER: launch the loader
@@ -223,11 +222,14 @@ $(document).ready(function(){
 				printUserLocation(idGroup,locsToPrint,fadeIn1);
 				//CLOSE ADDING PLACE
 				hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
+				//GA
+        		GATrackerEvent("Button_click", "Validate_place", "GPS");
 			}else{
 				var name = $('#addGPS').find('#nameField').val();
 				var adr = $('#addGPS').find('#addressField').val();
 				//check addr and get lat & lon of addr
-				console.log('IN VALIDATE: adr='+adr);
+				//console.log('IN VALIDATE: adr='+adr);
+				//console.log("Public place's name: "+mylo_UI_init_variables[0].addingPublicName);
 				addLocation(name, adr, idGroup, mylo_UI_init_variables[0].currentGPS.lat, mylo_UI_init_variables[0].currentGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 0);
 				//LOADER: Display end of load
 				$('#loader').css({display:'none'});
@@ -241,6 +243,8 @@ $(document).ready(function(){
 				printUserLocation(idGroup,locsToPrint,fadeIn1);
 				//CLOSE ADDING PLACE
 				hideAddPlaceScreen(400);	//in hideAddPlaceScreen => hide LOADER
+				//GA
+        		GATrackerEvent("Button_click", "Validate_place", "PUBLIC_PLACE");
 			}
 		}else{
 			//TOAST NOTIF ERROR MISSING FIELDS

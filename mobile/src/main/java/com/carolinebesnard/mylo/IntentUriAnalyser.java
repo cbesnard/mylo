@@ -162,11 +162,11 @@ public class IntentUriAnalyser {
         //TODO: check all error case
         try{
             final String URL_FORMAT = "http://maps.google.com/maps?cid=%s&q=a&output=json";
-            final String LATLNG_BEFORE = "viewport:{center:{";
-            final String LATLNG_AFTER = "}";
-            final String LATLNG_SEPARATOR = ",";
-            final String LAT_PREFIX = "lat:";
-            final String LNG_PREFIX = "lng:";
+            //final String LATLNG_BEFORE = "viewport:{center:{";
+            //final String LATLNG_AFTER = "}";
+            //final String LATLNG_SEPARATOR = ",";
+            //final String LAT_PREFIX = "lat:";
+            //final String LNG_PREFIX = "lng:";
 
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(String.format(URL_FORMAT, cid));
