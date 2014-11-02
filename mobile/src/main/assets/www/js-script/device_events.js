@@ -143,7 +143,9 @@ function addGPSFromLink(lat,lon, addrEncoded){
         addr = _utf8_decode(d);
     }else{addr="";}
 	//GET ADR of lat & lng
-	$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+addr);
+	var display = addr;
+	if (display=="") {display = "latitude: "+lat+", longitude: "+lon;};
+	$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+display);
 	$('#gps_txt').css('display','block');
 	$('#gps_img').css('display','block');
 	//hide search field

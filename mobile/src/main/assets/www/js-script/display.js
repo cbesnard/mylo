@@ -599,6 +599,7 @@ function printUserLocation(idGroupToDisplay,userLocs,callback){
 				var adr = userLocs[i].adr;
 				var adr1 = mylo_textes[0].location_gps_addr_txt;
 				var adr2 = adr.replace(adr1, "");
+				if(adr2==""){adr2="latitude: "+userLocs[i].lat+", longitude: "+userLocs[i].lon;}
 				$('#'+userLocs[i].id).find('.locadr').html('<span class="gpsTxt">'+adr1+'</span>'+adr2);
 			}else{
 				$('#'+userLocs[i].id).find('.locadr').text(userLocs[i].adr);
