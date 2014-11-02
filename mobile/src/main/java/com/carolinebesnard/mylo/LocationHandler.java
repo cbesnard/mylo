@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final long updateInterval=120000;//2 minutes in milliseconds
+    private static final long updateInterval=50000;//5 seconds in milliseconds
     private static final long debugUpdateInterval=1000;//in milliseconds
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
