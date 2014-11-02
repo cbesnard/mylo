@@ -16,7 +16,8 @@ $(document).ready(function(){
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	* GOOGLE MAPS LAZY LOAD
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	var s = document.createElement("script");
+	initMapsScripts();
+	/*var s = document.createElement("script");
 	s.type = "text/javascript";
 	s.src  = "https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC4QjL6Ba54J2kY9SfprjB7UWol-Es-xbc&libraries=places&language=en&callback=gmap_draw";
 
@@ -27,11 +28,13 @@ $(document).ready(function(){
        	//setEditPlaceMap();
         //INIT MAP TAB
 	    setMap();
-	    setMarkers(0);
+	    var groupToDisplay = $('.currentGroup').attr('name');
+    	var idGroupToDisplay = parseInt(groupToDisplay);
+	    setMarkers(idGroupToDisplay);
 		//AUTOCOMPLETE
 		setAddPlaceAutocomplete();
 	};
-	$("head").append(s);
+	$("head").append(s);*/
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	*	SET UI ELEMENTS BEHAVIOR

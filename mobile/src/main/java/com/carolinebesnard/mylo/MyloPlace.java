@@ -10,6 +10,7 @@ import java.util.Locale;
 public class MyloPlace extends Address {
 
     private String address;
+    private Boolean GPS;
 
     /**
      * Constructs a new Address object set to the given Locale and with all
@@ -19,6 +20,7 @@ public class MyloPlace extends Address {
      */
     public MyloPlace(Locale locale) {
         super(locale);
+        this.GPS=false;
     }
 
     public String getAddress(){
@@ -27,6 +29,14 @@ public class MyloPlace extends Address {
 
     public void setAddress(String addr){
          this.address = addr;
+    }
+
+    public Boolean getGPS(){
+        return this.GPS;
+    }
+
+    public void setGPS(Boolean bool){
+        this.GPS = bool;
     }
 
 }

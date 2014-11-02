@@ -54,6 +54,7 @@ public class IntentUriAnalyser {
                     //GET ADDRESS FROM GPS
                     myloPlace.setAddress(Helper.getAddrFromGPS(myloPlace.getLatitude(), myloPlace.getLongitude()));
                     Log.i(TAG, "lat: "+myloPlace.getLatitude()+" & lon: "+myloPlace.getLongitude());
+                    myloPlace.setGPS(true);
                     String url = urlBuilderFromMyloPlace(myloPlace);
                     return url;
                 }else{//PUBLIC PLACES
@@ -130,7 +131,11 @@ public class IntentUriAnalyser {
     public static String urlBuilderFromMyloPlace(MyloPlace myloPlace){
         if(myloPlace!=null) {
             String address = myloPlace.getAddress();
-            if(address==null){return null;}
+            if(address==null && myloPlace.getGPS()==false){
+                return null;
+            }else if(address==null && myloPlace.getGPS()==true){
+                address="";
+            }
             LatLng gps = new LatLng(myloPlace.getLatitude(), myloPlace.getLongitude());
             String name = myloPlace.getFeatureName();
             if (gps != null) {

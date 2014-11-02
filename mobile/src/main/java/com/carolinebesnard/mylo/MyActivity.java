@@ -203,6 +203,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
             checkForIntent();
+            //JS to check previous init of maps scripts
+            callJS("javascript:initMapsScripts()");
         }else{
             Log.i(TAG,"onCreate = false");
         }
@@ -567,6 +569,7 @@ class myJsInterface {
                 //GET ADDRESS FROM GPS
                 final String addr = Helper.getAddrFromGPS(latitude, longitude);
                 myloPlace.setAddress(addr);
+                myloPlace.setGPS(true);
                 final String url = IntentUriAnalyser.urlBuilderFromMyloPlace(myloPlace);
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
