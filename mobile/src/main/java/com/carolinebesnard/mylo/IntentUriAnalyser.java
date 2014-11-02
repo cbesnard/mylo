@@ -53,7 +53,7 @@ public class IntentUriAnalyser {
                     myloPlace.setLongitude(Double.parseDouble(flostr[1]));
                     //GET ADDRESS FROM GPS
                     myloPlace.setAddress(Helper.getAddrFromGPS(myloPlace.getLatitude(), myloPlace.getLongitude()));
-                    Log.i(TAG, "lat: "+myloPlace.getLatitude()+" & lon: "+myloPlace.getLongitude());
+                    Log.i(TAG, "lat: " + myloPlace.getLatitude() + " & lon: " + myloPlace.getLongitude());
                     myloPlace.setGPS(true);
                     String url = urlBuilderFromMyloPlace(myloPlace);
                     return url;
@@ -183,10 +183,12 @@ public class IntentUriAnalyser {
             String t = text.replace("while(1);","");
             JSONObject jsonobject = new JSONObject(t);
             JSONObject obj = (JSONObject) jsonobject.getJSONObject("overlays").getJSONArray("markers").get(0);
-            //
+            //LAT LON
             Double lat = obj.getJSONObject("latlng").getDouble("lat");
             Double lng = obj.getJSONObject("latlng").getDouble("lng");
+            //NAME
             String name = obj.getString("name");
+            //ADDRESS
             JSONArray addressline = obj.getJSONObject("infoWindow").getJSONArray("addressLines");
             String addr = "";
             for (int i=0;i<addressline.length();i++){
@@ -220,17 +222,36 @@ public class IntentUriAnalyser {
                 response.getEntity().writeTo(out);
                 out.close();
                 String responseString = out.toString();
-                //Log.i(TAG,"responseString= "+responseString);
+                Log.i(TAG,"responseString= "+responseString);
                 //JSON STUFF
                 JSONObject obj = new JSONObject(responseString);
                 JSONArray results = obj.getJSONArray("results");
                 JSONObject myresult = results.getJSONObject(0);
                 MyloPlace myloPlace = new MyloPlace(Locale.getDefault());
+                //ADDRESS
                 myloPlace.setAddress(myresult.getString("formatted_address"));
+                //NAME
                 myloPlace.setFeatureName(myresult.getString("name"));
+                //
+                /*int l = myloPlace.getFeatureName().length();
+                if(myloPlace.getFeatureName().startsWith(address.substring(0, l))){
+                    myloPlace.setGPS(true);
+                    myloPlace.setFeatureName(null);
+                }*/
+                JSONArray types = myresult.getJSONArray("types");
+                for (int i = 0; i < types.length(); i++) {
+                    if(types.get(i).equals("street_address")){
+                        myloPlace.setGPS(true);
+                        myloPlace.setFeatureName(null);
+                        break;
+                    }
+                }
+                //LAT LON
                 JSONObject location = myresult.getJSONObject("geometry").getJSONObject("location");
                 myloPlace.setLatitude(location.getDouble("lat"));
                 myloPlace.setLongitude(location.getDouble("lng"));
+                //
+                Log.i(TAG,"Name= "+myloPlace.getFeatureName()+", initial address= "+address+", returned addr= "+myloPlace.getAddress());
                 return myloPlace;
             }else{return null;}
         } catch (Exception e) {

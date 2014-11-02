@@ -35,6 +35,10 @@ function initAddGPSWindow(){
 	$('#addGPS').find('#add_header').find('#close_txt').text(mylo_textes[0].add_place_form_title_gps);
 	$('#addGPS').find('#add_header').find('#add_from_url').text(mylo_textes[0].add_place_from_URL_title);
 	$('#addGPS').find('#add_header').find('#edit_place').text(mylo_textes[0].edit_place_form_title);
+	$('#addGPS').find('#name_field_title').text(mylo_textes[0].edit_place_form_place_name_field_title)//
+	//
+	//init edit loc share and go loc buttons
+	initShareGoEditLocButtons();
 }
 function setAddPlaceScreen(){
 	$('#addPlace').stopAnima(true);
@@ -56,6 +60,7 @@ function setAddGPSScreen(){
 	if(mylo_UI_init_variables[0].editPlace!=null){
 		$('#addGPS').find('#edit_place').html('');
 		$('#addGPS').find('#edit_place').html('<span>'+mylo_UI_init_variables[0].editPlace.name+'</span>');
+		$('.editPlaceElement').css("display","block");
 	}
 	try{
 		if(mylo_UI_init_variables[0].addingGPS!=null){
@@ -123,6 +128,7 @@ function closeAddGPSWindow(){
 	$('#addGPS').find('#close_txt').css("display","block");
 	$('#addGPS').find('#add_from_url').css("display","none");
 	$('#addGPS').find('#edit_place').css("display","none");
+	$('.editPlaceElement').css("display","none");
 	//
 	$("#addGPS").find("#validateButton").css("display","block");
    	$("#saveButton").css("display","none");
@@ -330,4 +336,56 @@ function initAddButtons(){
 	    	}
 	    },delay);
     });
+}
+
+function initShareGoEditLocButtons(){
+	/*
+	*	SHARE BUTTON ONCLICK
+	*/
+	$('#edit_shareLocButton').click(function(event){
+		event.stopPropagation();
+		//GA
+        GATrackerEvent("Button_click", "share_loc", "");
+        //
+        var adressToEncode="";
+		var adressMessage = "";
+		var name = "";
+        if(mylo_UI_init_variables[0].editPlace!=null){
+        	var loc = mylo_UI_init_variables[0].editPlace;
+        	name = loc.name; 
+			if(loc.gps==1){
+				adressToEncode = "@"+loc.lat+","+loc.lon;//@lat,lon
+			}else{
+				adressToEncode = loc.publicName+' '+loc.adr;
+			}
+			adressMessage = loc.adr;	
+        }else if(mylo_UI_init_variables[0].addingGPS!=null){
+        	name = "New GPS location";
+        	adressToEncode = "@"+mylo_UI_init_variables[0].addingGPS.lat+","+mylo_UI_init_variables[0].addingGPS.lon;//@lat,lon
+        	adressMessage = "latitude: "+mylo_UI_init_variables[0].addingGPS.lat+", longitude: "+mylo_UI_init_variables[0].addingGPS.lon;
+        }else if(mylo_UI_init_variables[0].addingPublicName!=null){
+        	name = mylo_UI_init_variables[0].addingPublicName;
+        	adressToEncode = mylo_UI_init_variables[0].addingPublicName+" "+$('#addGPS').find('#addressField').val();
+        	adressMessage = $('#addGPS').find('#addressField').val();
+        }
+		
+		var urlToShare = 'http://maps.google.com/maps?q='+encodeURIComponent(adressToEncode);
+		var message = name+', '+adressMessage+': '+urlToShare;
+		shareAndroid(message);
+	});
+	/*
+	*	GO BUTTON ONCLICK
+	*/
+	$('#edit_goLocButton').click(function(event){
+		event.stopPropagation();
+		var loc = mylo_UI_init_variables[0].editPlace; 
+		//GA
+        GATrackerEvent("Button_click", "go_loc", "");
+        var adressToEncode="";
+		if(loc.gps==1){
+			adressToEncode = loc.lat+","+loc.lon;//@lat,lon
+		}else{adressToEncode = loc.publicName+' '+loc.adr;}
+		var urlToShare = 'geo:'+loc.lat+","+loc.lon+'?q='+encodeURIComponent(adressToEncode);
+		showOnMapsAndroid(urlToShare);
+	});
 }

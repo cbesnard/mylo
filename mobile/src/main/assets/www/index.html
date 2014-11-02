@@ -119,7 +119,7 @@
 			<div id="add_header">
 				<div id="close_txt" class=""></div>
 				<div id="add_from_url" class="add_window_title"></div>
-				<div id="edit_place" class="add_window_title"></div>
+				<div id="edit_place" class="add_window_title editPlaceElement"></div>
 				<IMG id="close_add_loc" class="" SRC="./png/mylo-icon-V2_add-loc-close.png">
 			</div>
 			<div id="map-canvas"></div>
@@ -129,10 +129,12 @@
 				<IMG id="google_logo" SRC="./png/powered-by-google-on-white.png" width="104" height="16">
 			</div>
 			
-			<div id="table" class="form">
+			<div id="table" class="">
 				<div class="table_cell" ><IMG id="gps_img" SRC="./png/go_dark_filled.png"></div>
 				<div class="table_cell" ><p id="gps_txt"></p></div>
+				<div class="table_cell" id="edit_shareLocButton"><IMG SRC="./png/share_dark.png"></div>
 			</div>
+			<p id="name_field_title" class="editPlaceElement"></p>
 			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
 			<a class="formButton form" id="validateButton"></a>
 			<a class="formButton form" id="saveButton"></a>

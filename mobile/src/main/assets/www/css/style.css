@@ -256,6 +256,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	float: right;
 	border-left:1px solid #f8f8f8;
 }
+
 #closeButton{
 	margin-top: 40px;
 	width: 40px;
@@ -586,6 +587,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	overflow: hidden;
 	text-overflow:ellipsis;
 }
+.editPlaceElement{
+	display: none;
+}
+#edit_shareLocButton {
+	width: 45px;
+	border-left:1px solid #f8f8f8;
+}
+#edit_shareLocButton img{
+	width: 32px;
+	height: 32px;
+	margin-left: 13px;
+}
+#edit_loc_buttons #edit_goLocButton{
+	border-left:1px solid #f8f8f8;
+}
+#addGPS #name_field_title{
+	font-family: 'Roboto light';
+	font-size: 20px;
+	margin-left: 15px;
+	margin-bottom: 0px;
+	color: #999999;
+}
 /****TRASH**********/
 #trash{
 	border-top: 1px solid #f2F1F1;
@@ -736,6 +759,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	padding-left: 5px;
 }
 #nameField{
+	margin-top: 10px;
 	margin-bottom: 20px;
 }
 .maxLength{
@@ -747,23 +771,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #table {
 	display: table;
 	overflow: hidden;
+	margin-left: 15px;
+	margin-right: 15px;
 	margin-top: 10px;
-	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom:1px solid #f8f8f8;
 }
 .table_cell {
 	display: table-cell;
 	vertical-align: middle;
 }
 
-#gps_txt #edit_gps_txt{
+#gps_txt{
 	font-family: 'Roboto thin';
 	font-size: 16px;
 	text-transform: capitalize;
 	word-wrap: break-word;
-	width: 300px;
-	/*height: 75px;*/
 	margin: 0px;
-	/*margin-top: 20px;*/
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-right: 5px;
 	/*margin-left: 10px;*/
 }
 #edit_gps_txt .name{
