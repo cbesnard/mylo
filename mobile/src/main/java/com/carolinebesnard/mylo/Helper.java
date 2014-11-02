@@ -17,6 +17,9 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -43,7 +46,7 @@ public class Helper {
             addresses = geocoder.getFromLocation(lat, lng, 1);
             if(addresses==null){
                 //error case
-                Log.i(TAG,"Get location address ERROR: Couldn't get location address, send error message to wear service");
+                Log.i(TAG,"Get location address ERROR: Couldn't get location address");
                 return null;
             }
             String address = String.format(
@@ -105,7 +108,7 @@ public class Helper {
         }
     }
 
-    public static LatLng getGPSFromAddr(String address){
+    /*public static LatLng getGPSFromAddr(String address){
         //GET CONTEXT
         context = activity.getBaseContext();
         //GET ADDR FROM LOCATION
@@ -114,16 +117,7 @@ public class Helper {
         geocoder = new Geocoder(context, Locale.getDefault());
         try {
             addresses = geocoder.getFromLocationName(address, 1);
-            /*String returnedAddress = String.format(
-                    "%s, %s, %s",
-                    // If there's a street address, add it
-                    addresses.get(0).getMaxAddressLineIndex() > 0 ?
-                            addresses.get(0).getAddressLine(0) : "",
-                    // Locality is usually a city
-                    addresses.get(0).getLocality(),
-                    // The country of the address
-                    addresses.get(0).getCountryName());*/
-            //TODO CHECK IF RETURNED ADDR IS SAME AS GIVEN
+
             LatLng gps = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
             return gps;
         } catch (Exception e) {
@@ -132,7 +126,7 @@ public class Helper {
             Log.i(TAG,"Get location address ERROR: Couldn't get location address, send error message to wear service");
             return null;
         }
-    }
+    }*/
 
     public static void showToast(String mssg) {
         context = activity.getBaseContext();
@@ -162,5 +156,44 @@ public class Helper {
             return url;
         }
         return null;
+    }
+
+    public static String jsCallFromData(String data){
+        //DE-STRINGIFY DATA INTO AN OBJECT
+        JSONObject obj = null;
+        JSONArray mylocs = null;
+        JSONArray updatedLocs = new JSONArray();
+        try {
+            obj = new JSONObject(data);
+            mylocs = obj.getJSONArray("locs");
+
+            for (int i = 0; i < mylocs.length(); i++) {
+                try {
+                    JSONObject loc = mylocs.getJSONObject(i);
+                    if(loc.getString("adr").equals("")){
+                        //GET ADDR FROM GPS
+                        String addr = getAddrFromGPS(loc.getDouble("lat"),loc.getDouble("lon"));
+                        if(addr!=null){
+                            loc.put("adr",addr);
+                            //STORE LOC IN NEW JSONARRAY
+                            updatedLocs.put(loc);
+                        }
+                    }
+                } catch (JSONException e){
+
+                }
+            }
+            if(updatedLocs.length()>0){
+                //STRINGIFY UPDATEDLOCS ARRAY
+                String converted = Base64.encodeToString(updatedLocs.toString().getBytes("UTF-8"), Base64.DEFAULT);
+                //BUILD JSCALL
+                String url="javascript:updateLocs('"+converted+"')";
+                return url;
+            }else {return null;}
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

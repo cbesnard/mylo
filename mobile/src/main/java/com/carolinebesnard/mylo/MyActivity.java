@@ -348,6 +348,8 @@ public class MyActivity extends Activity implements LocationUpdateListener{
                 isr.close();
                 fis.close();
 
+                checkDataForAddressUpdate(sb.toString());
+
                 if(!onCreate){
                     Log.i(TAG,"onCreate=false => calling javascript init");
                     //Log.v(TAG,"read data= '"+sb.toString()+"'");
@@ -381,7 +383,25 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         }
 
     }
-
+    private void checkDataForAddressUpdate(String data){
+        final String dataToUpdate = data;
+        Thread thread = new Thread(new Runnable() {
+            //private Uri data
+            @Override
+            public void run() {
+                final String url = Helper.jsCallFromData(dataToUpdate);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (url != null) {
+                            callJS(url);
+                        } else {
+                        }
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
     /***/
     private boolean fileExistence(String FILE){
         File file = getFileStreamPath(FILE);

@@ -211,8 +211,8 @@ $(document).ready(function(){
 			if(mylo_UI_init_variables[0].addingGPS!=null){//specific gps position asked
 				var name = $('#addGPS').find('#nameField').val();
 				var adr = $('#addGPS').find('#addressField').val();
-				
-				addLocation(name, $('#gps_txt').text(), idGroup, mylo_UI_init_variables[0].addingGPS.lat, mylo_UI_init_variables[0].addingGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 1);
+				console.log(adr);//$('#gps_txt').text()
+				addLocation(name, adr, idGroup, mylo_UI_init_variables[0].addingGPS.lat, mylo_UI_init_variables[0].addingGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 1);
 				//LOADER: Display end of load
 				$('#loader').css({display:'none'});
 				$('#loader_end').css({display:'block'});

@@ -141,13 +141,14 @@ function addGPSFromLink(lat,lon, addrEncoded){
         //RETRIEVE USER DATA
         var d = window.atob(addrEncoded);
         addr = _utf8_decode(d);
-    }
+    }else{addr="";}
 	//GET ADR of lat & lng
 	$('#gps_txt').html('<span class="gpsTxt">'+mylo_textes[0].location_gps_addr_txt+'</span>'+addr);
 	$('#gps_txt').css('display','block');
 	$('#gps_img').css('display','block');
 	//hide search field
 	$('#addGPS').find('#nameField').val('New GPS location');
+	$('#addGPS').find('#addressField').val(addr);
 	validateAddGPSForm();
 	//STOP LOADER
 	stopLoader();
@@ -223,4 +224,35 @@ function initMapsScripts(){
 		};
 		$("head").append(s);
 	}
+}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* UPDATE LOCS WITH MISSING ADDR
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function updateLocs(stringDatas){
+	try{
+        //console.log("Android data received is"+stringDatas);
+        if(stringDatas.length>0){
+            //RETRIEVE USER DATA
+            var d = window.atob(stringDatas);
+            var decoded = _utf8_decode(d);
+            var updatedlocs = JSON.parse(decoded);
+            for (var i = updatedlocs.length - 1; i >= 0; i--) {
+            	var loc = updatedlocs[i];
+            	for (var j = locations.length - 1; j >= 0; j--) {
+        			if(locations[j].id==loc.id){
+        				console.log("actual loc addr: "+locations[j].adr+", updated addr: "+loc.adr);
+        				locations[j].adr = loc.adr;
+        			}
+        			break;
+        		}	
+            }
+            //DISPLAY REFRESHED USER DATAS
+		    var groupToDisplay = $('.currentGroup').attr('name');
+		    var idGroupToDisplay = parseInt(groupToDisplay);
+		    var locToDisplay = getPositions(idGroupToDisplay);
+		    printUserLocation(idGroupToDisplay,locToDisplay,fadeIn1);
+        }
+    }catch(e){
+       console.log("error : "+e.message);
+    }
 }

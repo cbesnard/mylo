@@ -155,6 +155,7 @@ public class IntentUriAnalyser {
                     String url = "javascript:addPublicPlaceFromLink('" + convertedName + "','" + convertedAddr + "'," + gps.latitude + "," + gps.longitude + ")";
                     return url;
                 }else{//GPS PLACE
+                    //if(address==null){convertedAddr="";}
                     String url = "javascript:addGPSFromLink("+gps.latitude+","+gps.longitude+",'"+convertedAddr+"')";
                     return url;
                 }
