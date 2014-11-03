@@ -260,3 +260,13 @@ function updateLocs(stringDatas){
        console.log("error : "+e.message);
     }
 }
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* REFRESH SCREEN
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+function refreshScreen(){
+	//DISPLAY REFRESHED USER DATAS
+    var groupToDisplay = $('.currentGroup').attr('name');
+    var idGroupToDisplay = parseInt(groupToDisplay);
+    var locToDisplay = getPositions(idGroupToDisplay);
+    printUserLocation(idGroupToDisplay,locToDisplay,fadeIn1);
+}

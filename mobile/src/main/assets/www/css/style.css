@@ -95,9 +95,10 @@ body {
 }
 
 #firstTimeAll #title{
+	display: block;
 	width: 350px;
-	padding-top: 30px;
-	font-family: 'Roboto thin';
+	padding-top: 40px;
+	font-family: 'Roboto light';
 	font-size: 35px;
 	color: #2FBA90;
 	margin: auto;
@@ -113,18 +114,18 @@ body {
 }
 
 #firstTimeAll #icon{
+	display: none;
 	width: 80px;
 	height: 80px;
-	padding-top: 30px;
+	padding-top: 20px;
 	margin: auto;
 }
 
 #firstTimeAll #arrow{
-	width: 140px;/*149*/
-	height: 189px;/*201*/
+	width: 353px;/*720*/
+	height: 147px;/*300*/
 	position: absolute;
-	top:62px;/*firstTimeAll margin top*/
-	right: 0px;
+	right: 10px;
 }
 
 
@@ -356,6 +357,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
     -moz-border-radius:50%;
     -webkit-border-radius:50%;
     -khtml-border-radius: 50%;
+    /* SHADOW */
+    box-shadow: 1px 1px 2px 2px rgba(85,85,85,0.1);
 }
 .addGroup p{
 	-webkit-transition: all 0.4s ease-in-out;

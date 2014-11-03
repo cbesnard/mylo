@@ -206,7 +206,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             //JS to check previous init of maps scripts
             callJS("javascript:initMapsScripts()");
         }else{
-            Log.i(TAG,"onCreate = false");
+            Log.i(TAG,"onCreate = false : launch app");
         }
     }
 
@@ -243,7 +243,10 @@ public class MyActivity extends Activity implements LocationUpdateListener{
             Log.i(TAG, "updates detected: calling readData");
             readData();
             updated=false;
-        }else {Log.i(TAG, "No updates");}
+        }else {
+            Log.i(TAG, "No updates");
+            callJS("javascript:refreshScreen()");
+        }
     }
 
     @Override

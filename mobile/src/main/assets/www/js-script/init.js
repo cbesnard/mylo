@@ -206,6 +206,7 @@ function setUI(callback){
     $('#addButtons').css({
         left: (screenWidth-80)-54+'px',
     });
+
     /*$('#add_place').css({
         left: (screenWidth-10)-54+'px',
     });
@@ -244,6 +245,8 @@ function setUI(callback){
     var locsdivHeight = screenHeight-mylo_UI_init_variables[0].headerHeight-$('#groupsDiv').outerHeight()-$('.addPlace').outerHeight();
     $('#locsDiv').css('height',locsdivHeight+'px');
     $('#locsDiv').css('width',screenWidth+'px');
+    //FIRST TIME SCENARIO 
+    $('#arrow').css("top",locsdivHeight-149-76+"px");
     $('#locContainer').css('width',screenWidth+'px');
     $('#groupsDiv').css({width: $(window).width()+'px'});
     $('#addGroup').css({
