@@ -253,6 +253,8 @@ function updateLocs(stringDatas){
 		    var idGroupToDisplay = parseInt(groupToDisplay);
 		    var locToDisplay = getPositions(idGroupToDisplay);
 		    printUserLocation(idGroupToDisplay,locToDisplay,fadeIn1);
+		    //WRITE UPDATED DATA
+		    storeDataInAndroid();
         }
     }catch(e){
        console.log("error : "+e.message);
