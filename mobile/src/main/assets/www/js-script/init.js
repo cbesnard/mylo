@@ -19,7 +19,8 @@ error_add_place_form_addr_not_found:"Address not recognized!",
 error_add_place_form_connexion_pb:"Sorry, your place couldn't be added due to connexion problems :/ \nTry again later!",
 first_time_group_txt_1:"What ",
 first_time_group_txt_2:" do you want to add?",
-first_time_all_txt_title:"Welcome to Mylo!",
+first_time_all_txt_title:"Welcome to ",
+first_time_all_txt_title_span:"Mylo!",
 first_time_all_txt_phrase:"Add your favourites places now!",
 add_group_form_name_field_helper:"Name",
 add_group_form_validate_button:"Add",
@@ -246,7 +247,7 @@ function setUI(callback){
     $('#locsDiv').css('height',locsdivHeight+'px');
     $('#locsDiv').css('width',screenWidth+'px');
     //FIRST TIME SCENARIO 
-    $('#arrow').css("top",locsdivHeight-149-76+"px");
+    $('#arrow').css("top",locsdivHeight-156+"px");
     $('#locContainer').css('width',screenWidth+'px');
     $('#groupsDiv').css({width: $(window).width()+'px'});
     $('#addGroup').css({

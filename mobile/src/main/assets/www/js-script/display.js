@@ -518,7 +518,7 @@ function getLoc(id){
 function checkFirstTime(idGroup,userLocs){
 	if(userLocs.length<=0){
 		if(idGroup==0){
-			$('#firstTimeAll').find('#title').html(mylo_textes[0].first_time_all_txt_title);//'Welcome to Mylo!'
+			$('#firstTimeAll').find('#title').html(mylo_textes[0].first_time_all_txt_title+"<span>"+mylo_textes[0].first_time_all_txt_title_span+"</span>");//'Welcome to Mylo!'
 			$('#firstTimeAll').find('#text').html(mylo_textes[0].first_time_all_txt_phrase);//'Add your favourites places now!'
 			$('#firstTimeAll').css({
 				display: 'block',

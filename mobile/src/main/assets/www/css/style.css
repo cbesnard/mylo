@@ -97,11 +97,16 @@ body {
 #firstTimeAll #title{
 	display: block;
 	width: 350px;
-	padding-top: 40px;
+	padding-top: 80px;
+	font-family: 'Roboto thin';
+	font-size: 30px;
+	color: #555555;
+	margin: auto;
+}
+
+#firstTimeAll #title span{
 	font-family: 'Roboto light';
 	font-size: 35px;
-	color: #2FBA90;
-	margin: auto;
 }
 
 #firstTimeAll #text{
@@ -122,10 +127,10 @@ body {
 }
 
 #firstTimeAll #arrow{
-	width: 353px;/*720*/
-	height: 147px;/*300*/
+	width: 300px;/*720*/
+	height: 141px;/*300*/
 	position: absolute;
-	right: 10px;
+	right: 0px;
 }
 
 
@@ -360,6 +365,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
     /* SHADOW */
     box-shadow: 1px 1px 2px 2px rgba(85,85,85,0.1);
 }
+.addGroup:active{
+	background-color: #888888;
+}
 .addGroup p{
 	-webkit-transition: all 0.4s ease-in-out;
     -moz-transition: all 0.4s ease-in-out;
@@ -533,6 +541,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
     -khtml-border-radius: 50%;
     /* SHADOW */
     box-shadow: 1px 1px 2px 2px rgba(85,85,85,0.1);
+}
+
+.add_buttons:active{
+	background-color: #269573;
 }
 
 .add_buttons .button_icon{
@@ -844,9 +856,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 #saveButton{
 	display: none;
 }
+.formButton:active{
+	background-color: #891720;
+}
+#validateGroup:active{
+	background-color: #891720;	
+}
 #validateButton:active{
-	background-color: #ac1c28;
-	border: 1px solid #ac1c28;
+	background-color: #b71e2b;
+	border: 1px solid #b71e2b;
 }
 .gpsTxt {
 	font-family: 'Roboto';
