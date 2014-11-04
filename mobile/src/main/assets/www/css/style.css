@@ -133,6 +133,13 @@ body {
 	right: 0px;
 }
 
+#firstTimeAll #sketches{
+	position: absolute;
+	width: 357px;
+	height: 181px;
+	top:-8px;
+}
+
 
 #header{
 	background-color: #2FBA90;

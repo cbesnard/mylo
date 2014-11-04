@@ -248,6 +248,7 @@ function setUI(callback){
     $('#locsDiv').css('width',screenWidth+'px');
     //FIRST TIME SCENARIO 
     $('#arrow').css("top",locsdivHeight-156+"px");
+    $('#sketches').css("left",(screenWidth-357)/2+"px");
     $('#locContainer').css('width',screenWidth+'px');
     $('#groupsDiv').css({width: $(window).width()+'px'});
     $('#addGroup').css({
