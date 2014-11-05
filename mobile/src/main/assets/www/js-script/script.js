@@ -142,7 +142,7 @@ $(document).ready(function(){
 			mylo_UI_init_variables[0].searching_position=1;
 			//GET USER LOCATION in lat lng
 			//mylo_UI_init_variables[0].addingGPS=mylo_UI_init_variables[0].userpos;
-			console.log("lat:"+mylo_UI_init_variables[0].userpos.lat+", lon:"+mylo_UI_init_variables[0].userpos.lon)
+			//console.log("lat:"+mylo_UI_init_variables[0].userpos.lat+", lon:"+mylo_UI_init_variables[0].userpos.lon)
 			addGPSLocation(mylo_UI_init_variables[0].userpos.lat,mylo_UI_init_variables[0].userpos.lon);
 		}
 		return 1;
@@ -211,7 +211,7 @@ $(document).ready(function(){
 			if(mylo_UI_init_variables[0].addingGPS!=null){//specific gps position asked
 				var name = $('#addGPS').find('#nameField').val();
 				var adr = $('#addGPS').find('#addressField').val();
-				console.log(adr);//$('#gps_txt').text()
+				//console.log(adr);//$('#gps_txt').text()
 				addLocation(name, adr, idGroup, mylo_UI_init_variables[0].addingGPS.lat, mylo_UI_init_variables[0].addingGPS.lon, country,mylo_UI_init_variables[0].addingPublicName, 1);
 				//LOADER: Display end of load
 				$('#loader').css({display:'none'});

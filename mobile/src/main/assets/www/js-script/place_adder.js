@@ -245,8 +245,8 @@ function setAddPlaceAutocomplete(){
 					mylo_UI_init_variables[0].addPlace_currentGPS = {lat:0,lon:0};
 					mylo_UI_init_variables[0].addPlace_currentGPS.lat = place.geometry.location.lat();
 					mylo_UI_init_variables[0].addPlace_currentGPS.lon = place.geometry.location.lng();
-					console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
-					console.log('currentGPS='+mylo_UI_init_variables[0].addPlace_currentGPS.lat+', '+mylo_UI_init_variables[0].addPlace_currentGPS.lon);
+					//console.log('place.geometry='+place.geometry.location.lat()+', '+place.geometry.location.lng());
+					//console.log('currentGPS='+mylo_UI_init_variables[0].addPlace_currentGPS.lat+', '+mylo_UI_init_variables[0].addPlace_currentGPS.lon);
 					
 					//Update map infos
 					var myLatlng = new google.maps.LatLng(mylo_UI_init_variables[0].addPlace_currentGPS.lat,mylo_UI_init_variables[0].addPlace_currentGPS.lon);

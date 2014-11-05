@@ -178,7 +178,7 @@ function validateEditPlaceForm(){
 }
 
 function checkFields(el){
-	console.log(el.attr('id'));
+	//console.log(el.attr('id'));
 	if(el.attr('id')=="addGPS"){
 		if( mylo_UI_init_variables[0].editPlace!=null){
 			console.log('IN CHECKFIELDS ');

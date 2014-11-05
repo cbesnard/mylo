@@ -71,7 +71,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         }
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(loc==null){
-            Log.i(TAG, "Fused location is null, get the GPS provider last known loc");
+            //Log.i(TAG, "Fused location is null, get the GPS provider last known loc");
             loc = getLocationFromGPSProvider();
         }
         return loc;
@@ -143,7 +143,7 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
     }
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
+        //Log.i(TAG, "Location Request - on location changed :" + location.getLatitude() + "," + location.getLongitude());
         //Location loc = getLocationFromGPSProvider();
         if(location!=null){
             //Log.i(TAG,"Both fused and GPS location not null");

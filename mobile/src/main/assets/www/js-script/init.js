@@ -434,10 +434,10 @@ function displayUserDatas(){
 *   REFRASH DATA
 * * * * * * * * * * * */
 function refreshData(stringDatas){
-    console.log("in refreshData function");
+    //console.log("in refreshData function");
     //PARSE NEW USER DATAS
     try{
-        //console.log("Android data received is"+stringDatas);
+        console.log("New Android data received : parsing it to refresh UI");
         if(stringDatas.length>0){
             //RETRIEVE USER DATA
             var d = window.atob(stringDatas);

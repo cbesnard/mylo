@@ -59,7 +59,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "MYLO V2.6.6");
+        Log.i(TAG, "MYLO V3.0");
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
@@ -186,7 +186,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG,"onResume called");
+        //Log.i(TAG,"onResume called");
         myJsInterface.activity=this;
         MyloWearService.activity=this;
         Helper.activity = this;
@@ -257,12 +257,12 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         super.onNewIntent(intent);
         myintent = intent;
         intentData = intent.getData();
-        Log.i(TAG,"onNewIntent called");
+        //Log.i(TAG,"onNewIntent called");
     }
 
     private void checkForIntent() {
         /*CHECK FOR INTENT*/
-        Log.i(TAG,"CheckForIntent called");
+        //Log.i(TAG,"CheckForIntent called");
         //if(getIntent()!=null){
         if(myintent==null){return;}
         if(Intent.ACTION_VIEW.equals(myintent.getAction())) {

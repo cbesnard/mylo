@@ -240,7 +240,7 @@ function updateLocs(stringDatas){
             	var loc = updatedlocs[i];
             	for (var j = locations.length - 1; j >= 0; j--) {
         			if(locations[j].id==loc.id){
-        				console.log("actual loc addr: "+locations[j].adr+", updated addr: "+loc.adr);
+        				//console.log("actual loc addr: "+locations[j].adr+", updated addr: "+loc.adr);
         				locations[j].adr = loc.adr;
         			}
         			break;

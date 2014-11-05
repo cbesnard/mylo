@@ -263,10 +263,10 @@ function getClosestLoc(locs){
 * Log array
 */
 function logLocations(locArray, arrayName){
-	console.log("LOG of "+arrayName+": ");
+	//console.log("LOG of "+arrayName+": ");
 	var i=0;
 	for(i=0;i<locArray.length;i++){
-		console.log("locId="+locArray[i].id+" locName="+locArray[i].name);
+		//console.log("locId="+locArray[i].id+" locName="+locArray[i].name);
 	}
 }
 /* * * * * * * * * * * * * * *  * * *  * *  * * * * *
