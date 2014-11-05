@@ -374,6 +374,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 }
 .addGroup:active{
 	background-color: #888888;
+	box-shadow: 1px 1px 7px 3px rgba(85,85,85,0.1);
 }
 .addGroup p{
 	-webkit-transition: all 0.4s ease-in-out;
@@ -537,7 +538,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
 	width: 54px;
 	height: 54px;
 	float: left;
-	margin-right: 12px;
 	background-color: #2FBA90;
 
 	z-index: 5000;
@@ -549,9 +549,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f000000', e
     /* SHADOW */
     box-shadow: 1px 1px 2px 2px rgba(85,85,85,0.1);
 }
+#addButtons #add_gps{
+	margin-right: 12px;
+}
 
 .add_buttons:active{
 	background-color: #269573;
+	/*width: 60px;
+	height: 60px;*/
+	/* SHADOW */
+    box-shadow: 1px 1px 7px 5px rgba(85,85,85,0.1);
 }
 
 .add_buttons .button_icon{

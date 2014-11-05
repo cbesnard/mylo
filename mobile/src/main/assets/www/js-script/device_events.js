@@ -14,8 +14,6 @@ function setUserPosition(lat,lon){
     }else{
     	refreshLocsdist();
     }
-    
-    
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

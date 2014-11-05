@@ -340,6 +340,50 @@ function setUI(callback){
         left:(screenWidth-40)/2+'px',   //40=size of trash img div
     });
     callback();
+    /*
+    * MATERIAL BUTTONS BEHAVIOR
+    */
+    /*var original_size;
+    $(".material_buttons").mouseup(function() { 
+        $( this ).removeClass("clicked");
+        $( this ).css({
+            "width":original_size+"px",
+            "height":original_size+"px",
+            "margin-left":"0px",
+            "margin-top":"0px",
+            "box-shadow": "1px 1px 2px 2px rgba(85,85,85,0.1)",
+        });
+    })
+    .mousedown(function() {
+        if(!$( this ).hasClass("clicked")){
+            original_size = $( this ).outerHeight();
+            $( this ).addClass("clicked");
+            $( this ).css({
+                "width":original_size*1.1+"px",
+                "height":original_size*1.1+"px",
+                "margin-left":-(original_size*1.1-original_size)/2+"px",
+                "margin-top":-(original_size*1.1-original_size)/2+"px",
+                "box-shadow": "1px 1px 7px 5px rgba(85,85,85,0.1)",
+            });
+        }
+    });
+    $(document).mousedown(function(){
+        return false;
+    });
+    $(document).mouseup(function(){
+        console.log("fuck this shit");
+        var el = $(".clicked");
+        if(el){
+            el.removeClass("clicked");
+            el.css({
+                "width":original_size+"px",
+                "height":original_size+"px",
+                "margin-left":"0px",
+                "margin-top":"0px",
+                "box-shadow": "1px 1px 2px 2px rgba(85,85,85,0.1)",
+            });
+        }
+    }); */
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
 *   INIT USER DATAS 

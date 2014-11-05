@@ -92,7 +92,7 @@ function bindGroupEvents(){
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function initializeGroup(){	//Set css properties of group div
 	//console.log("in initialize group function");
-	$('#groupsContainer').append('<div class="addGroup" name="addGroup"><p name="addGroupIcon">+</p></div>');
+	$('#groupsContainer').append('<div class="addGroup material_buttons" name="addGroup"><p name="addGroupIcon">+</p></div>');
 	
 	$('.addGroup').css({
 		height: 45+'px',

@@ -200,6 +200,9 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         sendGATrackerEvent("Flags", "Resume_App", "");
         if(onCreate){
             Log.i(TAG,"onCreate = true");
+            Log.i(TAG,"Current loc: "+currentLoc.getLatitude()+","+currentLoc.getLongitude());
+            //UPDATE CURRENT LOCATION
+            callJS("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
             checkForIntent();
