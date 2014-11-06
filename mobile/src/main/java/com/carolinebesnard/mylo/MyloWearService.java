@@ -192,13 +192,15 @@ public class MyloWearService extends WearableListenerService {
         String FILENAME = "data.txt";
 
         if(MyActivity.isExternalStorageReadable()){
-            String root = Environment.getExternalStorageDirectory().toString();
+            //String root = Environment.getExternalStorageDirectory().toString();
             //Log.v(TAG,"external storage file root: "+root);
-            File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+            //File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
             //myDir.mkdirs();
 
-            File file = new File (myDir, FILENAME);
+            //File file = new File (myDir, FILENAME);
+            File file = new File (activity.getFilesDir(), FILENAME);
             if (file.exists ()){
+                Log.i(TAG,"file exists");
                 try {
                     FileInputStream fis = new FileInputStream(file);
                     InputStreamReader isr = new InputStreamReader(fis);
@@ -228,23 +230,31 @@ public class MyloWearService extends WearableListenerService {
     public void storeDatas(String datas) {
         String FILENAME = "data.txt";
         if(myJsInterface.isExternalStorageWritable()){
-            String root = Environment.getExternalStorageDirectory().toString();
+            //String root = Environment.getExternalStorageDirectory().toString();
             //Log.v("external storage file ","root: "+root);
-            File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+            //File myDir = new File(root + "/Android/data/com.carolinebesnard.mylo/files");
+
             //myDir.mkdirs();
-            if (!myDir.exists ()){
+            /*if (!myDir.exists ()){
                 Log.v("external storage DIRECTORY DOESN'T EXISTS ","directory: "+root);
                 myDir.mkdirs();
-            }
-            File file = new File (myDir, FILENAME);
+            }*/
+            //File file = new File (myDir, FILENAME);
+            File file = new File (activity.getFilesDir(), FILENAME);
 
-            try{
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(datas.getBytes());
-                fos.close();
-            }catch (java.io.IOException e){
-                Log.i(TAG,"ERROR while writing data");
-                e.printStackTrace();
+            boolean backupNeeded = true;
+            synchronized (MyloBackupAgentHelper.locationDataLock) {
+                try{
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(datas.getBytes());
+                    fos.close();
+                }catch (java.io.IOException e){
+                    Log.i(TAG,"ERROR while writing data");
+                    e.printStackTrace();
+                }
+            }
+            if (backupNeeded) {
+                activity.requestBackUp();
             }
         }else{
             Log.i(TAG,"ERROR while writing data: external storage not writable");
