@@ -74,7 +74,17 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
             //Log.i(TAG, "Fused location is null, get the GPS provider last known loc");
             loc = getLocationFromGPSProvider();
         }
-        return loc;
+        //
+        if(currentLocation!=null){
+            if(isBetterLocation(loc,currentLocation)){
+                Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
+                currentLocation=loc;
+                //Log.i(TAG,"Fused location better than current");
+            }
+        }else{
+            currentLocation=loc;
+        }
+        return currentLocation;
     }
 
     public int startLocationRequest() {
