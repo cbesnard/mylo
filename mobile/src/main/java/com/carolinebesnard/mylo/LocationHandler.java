@@ -65,23 +65,28 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
 
     public Location getLocation() {
         //Log.i(TAG, "getLocation called");
-        if(mGoogleApiClient == null){
-            Log.e(TAG, "ERROR mGoogleApiClient is null");
-            return null;
-        }
-        Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if(loc==null){
-            //Log.i(TAG, "Fused location is null, get the GPS provider last known loc");
-            loc = getLocationFromGPSProvider();
+        Location loc = null;
+        if(mGoogleApiClient != null){
+            loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if(loc==null){
+                Log.i(TAG, "Fused location is null, get the providers last known loc");
+                loc = getLocationFromProviders();
+            }
+        }else{
+            Log.i(TAG, "mGoogleApiClient is null get the providers last known loc");
+            loc = getLocationFromProviders();
         }
         //
         if(currentLocation!=null){
             if(isBetterLocation(loc,currentLocation)){
                 Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
                 currentLocation=loc;
-                //Log.i(TAG,"Fused location better than current");
+                Log.i(TAG,"New location better than current");
+            }else {
+                Log.i(TAG,"New loc less accurate than currentLocation");
             }
         }else{
+            Log.i(TAG,"currentLocation is null: new loc is better");
             currentLocation=loc;
         }
         return currentLocation;
@@ -144,6 +149,28 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         if(isRequestOnGPSProvider){
             GPSlocationManager.removeUpdates(GPSlocationListener);
         }
+    }
+    private Location getLocationFromProviders(){
+        Location gps = getLocationFromGPSProvider();
+        Location network = getLocationFromNetworkProvider();
+        if(network!=null){
+            if(isBetterLocation(gps,network)){
+                Log.i(TAG,"gps provider loc is better than network provider's");
+                network = gps;
+            }else{
+                Log.i(TAG,"network provider loc is better than gps provider's");
+            }
+        }else{
+            Log.i(TAG,"network provider loc is null, gps loc is better");
+            network = gps;
+        }
+        return network;
+    }
+    private Location getLocationFromNetworkProvider(){
+        LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        Location loc = locationManager.getLastKnownLocation(locationProvider);
+        return loc;
     }
     private Location getLocationFromGPSProvider(){
         LocationManager locationManager = (LocationManager) applicationContext.getSystemService(Context.LOCATION_SERVICE);

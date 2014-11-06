@@ -194,15 +194,23 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         Context con = getApplicationContext();
         myLocationObject = new LocationHandler(con,this);
         //Get user last known location
-        currentLoc = myLocationObject.getLocation();
-
+        Location lastKnownLoc = myLocationObject.getLocation();
+        if(currentLoc!=null){
+            if(LocationHandler.isBetterLocation(lastKnownLoc,currentLoc)){
+                currentLoc = lastKnownLoc;
+            }
+        }else {
+            currentLoc = lastKnownLoc;
+        }
         // Acquire a reference to the system Location Manager
         sendGATrackerEvent("Flags", "Resume_App", "");
         if(onCreate){
             Log.i(TAG,"onCreate = true");
-            Log.i(TAG,"Current loc: "+currentLoc.getLatitude()+","+currentLoc.getLongitude());
-            //UPDATE CURRENT LOCATION
-            callJS("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+            if(currentLoc!=null){
+                Log.i(TAG,"Current loc not null: "+currentLoc.getLatitude()+","+currentLoc.getLongitude());
+                //UPDATE CURRENT LOCATION
+                callJS("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
+            }
             //CHECK FOR UPDATES AND REFRESH IF ANY
             refreshUserDatas();
             checkForIntent();
