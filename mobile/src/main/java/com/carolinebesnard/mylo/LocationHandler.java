@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final long updateInterval=50000;//5 seconds in milliseconds
+    private static final long updateInterval=30000;//5 seconds in milliseconds
     private static final long debugUpdateInterval=1000;//in milliseconds
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -69,24 +69,24 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         if(mGoogleApiClient != null){
             loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(loc==null){
-                Log.i(TAG, "Fused location is null, get the providers last known loc");
+                //Log.i(TAG, "Fused location is null, get the providers last known loc");
                 loc = getLocationFromProviders();
             }
         }else{
-            Log.i(TAG, "mGoogleApiClient is null get the providers last known loc");
+            //Log.i(TAG, "mGoogleApiClient is null get the providers last known loc");
             loc = getLocationFromProviders();
         }
         //
         if(currentLocation!=null){
             if(isBetterLocation(loc,currentLocation)){
-                Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
+                //Log.v(TAG, "new best location: lat="+loc.getLatitude()+"lon="+loc.getLongitude());
                 currentLocation=loc;
-                Log.i(TAG,"New location better than current");
+                //Log.i(TAG,"New location better than current");
             }else {
-                Log.i(TAG,"New loc less accurate than currentLocation");
+                //Log.i(TAG,"New loc less accurate than currentLocation");
             }
         }else{
-            Log.i(TAG,"currentLocation is null: new loc is better");
+            //Log.i(TAG,"currentLocation is null: new loc is better");
             currentLocation=loc;
         }
         return currentLocation;
@@ -155,13 +155,13 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,Goog
         Location network = getLocationFromNetworkProvider();
         if(network!=null){
             if(isBetterLocation(gps,network)){
-                Log.i(TAG,"gps provider loc is better than network provider's");
+                //Log.i(TAG,"gps provider loc is better than network provider's");
                 network = gps;
             }else{
-                Log.i(TAG,"network provider loc is better than gps provider's");
+                //Log.i(TAG,"network provider loc is better than gps provider's");
             }
         }else{
-            Log.i(TAG,"network provider loc is null, gps loc is better");
+            //Log.i(TAG,"network provider loc is null, gps loc is better");
             network = gps;
         }
         return network;

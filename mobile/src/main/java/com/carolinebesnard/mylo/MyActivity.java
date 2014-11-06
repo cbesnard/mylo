@@ -53,7 +53,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
     private Uri intentData=null;
     private String intentType=null;
     private static final String TAG = MyActivity.class.getSimpleName();
-    private static final String PROPERTY_ID = "UA-51649868-2";
+    private static final String PROPERTY_ID = "UA-51649868-1";
 
     private BackupManager bm;
 
@@ -147,7 +147,6 @@ public class MyActivity extends Activity implements LocationUpdateListener{
 
             File file = new File(myDir, MyloBackupAgentHelper.LOCATION_FILE_NAME);
             File dataFile = new File(this.getFilesDir(), MyloBackupAgentHelper.LOCATION_FILE_NAME);
-            //dataFile.delete();
 
             boolean empty = !dataFile.exists() || dataFile.length() == 0;
 
@@ -205,9 +204,9 @@ public class MyActivity extends Activity implements LocationUpdateListener{
         // Acquire a reference to the system Location Manager
         sendGATrackerEvent("Flags", "Resume_App", "");
         if(onCreate){
-            Log.i(TAG,"onCreate = true");
+            //Log.i(TAG,"onCreate = true");
             if(currentLoc!=null){
-                Log.i(TAG,"Current loc not null: "+currentLoc.getLatitude()+","+currentLoc.getLongitude());
+                //Log.i(TAG,"Current loc not null: "+currentLoc.getLatitude()+","+currentLoc.getLongitude());
                 //UPDATE CURRENT LOCATION
                 callJS("javascript:setUserPosition("+currentLoc.getLatitude()+","+currentLoc.getLongitude()+")");
             }

@@ -289,7 +289,7 @@ function initAddButtons(){
         lastScrollTop = st;
         return  direction;
     }
-    var delay = 6000;
+    var delay = 10000;
 	var timeout = null;
     $("#locsDiv").on("scroll", function () {
         var dir = detectDirection();
