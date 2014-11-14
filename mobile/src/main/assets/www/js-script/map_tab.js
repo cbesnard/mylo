@@ -38,7 +38,8 @@ function setMap(){
 	    mylo_UI_init_variables[0].map_user_marker = new google.maps.Marker({
 	      position: myLatlng,
 	      map: mylo_UI_init_variables[0].map_tab_map,
-	      icon: image
+	      icon: image,
+	      zIndex: 10
 	    });
 	    google.maps.event.addListenerOnce(mylo_UI_init_variables[0].map_tab_map, 'idle', function(){
 	        // do something only the first time the map is loaded
@@ -111,13 +112,14 @@ function setMarkers(group_id){
 					scaledSize: new google.maps.Size(30,41), // the normal size of the image is 90x1100 because Retina asks double size.
 					origin: new google.maps.Point(0, 0), // position in the sprite
 					// The anchor for this image is the base of the flagpole at 0,32.
-			    	anchor: new google.maps.Point(15, 41)                   
+			    	anchor: new google.maps.Point(15, 41)                  
 				};
 				(function(z){
 				    var marker = new google.maps.Marker({
 				      position: myLatlng,
 				      map: mylo_UI_init_variables[0].map_tab_map,
 				      icon: image,
+				      zIndex: 100,
 				    });
 				    marker.metadata = {id: locations[z].id};
 				    //console.log("marker metadata="+marker.metadata.id);
@@ -180,7 +182,8 @@ function setMarkers(group_id){
 					    var marker = new google.maps.Marker({
 					      position: myLatlng,
 					      map: mylo_UI_init_variables[0].map_tab_map,
-					      icon: image
+					      icon: image,
+					      zIndex: 100
 					    });
 					    markers.push(marker);
 					    marker.metadata = {id: locations[z].id};
