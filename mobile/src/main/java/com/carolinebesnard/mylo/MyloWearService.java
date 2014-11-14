@@ -96,22 +96,44 @@ public class MyloWearService extends WearableListenerService {
                 if(address.length()>0){
                     try {
                         //DE-STRINGIFY DATA INTO AN OBJECT
-                        JSONObject obj = new JSONObject(userDatas);
-                        JSONArray mylocs = obj.getJSONArray("locs");
-                        //CREATE ID FOR NEW LOC
-                        int index = mylocs.length()-1;
-                        JSONObject lastloc = mylocs.getJSONObject(index);
-                        int id = lastloc.getInt("id")+1;
-                        //CREATE NEW LOC
-                        JSONObject newLoc = new JSONObject("{\"id\":"+id+",\"name\":\"\",\"group\":0,\"lat\":"+MyActivity.currentLoc.getLatitude()+",\"lon\":"+MyActivity.currentLoc.getLongitude()+",\"adr\":\""+address+"\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
-                        //{"id":0,"name":"work","group":0,"lat":48.8708832,"lon":2.346594,"adr":"GPS location near: Mail, Paris, France","country":"","publicName":"","gps":1},
-
-                        //ADD NEW LOC TO location OBJECT
-                        mylocs.put(newLoc);
-
-                        //ADD NEW LOC TO DATA OBJECT
-                        obj.put("locs",mylocs);
-
+                        JSONObject obj;
+                        if(userDatas!=null && userDatas!="" ) {
+                            if(!userDatas.isEmpty()){
+                                obj = new JSONObject(userDatas);
+                                JSONArray mylocs = obj.getJSONArray("locs");
+                                //CREATE ID FOR NEW LOC
+                                int index = mylocs.length() - 1;
+                                JSONObject lastloc = mylocs.getJSONObject(index);
+                                int id = lastloc.getInt("id") + 1;
+                                //CREATE NEW LOC
+                                JSONObject newLoc = new JSONObject("{\"id\":" + id + ",\"name\":\"\",\"group\":0,\"lat\":" + MyActivity.currentLoc.getLatitude() + ",\"lon\":" + MyActivity.currentLoc.getLongitude() + ",\"adr\":\"" + address + "\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
+                                //{"id":0,"name":"work","group":0,"lat":48.8708832,"lon":2.346594,"adr":"GPS location near: Mail, Paris, France","country":"","publicName":"","gps":1},
+                                //ADD NEW LOC TO location OBJECT
+                                mylocs.put(newLoc);
+                                //ADD NEW LOC TO DATA OBJECT
+                                obj.put("locs", mylocs);
+                            }else {
+                                obj = new JSONObject().put("groups","");
+                                //CREATE ID FOR NEW LOC
+                                int id = 0;
+                                //CREATE NEW LOC
+                                JSONObject newLoc = new JSONObject("{\"id\":" + id + ",\"name\":\"\",\"group\":0,\"lat\":" + MyActivity.currentLoc.getLatitude() + ",\"lon\":" + MyActivity.currentLoc.getLongitude() + ",\"adr\":\"" + address + "\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
+                                //ADD NEW LOC TO location OBJECT
+                                JSONArray mylocs = new JSONArray().put(newLoc);
+                                //ADD NEW LOC TO DATA OBJECT
+                                obj.put("locs", mylocs);
+                            }
+                        }else {
+                            obj = new JSONObject().put("groups","");
+                            //CREATE ID FOR NEW LOC
+                            int id = 0;
+                            //CREATE NEW LOC
+                            JSONObject newLoc = new JSONObject("{\"id\":" + id + ",\"name\":\"\",\"group\":0,\"lat\":" + MyActivity.currentLoc.getLatitude() + ",\"lon\":" + MyActivity.currentLoc.getLongitude() + ",\"adr\":\"" + address + "\",\"country\":\"\",\"publicName\":\"\",\"gps\":1}");
+                            //ADD NEW LOC TO location OBJECT
+                            JSONArray mylocs = new JSONArray().put(newLoc);
+                            //ADD NEW LOC TO DATA OBJECT
+                            obj.put("locs", mylocs);
+                        }
                         //STRINGIFY DATA //WRITE USER DATAS
                         storeDatas(obj.toString());
 
@@ -127,7 +149,7 @@ public class MyloWearService extends WearableListenerService {
                         byte [] data = new byte[]{(byte)1};
                         Wearable.MessageApi.sendMessage(mGoogleApiClient, "", PATH_STRING, data);
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         //error case
                         Log.i(TAG,"ERROR: Couldn't store new location address: send error message wear service");
@@ -198,9 +220,9 @@ public class MyloWearService extends WearableListenerService {
             //myDir.mkdirs();
 
             //File file = new File (myDir, FILENAME);
-            File file = new File (activity.getFilesDir(), FILENAME);
+            File file = new File (this.getFilesDir(), FILENAME);
             if (file.exists ()){
-                Log.i(TAG,"file exists");
+                Log.i(TAG,"SUCCESS file: "+this.getFilesDir()+"/"+FILENAME+" exists");
                 try {
                     FileInputStream fis = new FileInputStream(file);
                     InputStreamReader isr = new InputStreamReader(fis);
@@ -214,12 +236,13 @@ public class MyloWearService extends WearableListenerService {
                     fis.close();
                     userDatas = sb.toString();
                     Log.i(TAG,"Read data SUCCESS");
+                    Log.i(TAG,"Data="+userDatas);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG,"ERROR while reading data");
                 }
             }else{
-                Log.e(TAG,"ERROR: file"+FILENAME+" doesn't exist");
+                Log.e(TAG,"ERROR: file: "+this.getFilesDir()+"/"+FILENAME+" doesn't exist");
             }
         }else{
             Log.e(TAG,"ERROR while reading data: external storage not readable");
@@ -240,7 +263,7 @@ public class MyloWearService extends WearableListenerService {
                 myDir.mkdirs();
             }*/
             //File file = new File (myDir, FILENAME);
-            File file = new File (activity.getFilesDir(), FILENAME);
+            File file = new File (this.getFilesDir(), FILENAME);
 
             boolean backupNeeded = true;
             synchronized (MyloBackupAgentHelper.locationDataLock) {
@@ -253,7 +276,7 @@ public class MyloWearService extends WearableListenerService {
                     e.printStackTrace();
                 }
             }
-            if (backupNeeded) {
+            if (backupNeeded && activity!=null) {
                 activity.requestBackUp();
             }
         }else{
