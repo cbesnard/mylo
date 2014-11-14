@@ -401,11 +401,21 @@ function initUserDatas(stringDatas){
             locations = datas.locs;
         }
         //SET USER GROUPS
-        nb_user_group = userGroups.length; 
-        var i = 0;
-        for(i=0;i<userGroups.length;i++)    //user's groups ids start at 1
-        {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
-            groups[userGroups[i].id].name = userGroups[i].name; 
+        if(userGroups != null){
+            if(userGroups.length!=0){
+                nb_user_group = userGroups.length; 
+                var i = 0;
+                for(i=0;i<userGroups.length;i++)    //user's groups ids start at 1
+                {   //alert(userGroups[i].id);      // 0 id is reserved for default group (gray color)
+                    groups[userGroups[i].id].name = userGroups[i].name; 
+                }    
+            }else{
+                console.log("usergroups array's length is 0");
+                userGroups = new Array();    
+            }
+        }else{
+            console.log("usergroups array's null");
+            userGroups = new Array();
         }
         //INITE MAP
         setMarkers(0);

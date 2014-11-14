@@ -121,7 +121,7 @@ public class MyloWearService extends WearableListenerService {
                                 //ADD NEW LOC TO location OBJECT
                                 JSONArray mylocs = new JSONArray().put(newLoc);
                                 //ADD NEW LOC TO DATA OBJECT
-                                obj.put("locs", mylocs);
+                                obj = new JSONObject().put("locs", mylocs);
                             }
                         }else {
                             obj = new JSONObject().put("groups","");

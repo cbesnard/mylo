@@ -80,7 +80,19 @@ function addGroup(groupName){
 	}
 	//GROUPS ARRAY: add to groups Array
 	groups[newGroupId].name = groupName;
-	userGroups.push({id:newGroupId,name:groupName});
+
+	if(userGroups != null){
+        if(userGroups.length!=0){
+            userGroups.push({id:newGroupId,name:groupName});    
+        }else{
+            console.log("usergroups array's length is 0");
+            userGroups = [{id:newGroupId,name:groupName}];    
+        }
+    }else{
+        console.log("usergroups array's null");
+        userGroups = [{id:newGroupId,name:groupName}];
+    }
+	
 	nb_user_group=userGroups.length;
 	//SCREEN: refresh groupsdiv
 	displayNewGroup(newGroupId,groupName);
