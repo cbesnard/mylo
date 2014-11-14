@@ -143,19 +143,40 @@ public class Helper {
 
         String[] words = text.split(" ");
         int index =-1;
+        String url = null;
         for(int i=0; i<words.length;i++){
             if(words[i].matches(".*http://goo.gl/maps/.*")){
                 Log.i(TAG,"Maps url detected! txt="+sharedText);
                 index = i;
+                url = IntentUriAnalyser.shortUrlCase(words[index]);
+                break;
+            }else if (words[i].matches(".*maps.google.com/.*")){
+                Log.i(TAG,"Maps url detected! txt="+words[i]);
+                index = i;
+                url = IntentUriAnalyser.extractIntent(Uri.parse(words[index]));
                 break;
             }
         }
-        if(index!=-1){
+
+        /*if(index!=-1){
             Log.i(TAG,words[index]);
             String url = IntentUriAnalyser.shortUrlCase(words[index]);
             return url;
-        }
-        return null;
+        }else {
+            for(int i=0; i<words.length;i++){
+                if(words[i].matches(".*maps.google.com/.*")){
+                    Log.i(TAG,"Maps url detected! txt="+words[i]);
+                    index = i;
+                    break;
+                }
+            }
+            if(index!=-1){
+                Log.i(TAG,words[index]);
+                String url = IntentUriAnalyser.extractIntent(Uri.parse(words[index]));
+                return url;
+            }
+        }*/
+        return url;
     }
 
     public static String jsCallFromData(String data){

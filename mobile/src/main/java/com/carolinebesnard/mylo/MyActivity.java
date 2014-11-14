@@ -59,7 +59,7 @@ public class MyActivity extends Activity implements LocationUpdateListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "MYLO V3.0");
+        Log.i(TAG, "MYLO V3.0.1");
         super.onCreate(savedInstanceState);
         updated = false;
         onCreate=false;
