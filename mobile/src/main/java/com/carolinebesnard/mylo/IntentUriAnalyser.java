@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.net.URLEncoder;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class IntentUriAnalyser {
                 value = data.getQueryParameter("cid");
                 if(value!=null){
                     //GET MyloPlace from CID
-                    MyloPlace myloPlace = getMyloPlaceFromCid(value);
+                    MyloPlace myloPlace = getMyloPlaceFromCid(value,"");
                     //GET url from MyloPlace
                     String url = urlBuilderFromMyloPlace(myloPlace);
                     return url;
@@ -76,13 +77,13 @@ public class IntentUriAnalyser {
                 }
             }
         } else if (host.equals("goo.gl")) {
-            String url = shortUrlCase(data.toString());
+            String url = shortUrlCase(data.toString(),"");
             return url;
         }
         return null;
     }
 
-    public static String shortUrlCase(String data){
+    public static String shortUrlCase(String data, String name){
         Log.i(TAG,data);
         try{
             //HTTP REQUEST TO GET LONG URL
@@ -112,7 +113,8 @@ public class IntentUriAnalyser {
                     if(value!=null){
                         Log.i(TAG,"value cid= "+value);
                         //GET MyloPlace from CID
-                        myloPlace = getMyloPlaceFromCid(value);
+                        Log.i(TAG,name);
+                        myloPlace = getMyloPlaceFromCid(value,name);
                     }
                 }
                 //GET url from MyloPlace
@@ -163,11 +165,22 @@ public class IntentUriAnalyser {
         }else {return null;}
     }
 
-    private static MyloPlace getMyloPlaceFromCid(String cid){
+    private static MyloPlace getMyloPlaceFromCid(String cid, String name){
         Log.i(TAG,"in getMyloPlaceFromCid");
+        Log.i(TAG,"cid="+cid);
         //TODO: check all error case
         try{
-            final String URL_FORMAT = "http://maps.google.com/maps?cid=%s&q=a&output=json";
+            //final String URL_FORMAT = "http://maps.google.com/maps?cid=%s&q=a&output=json";
+            //retirer les accents du nom
+            String s_un = Normalizer.normalize(name, Normalizer.Form.NFD);
+            String s_deux = s_un.replaceAll("\\p{M}", "");
+            //encode le nom au format url
+            String nom_query = URLEncoder.encode(s_deux, "utf-8");
+            Log.i(TAG,nom_query);
+            String nom_query_finished = nom_query.replace("%0A%0A","");
+            Log.i(TAG,nom_query_finished);
+            final String URL_FORMAT = "http://maps.google.com/maps?cid="+cid+"&q="+nom_query_finished+"&output=json";
+            Log.i(TAG,URL_FORMAT);
             //final String LATLNG_BEFORE = "viewport:{center:{";
             //final String LATLNG_AFTER = "}";
             //final String LATLNG_SEPARATOR = ",";
@@ -182,12 +195,25 @@ public class IntentUriAnalyser {
             Log.i(TAG,text);
             String t = text.replace("while(1);","");
             JSONObject jsonobject = new JSONObject(t);
-            JSONObject obj = (JSONObject) jsonobject.getJSONObject("overlays").getJSONArray("markers").get(0);
+            JSONArray markers = jsonobject.getJSONObject("overlays").getJSONArray("markers");
+            int index=0;
+            for (int i = 0; i < markers.length(); i++) {
+                JSONObject temp_obj = (JSONObject) markers.getJSONObject(i);
+                Log.i(TAG,"nom="+temp_obj.getString("name"));
+                if(temp_obj.getString("cid").equals(cid)){
+                    index=i;
+                    break;
+                }
+            }
+
+            JSONObject obj = (JSONObject) jsonobject.getJSONObject("overlays").getJSONArray("markers").get(index);
+            //CID
+            String result_cid = obj.getString("cid");
             //LAT LON
             Double lat = obj.getJSONObject("latlng").getDouble("lat");
             Double lng = obj.getJSONObject("latlng").getDouble("lng");
             //NAME
-            String name = obj.getString("name");
+            String result_name = obj.getString("name");
             //ADDRESS
             JSONArray addressline = obj.getJSONObject("infoWindow").getJSONArray("addressLines");
             String addr = "";
@@ -199,12 +225,15 @@ public class IntentUriAnalyser {
             //
             MyloPlace myloplace = new MyloPlace(Locale.getDefault());
             myloplace.setAddress(addr);
-            myloplace.setFeatureName(name);
+            myloplace.setFeatureName(result_name);
             myloplace.setLatitude(lat);
             myloplace.setLongitude(lng);
-            return myloplace;
-        }catch (Exception e){
+            if(cid.equals(result_cid)){
+                return myloplace;
+            }else {return null;}
 
+        }catch (Exception e){
+            Log.i(TAG,e.getMessage());
         }
         return null;
     }

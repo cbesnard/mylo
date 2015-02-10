@@ -148,7 +148,10 @@ public class Helper {
             if(words[i].matches(".*http://goo.gl/maps/.*")){
                 Log.i(TAG,"Maps url detected! txt="+sharedText);
                 index = i;
-                url = IntentUriAnalyser.shortUrlCase(words[index]);
+                String places_name = sharedText.replace(words[index],"");
+                String places_name_finished = places_name.replace("%0A%0A","");
+                Log.i(TAG,places_name_finished);
+                url = IntentUriAnalyser.shortUrlCase(words[index],places_name_finished);
                 break;
             }else if (words[i].matches(".*maps.google.com/.*")){
                 Log.i(TAG,"Maps url detected! txt="+words[i]);
