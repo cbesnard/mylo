@@ -197,9 +197,8 @@ function addPublicPlaceFromLink(name,addr,lat,lon){
 * GOOGLE MAPS LAZY LOAD
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function initMapsScripts(){
-	//console.log(mylo_UI_init_variables[0].map_tab_map);
 	if(mylo_UI_init_variables[0].map_tab_map==null || mylo_UI_init_variables[0].map==null){
-		//console.log("Try to init maps scripts and elements");
+    getUserPosition()
 		var s = document.createElement("script");
 		s.type = "text/javascript";
 		s.src  = "https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC4QjL6Ba54J2kY9SfprjB7UWol-Es-xbc&libraries=places&language=en&callback=gmap_draw";
