@@ -6,8 +6,13 @@
   "background_color": "#fff",
   "description": "Mylo is the perfect way to keep track of and save all the places you liked in the world",
   "icons": [{
-    "src": "png/icon.png",
+    "src": "png/icon144.png",
     "sizes": "144x144",
+    "type": "image/png"
+  },
+  {
+    "src": "png/icon512.png",
+    "sizes": "512x512",
     "type": "image/png"
   }]
 }
