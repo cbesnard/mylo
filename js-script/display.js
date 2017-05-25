@@ -207,10 +207,8 @@ function getUserPosition(callback, timeOut){
 	        mylo_UI_init_variables[0].userpos=p;
 	        var d = new Date();
 	        mylo_UI_init_variables[0].userpos_time=d.getTime();//in miliseconds
-	        callback();
-        }, 
+        },
 		function onError(error) {
-        	callback();
     	},{timeout: timeOut, enableHighAccuracy: true });
 	
 	//WATCH FOR POSITION CHANGE every 5min
