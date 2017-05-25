@@ -1,0 +1,13 @@
+{
+  "name": "Mylo",
+  "short_name": "Mylo",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Mylo is the perfect way to keep track of and save all the places you liked in the world",
+  "icons": [{
+    "src": "png/icon.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }]
+}
