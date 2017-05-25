@@ -4,7 +4,7 @@
   "start_url": "./",
   "display": "standalone",
   "background_color": "#fff",
-  "theme_color" : "#fff",
+  "theme_color" : "#2FBA90",
   "description": "Mylo is the perfect way to keep track of and save all the places you liked in the world",
   "icons": [{
     "src": "png/icon144.png",
