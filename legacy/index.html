@@ -1,0 +1,149 @@
+<!doctype html>
+<!--android:versionCode="15" android:versionName="2.6.6"-->
+<!-- updates:
+	TODO: - Open Mylo from url of loc "shared from Mylo"
+-->
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, height=device-height" />
+<meta name="theme-color" content="#2FBA90">
+<!--CSS IMPORT-->
+<link rel="stylesheet" href="css/roboto.css" />
+<link rel="stylesheet" href="css/style.css" />
+<!-- link rel="manifest" href="manifest.json" />
+
+<!--JS IMPORT-->
+<script src="js-script/jquery/jquery-2.1.0.min.js"></script>
+<script src="js-script/jquery/minimit-anima.min.js"></script>
+<script src="js-script/init.js"></script>
+<script src="js-script/customAnimationWithRequest.js"></script>
+<script src="js-script/display.js"></script>
+<script src="js-script/place_adder.js"></script>
+<script src="js-script/tab_navigation.js"></script>
+<script src="js-script/map_tab.js"></script>
+<script src="js-script/file.js"></script>
+<script src="js-script/storage.js"></script>
+<script src="js-script/form.js"></script>
+<script src="js-script/script.js"></script>
+<script src="js-script/device_events.js"></script>
+<script src="js-script/store.js"></script>
+
+<!--script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC4QjL6Ba54J2kY9SfprjB7UWol-Es-xbc&libraries=places&language=en"></script-->
+
+</head>
+<body>
+	<div id="container">
+		<div id="loader_container">
+			<!--IMG id="loader" SRC="./png/mylo-asset_loader.png" width="100" height="100"-->
+			<canvas id="loader" width="" height=""></canvas>
+			<IMG id="loader_end" SRC="./png/mylo-asset_loader-end.png" width="100" height="100">
+		</div>
+
+		<div id='groupsDiv'>
+			<div id='groupsDivContainer'>
+				<div id='groupsContainer'>
+					<div class="group default currentGroup droppable" name="0" id="g0">
+						<p class="centered"></p>
+					</div>
+				</div>
+				<div id="addGroup">
+					<input type="text" placeholder="" class="textInput" id="groupnameField"></input>
+					<div id="validateGroup"></div>
+				</div>
+			</div>
+		</div>
+		<div class='addPlace'>
+			<div class="tabs">
+				<div class="tab" id="list">
+					<IMG id="list_icon" class="tab_icon off" SRC="./png/mylo-icon-liste.png">
+				</div>
+				<div class="tab" id="map">
+					<IMG id="map_icon" class="tab_icon off" SRC="./png/mylo-icon-map.png">
+				</div>
+			</div>
+			<div id="indicator_container">
+				<div id="indicator"></div>
+			</div>
+		</div>
+		<div id='locContainer'>
+			<div id="addButtons">
+				<div class="add_buttons material_buttons" id="add_gps">
+					<IMG class="button_icon" id="add_gps_icon" SRC="./png/mylo-icon-add-gps.png">
+				</div>
+				<div class="add_buttons material_buttons" id="add_place">
+					<IMG class="button_icon" id="add_place_icon" SRC="./png/mylo-icon-add-place.png">
+				</div>
+			</div>
+			<!--div id="shadow"></div-->
+			<div id='locsDiv'>
+				<div class="" id="firstTimeGroup">
+					<p id="title"></p>
+					<div class="GroupPin">
+						<div class="GroupPinShadow"></div>
+						<IMG id="" SRC="./png/mylo-asset_pin-mask.png" width="" height="">
+					</div>
+				</div>
+				<div class="" id="firstTimeAll">
+					<p id="title"></p>
+					<!--p id="text"></p-->
+					<IMG id="sketches" SRC="./png/mylo-mock-first_time_sketches.png" width="" height="">
+					<IMG id="icon" SRC="./png/mylo-icon_paper-star-yellow.png" width="" height="">
+					<IMG id="arrow" SRC="./png/mylo-asset-pencil_tuto.png" width="" height="">
+				</div>
+			</div>
+			<div id="map_tab">
+				<p id="map_error_txt"></p>
+			</div>
+		</div>
+		<div id="background"></div>
+		<div id='addPlace' class="add_window">
+			<div id="add_header">
+				<div id="close_txt" class=""></div>
+				<IMG id="close_add_loc" class="" SRC="./png/mylo-icon-V2_add-loc-close.png">
+			</div>
+			<!--p id="searchField_title" class="input_container_title"></p-->
+			<div id="input_container" class="form">
+				<!--IMG id="place_search_img" SRC="./png/mylo-icon-V2_add-place.png"-->
+				<input type="text" class='textInput' placeholder="" id="addressField"></input>
+				<IMG id="google_logo" SRC="./png/powered-by-google-on-white.png" width="104" height="16">
+			</div>
+			<IMG id="search_icon" SRC="./png/mylo-icon-V2_add-place.png" width="180" height="83">
+			<!--p id="nameField_title" class="input_container_title"></p-->
+			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
+			<!--p class="maxLength form">0 character</p-->
+			<a class="formButton form" id="validateButton"></a>
+		</div>
+		<div id='addGPS' class="add_window">
+			<div id="add_header">
+				<div id="close_txt" class=""></div>
+				<div id="add_from_url" class="add_window_title"></div>
+				<div id="edit_place" class="add_window_title editPlaceElement"></div>
+				<IMG id="close_add_loc" class="" SRC="./png/mylo-icon-V2_add-loc-close.png">
+			</div>
+			<div id="map-canvas"></div>
+
+			<div id="input_container" class="form">
+				<input type="text" class='textInput' placeholder="" id="addressField"></input>
+				<IMG id="google_logo" SRC="./png/powered-by-google-on-white.png" width="104" height="16">
+			</div>
+
+			<div id="table" class="">
+				<div class="table_cell" ><IMG id="gps_img" SRC="./png/go_dark_filled.png"></div>
+				<div class="table_cell" ><p id="gps_txt"></p></div>
+				<div class="table_cell" id="edit_shareLocButton"><IMG SRC="./png/share_dark.png"></div>
+			</div>
+			<p id="name_field_title" class="editPlaceElement"></p>
+			<input type="text" class='textInput form' placeholder="" id="nameField"></input>
+			<div class="formButton form" id="validateButton"></div>
+			<a class="formButton form" id="saveButton"></a>
+		</div>
+		<div id='trash' name="trash" class='trash droppable'>
+			<div id="trash_bouncer"></div>
+			<IMG id="off" SRC="png/delete_dark.png">
+			<IMG id="focus" SRC="png/delete_OFF_white.png">
+		</div>
+	</div>
+</body>
+</html>
