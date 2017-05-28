@@ -1,0 +1,12 @@
+.icon {
+    font-size: 25px;
+    color: #777;
+}
+
+.tabs nav {
+    width: 100%;
+}
+
+.tabs .mdc-tab-bar__indicator {
+    background-color: #2FBA90;
+}

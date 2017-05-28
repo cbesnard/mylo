@@ -25,6 +25,7 @@
   "dependencies": {
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
-    "preact-router": "^2.5.2"
+    "preact-router": "^2.5.2",
+    "react-icons": "^2.2.5"
   }
 }
