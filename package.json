@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
+    "start": "npm run -s serve",
     "build": "preact build",
     "serve": "preact build && preact serve",
     "dev": "preact watch",
