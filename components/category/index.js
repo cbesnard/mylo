@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import {Component} from 'preact';
 import Style from './style.css'
 
 export default class Category extends Component {
