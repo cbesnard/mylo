@@ -1,31 +1,29 @@
 {
-  "name": "Mylo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "npm run -s serve",
-    "build": "preact build",
-    "serve": "preact build && preact serve",
-    "dev": "preact watch",
-    "test": "eslint src && preact test"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "eslintConfig": {
-    "extends": "eslint-config-synacor"
+  "name": "react-pwa",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.15.3",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-icons": "^2.2.5",
+    "react-swipeable-views": "^0.12.3",
+    "react-tap-event-plugin": "^2.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "if-env": "^1.0.0",
-    "preact-cli": "^1.0.1",
-    "preact-material-components": "^1.0.6"
+    "flow-bin": "^0.47.0",
+    "react-scripts": "1.0.2"
   },
-  "dependencies": {
-    "preact": "^8.1.0",
-    "preact-compat": "^3.16.0",
-    "preact-router": "^2.5.2",
-    "react-icons": "^2.2.5"
+  "scripts": {
+    "start": "node index.js",
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "flow && react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "flow": "flow"
+  },
+  "engines": {
+    "node": "= 6.10.0",
+    "npm": "= 3.10.0"
   }
 }

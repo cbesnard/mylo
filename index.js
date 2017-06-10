@@ -1,16 +1,13 @@
-import './style';
+const express = require('express');
+const path = require('path');
+const app = express();
 
-import { h } from 'preact';
-import { Router } from 'preact-router';
 
-import Header from './components/header';
-import Home from './routes/home';
+app.use(express.static(path.join(__dirname, 'build')));
 
-export default () => (
-	<div id="app">
-		<Header />
-		<Router>
-			<Home path="/" />
-		</Router>
-	</div>
-);
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+const port = process.env.PORT || '3000';
+app.listen(port);
