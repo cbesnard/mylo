@@ -1,11 +1,13 @@
+// @flow
+
 import React, {Component} from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import MapIcon from 'react-icons/lib/fa/map-o';
 import ListIcon from 'react-icons/lib/fa/list-ul';
-import appStyles from '../../style/AppStyles';
+import appStyles from 'style/AppStyles';
+import {LocationList, Map} from 'components'
 import './style.css'
-import {LocationList, Map} from '../index'
 
 const styles = {
   container: {

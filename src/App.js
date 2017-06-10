@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Tabs, Header, ActionsBar, Category } from './components';
-import myloTheme from './style/MyloTheme'
+import { Tabs, Header, ActionsBar, Category } from 'components';
+import myloTheme from 'style/MyloTheme'
 import './App.css';
 
 const styles = {
