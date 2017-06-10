@@ -1,16 +1,24 @@
+// @flow
+
 import React, { Component } from 'react';
-import './style.css';
+import AppBar from 'material-ui/AppBar';
 import myloLogo from '../../mylo-logo.png';
+
+const styles = {
+  logo: {
+    marginTop: 5,
+    height: 33,
+		width: 33,
+  },
+};
 
 export default class Header extends Component {
 	render() {
 		return (
-			<header>
-				<div className='header'>
-					<img src={myloLogo} alt="logo"/>
-					<p>Mylo</p>
-				</div>
-			</header>
+			<AppBar
+				title="Mylo"
+				iconElementLeft={<img style={styles.logo} src={myloLogo} alt="MyloLogo"/>}
+			/>
 		);
 	}
 }

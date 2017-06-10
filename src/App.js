@@ -1,27 +1,32 @@
 // @flow
 
 import React, { Component } from 'react';
-import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Category from './components/category';
-import Tabs from './components/tabs';
-import Header from './components/header';
-import Buttons from './components/buttons';
+import { Tabs, Header, ActionsBar, Category } from './components';
 import myloTheme from './style/MyloTheme'
+import './App.css';
+
+const styles = {
+  app: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}
 
 class App extends Component {
   render() {
     return (
     <MuiThemeProvider muiTheme={myloTheme}>
-      <div className="App">
+      <div style={styles.app}>
         <Header />
-        <div className="home">
           <Category />
           <Tabs />
           <div className="buttonsContainer">
-            <Buttons />
+            <ActionsBar />
           </div>
-        </div>
       </div>
     </MuiThemeProvider>
     );

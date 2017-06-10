@@ -1,25 +1,33 @@
 import React, {Component} from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import Map from 'react-icons/lib/fa/map-o';
-import List from 'react-icons/lib/fa/list-ul';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import MapIcon from 'react-icons/lib/fa/map-o';
+import ListIcon from 'react-icons/lib/fa/list-ul';
+import appStyles from '../../style/AppStyles';
+import './style.css'
+import {LocationList, Map} from '../index'
 
 const styles = {
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection:'column',
+  },
   slide: {
-    padding: 15,
-    minHeight: 100,
-    color: '#fff',
+    height: '100%',
+    color: 'black',
+    backgroundColor: '#f2F1F1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
   },
-  slide1: {
-    backgroundColor: '#FEA900',
+  tabContainer: {
+    height: '100%',
   },
-  slide2: {
-    backgroundColor: '#B3DC4A',
-  },
-  slide3: {
-    backgroundColor: '#6AC0FF',
-  },
+  inkBar: {
+    backgroundColor: appStyles.colors.mylo,
+    height: 4,
+  }
 };
 
 class MyloTabs extends Component {
@@ -39,34 +47,35 @@ class MyloTabs extends Component {
   render() {
     const { slideIndex } = this.state;
     return (
-      <div>
-        <Tabs
-          value={slideIndex}
-          onChange={this.handleChange}
-        >
-          <Tab
-            icon={<Map color='black' />}
-            value={0}
-          />
-          <Tab
-            icon={<List />}
-            value={1}
-          />
-
-        </Tabs>
-        <SwipeableViews
+      <div style={styles.container}>
+        <div>
+          <Tabs
+            value={slideIndex}
+            onChange={this.handleChange}
+            inkBarStyle={styles.inkBar}
+            tabItemContainerStyle={{backgroundColor: 'white'}}
+          >
+            <Tab
+              icon={<ListIcon className="icon"/>}
+              value={0}
+            />
+            <Tab
+              icon={<MapIcon className="icon"/>}
+              value={1}
+            />
+          </Tabs>
+        </div>
+          <SwipeableViews
           index={slideIndex}
+          style={styles.tabContainer}
+          containerStyle={styles.tabContainer}
           onChangeIndex={this.handleChange}>
-          <div style={Object.assign({}, styles.slide, styles.slide1)}>
-            slide n°1
-          </div>
-          <div style={Object.assign({}, styles.slide, styles.slide2)}>
-            Hello
-          </div>
+          <LocationList style={styles.slide} />
+          <Map style={styles.slide} />
         </SwipeableViews>
       </div>
     );
   }
 }
 
-export default muiThemeable()(MyloTabs);
+export default MyloTabs;
