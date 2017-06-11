@@ -1,0 +1,36 @@
+{
+  "name": "Mylo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.15.3",
+    "firebase": "^4.1.2",
+    "google-map-react": "^0.24.0",
+    "material-ui": "^0.18.3",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-icons": "^2.2.5",
+    "react-redux": "^5.0.5",
+    "react-swipeable-views": "^0.12.3",
+    "react-tap-event-plugin": "^2.0.1",
+    "redux": "^3.6.0",
+    "redux-persist": "^4.8.0",
+    "redux-saga": "^0.15.3"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.47.0",
+    "react-scripts": "1.0.2"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": " NODE_PATH=src/ react-scripts start",
+    "build": "NODE_PATH=src/ react-scripts build",
+    "test": "NODE_PATH=src/ flow && react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "flow": "flow"
+  },
+  "engines": {
+    "node": "= 6.10.0",
+    "npm": "= 3.10.0"
+  }
+}

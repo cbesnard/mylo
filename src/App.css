@@ -1,0 +1,17 @@
+.home {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabContainer {
+  display: flex;
+  flex: 1;
+  background-color: #f2F1F1;
+}
+
+.buttonsContainer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}

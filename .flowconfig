@@ -1,0 +1,15 @@
+[ignore]
+.*/build/.*
+.*/node_modules/eslint-plugin-jsx-a11y/*
+
+[include]
+
+[libs]
+src/flow/
+
+[options]
+emoji=true
+
+suppress_type=$FlowIssue
+suppress_type=$FlowFixMe
+suppress_type=$FixMe
