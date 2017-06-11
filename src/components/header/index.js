@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
+// $FlowFixMe
 import myloLogo from 'mylo-logo.png';
 
 const styles = {

@@ -5,7 +5,9 @@ import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import MapIcon from 'react-icons/lib/fa/map-o';
 import ListIcon from 'react-icons/lib/fa/list-ul';
+// $FlowFixMe
 import appStyles from 'style/AppStyles';
+// $FlowFixMe
 import {LocationList, Map} from 'components'
 import './style.css'
 
@@ -32,15 +34,21 @@ const styles = {
   }
 };
 
+type Statetype = {
+  slideIndex: number,
+}
+
 class MyloTabs extends Component {
-  constructor(props) {
+  state: Statetype;
+
+  constructor(props: any) {
     super(props);
     this.state = {
       slideIndex: 0,
     };
   }
 
-  handleChange = (value) => {
+  handleChange = (value: number) => {
     this.setState({
       slideIndex: value,
     });
