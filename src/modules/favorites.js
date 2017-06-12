@@ -1,7 +1,6 @@
 // @flow
 
 import { put, call, takeLatest } from 'redux-saga/effects';
-import { keyBy } from 'lodash';
 // $FlowFixMe
 import { fetchGeocode } from 'services/api';
 

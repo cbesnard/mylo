@@ -55,7 +55,6 @@ export default class LocationList extends Component {
   )
 
   render() {
-    const { favorites } = this.props;
     return (
       <div>
         { this.renderFavoritesList() }
