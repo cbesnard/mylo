@@ -21,8 +21,6 @@ const styles = {
     height: '100%',
     color: 'black',
     backgroundColor: '#f2F1F1',
-    justifyContent: 'center',
-    alignItems: 'center',
     display: 'flex',
   },
   tabContainer: {
