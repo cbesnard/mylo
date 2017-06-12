@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { geolocationReducer } from 'modules/geolocation'
-import { favoritePlacesReducer } from 'modules/favoritePlaces'
+import { favoritesReducer } from 'modules/favorites'
 
 const appReducer = combineReducers({
   geolocation: geolocationReducer,
-  favoritePlaces: favoritePlacesReducer,
+  favorites: favoritesReducer,
 });
 
 const initialState = {};

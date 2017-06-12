@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import Fab from 'material-ui/FloatingActionButton';
 import MapMarkerIcon from 'react-icons/lib/fa/map-marker';
 import SearchIcon from 'react-icons/lib/fa/search';
-import appStyles from '../../style/AppStyles';
+// $FlowFixMe
+import appStyles from 'style/AppStyles';
 
 const styles = {
   icon: {

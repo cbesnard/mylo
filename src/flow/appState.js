@@ -2,5 +2,5 @@
 
 declare type AppStateType = {
   geolocation: GeolocationType,
-  favoritePlaces: GeolocationType,
+  favorites: FavoritesType,
 }

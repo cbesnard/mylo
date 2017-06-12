@@ -1,10 +1,10 @@
 // @flow
 
-declare type FavoritePlacesType = {
+declare type FavoritesType = {
   map: FavoritePlaceType[],
 }
 
-declare type FavoritePlaceType = {
+declare type FavoriteType = {
   latitude: number,
   longitude: number,
 }

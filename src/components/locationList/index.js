@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+// $FlowFixMe
 import AppStyles from 'style/AppStyles';
 
 const styles = {
