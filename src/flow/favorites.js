@@ -1,10 +1,15 @@
 // @flow
 
 declare type FavoritesType = {
-  map: FavoritePlaceType[],
+  map: {[id: number]: FavoriteType},
 }
 
 declare type FavoriteType = {
+  id: string,
+  name: string,
   latitude: number,
   longitude: number,
+  streetNumber: string,
+  streetName: string,
+  city: string,
 }
