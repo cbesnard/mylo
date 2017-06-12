@@ -18,4 +18,4 @@ const store = createStore(rootReducer, undefined, composeEnhancers(...enhancers)
 
 sagaMiddleware.run(sagas);
 
-export default callback => persistStore(store, {}, () => callback(store));
+export default callback => persistStore(store, {}, () => callback(store)).purge();
