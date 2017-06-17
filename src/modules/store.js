@@ -1,6 +1,7 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
+import firebase  from './firebase';
 import rootReducer from './reducer';
 import sagas from './saga';
 
@@ -9,6 +10,7 @@ const middlewares = [sagaMiddleware];
 
 const enhancers = [
   applyMiddleware(...middlewares),
+  firebase,
   autoRehydrate(),
 ];
 
