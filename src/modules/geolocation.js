@@ -9,7 +9,7 @@ const actionTypes = {
 
 const initialState = {};
 
-export const refreshGeolocation = (position: { coords: GeolocationApiType} ) => ({
+export const refreshGeolocation = (position: { coords: GeolocationApiType } ) => ({
   type: actionTypes.GET_GEOLOCATION.REFRESH_REQUEST,
   position: translateCoordinates(position.coords)
 });
