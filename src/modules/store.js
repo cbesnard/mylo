@@ -2,7 +2,7 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import localForage from 'localforage';
 import createSagaMiddleware from 'redux-saga';
-import firebase  from './firebase';
+import firebase  from '../services/firebase';
 import rootReducer from './reducer';
 import sagas from './saga';
 
