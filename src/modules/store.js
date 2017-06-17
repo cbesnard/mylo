@@ -1,5 +1,6 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
+import localForage from 'localforage';
 import createSagaMiddleware from 'redux-saga';
 import firebase  from './firebase';
 import rootReducer from './reducer';
@@ -20,4 +21,4 @@ const store = createStore(rootReducer, undefined, composeEnhancers(...enhancers)
 
 sagaMiddleware.run(sagas);
 
-export default callback => persistStore(store, {}, () => callback(store));
+export default callback => persistStore(store, {storage: localForage}, () => callback(store));
