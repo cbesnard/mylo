@@ -1,19 +1,17 @@
 // @flow
 
-import { put, call, takeLatest } from 'redux-saga/effects';
-
 const actionTypes = {
   GET_GEOLOCATION: {
-    REQUEST: 'GET_GEOLOCATION.REQUEST',
+    REFRESH_REQUEST: 'GET_GEOLOCATION.REFRESH_REQUEST',
     ERROR: 'GET_GEOLOCATION.ERROR',
-    SUCCESS: 'GET_GEOLOCATION.SUCCESS',
   },
 };
 
 const initialState = {};
 
-export const refreshGeolocation = () => ({
-  type: actionTypes.GET_GEOLOCATION.REQUEST,
+export const refreshGeolocation = (position: { coords: GeolocationApiType} ) => ({
+  type: actionTypes.GET_GEOLOCATION.REFRESH_REQUEST,
+  position: translateCoordinates(position.coords)
 });
 
 export const selectGeolocation = (state: AppStateType): GeolocationType => state.geolocation;
@@ -23,7 +21,7 @@ export const geolocationReducer = (
   action: any,
 ): GeolocationType | {} => {
   switch (action.type) {
-    case actionTypes.GET_GEOLOCATION.SUCCESS:
+    case actionTypes.GET_GEOLOCATION.REFRESH_REQUEST:
       return {
         ...state,
         ...action.position,
@@ -41,27 +39,3 @@ const translateCoordinates = (coordinates: GeolocationApiType): GeolocationType 
   accuracy: coordinates.accuracy,
   altitude: coordinates.altitude,
 })
-
-export function* getGeolocation(): SagaType {
-  const geolocPromise = () => new Promise((resolve, reject) =>
-    navigator.geolocation.getCurrentPosition(
-      ({coords}) => resolve(coords),
-      error => reject(error),
-    ));
-
-  try {
-    const position = yield call(geolocPromise);
-    yield put({
-      type: actionTypes.GET_GEOLOCATION.SUCCESS,
-      position: translateCoordinates(position),
-    });
-  } catch (error) {
-    yield put({
-      type: actionTypes.GET_GEOLOCATION.ERROR,
-    });
-  }
-}
-
-export function* watchGeolocationSaga(): SagaType {
-  yield takeLatest(actionTypes.GET_GEOLOCATION.REQUEST, getGeolocation);
-}
