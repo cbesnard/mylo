@@ -15,6 +15,7 @@ const appStyles = {
   },
   margins: {
     small: 10,
+    medium: 16,
   },
   defaultTextStyle: {
     color: '#333',
