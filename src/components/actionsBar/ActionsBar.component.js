@@ -5,7 +5,7 @@ import Fab from 'material-ui/FloatingActionButton';
 import MapMarkerIcon from 'react-icons/lib/fa/map-marker';
 import SearchIcon from 'react-icons/lib/fa/search';
 import Dialog from 'material-ui/Dialog';
-import SearchBar from 'material-ui-search-bar'
+import SearchBar from 'material-ui-search-bar';
 // $FlowFixMe
 import appStyles from 'style/AppStyles';
 
