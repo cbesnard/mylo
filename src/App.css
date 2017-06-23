@@ -1,3 +1,5 @@
+@import "~roboto-fontface/css/roboto/roboto-fontface.css";
+
 .home {
   width: 100%;
   display: flex;

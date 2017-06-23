@@ -20,6 +20,7 @@
     "redux": "^3.7.0",
     "redux-persist": "^4.8.0",
     "redux-saga": "^0.15.3",
+    "roboto-fontface": "^0.7.0",
     "superagent": "^3.5.2"
   },
   "devDependencies": {
