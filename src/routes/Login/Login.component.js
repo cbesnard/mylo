@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 // $FlowFixMe
 import appStyle from 'style/AppStyles'
+// $FlowFixMe
 import loginImage from 'assets/login.png'
 import GoogleButton from 'react-google-button'
 
