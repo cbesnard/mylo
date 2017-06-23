@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import createStore from 'modules/store';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // $FlowFixMe
-import myloTheme from 'style/MyloTheme'
+import myloTheme from 'style/MyloTheme';
 // $FlowFixMe
-import { Homepage } from 'routes'
+import { Homepage, Login } from 'routes';
 import './App.css';
 
 class App extends Component {
@@ -24,7 +24,7 @@ class App extends Component {
     return this.state.store ? (
       <Provider store={this.state.store}>
         <MuiThemeProvider muiTheme={myloTheme}>
-          <Homepage />
+          <Login />
         </MuiThemeProvider>
       </Provider>
     ) : null;
