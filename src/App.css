@@ -1,14 +1,4 @@
-.home {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.tabContainer {
-  display: flex;
-  flex: 1;
-  background-color: #f2F1F1;
-}
+@import "~roboto-fontface/css/roboto/roboto-fontface.css";
 
 .buttonsContainer {
   width: 100%;

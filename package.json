@@ -12,6 +12,7 @@
     "material-ui-search-bar": "^0.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-google-button": "^0.3.0",
     "react-icons": "^2.2.5",
     "react-redux": "^5.0.5",
     "react-redux-firebase": "^1.4.1",
@@ -20,6 +21,7 @@
     "redux": "^3.7.0",
     "redux-persist": "^4.8.0",
     "redux-saga": "^0.15.3",
+    "roboto-fontface": "^0.7.0",
     "superagent": "^3.5.2"
   },
   "devDependencies": {

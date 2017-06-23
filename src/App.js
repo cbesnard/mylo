@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import createStore from 'modules/store';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // $FlowFixMe
-import myloTheme from 'style/MyloTheme'
+import myloTheme from 'style/MyloTheme';
 // $FlowFixMe
-import { Homepage } from 'routes'
+import { Homepage, Login } from 'routes';
 import './App.css';
 
 class App extends Component {

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 // $FlowFixMe
-import { Tabs, Header, ActionsBar, Category } from 'components';
+import { Tabs, Header, ActionsBar, CategoryList } from 'components';
 
 type PropsType = {
   style: {},
@@ -29,7 +29,7 @@ export default class Homepage extends Component {
     return (
       <div style={styles.app}>
         <Header />
-        <Category />
+        <CategoryList />
         <Tabs />
         <div className="buttonsContainer">
           <ActionsBar />
