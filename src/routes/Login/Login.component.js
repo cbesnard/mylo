@@ -58,7 +58,9 @@ export default class Login extends Component {
           Save all your favourite places in one place!
         </div>
         <div style={styles.googleButton}>
-        <GoogleButton />
+        <GoogleButton
+          type='light'
+        />
         </div>
       </div>
     )

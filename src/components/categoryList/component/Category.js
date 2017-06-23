@@ -28,6 +28,10 @@ type PropsType = {
 class Category extends Component {
   props: PropsType;
 
+  static defaultProps = {
+    color: '#DBDBDB',
+  }
+
   render(){
     return (
       <div style={{...styles.circle, ...{borderColor: this.props.color}}} >
@@ -35,10 +39,6 @@ class Category extends Component {
       </div>
     );
   }
-}
-
-Category.defaultProps = {
-  color: '#DBDBDB',
 }
 
 export default Category;

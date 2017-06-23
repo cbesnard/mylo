@@ -24,7 +24,7 @@ class App extends Component {
     return this.state.store ? (
       <Provider store={this.state.store}>
         <MuiThemeProvider muiTheme={myloTheme}>
-          <Login />
+          <Homepage />
         </MuiThemeProvider>
       </Provider>
     ) : null;
