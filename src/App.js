@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // $FlowFixMe
 import myloTheme from 'style/MyloTheme';
 // $FlowFixMe
-import { Homepage, Login } from 'routes';
+import { Login } from 'routes';
 import './App.css';
 
 class App extends Component {
