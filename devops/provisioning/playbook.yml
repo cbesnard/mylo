@@ -19,4 +19,5 @@
     - any-nodejs
     - ubuntu-nodejs-nginx
     - ubuntu-mysql
+    - weareinteractive.pm2
 
