@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import { geolocationReducer } from 'modules/geolocation'
 import { favoritesReducer } from 'modules/favorites'
-import { firebaseStateReducer } from 'react-redux-firebase'
+import { snackbarReducer } from 'modules/snackbar'
 
 const appReducer = combineReducers({
-  firebase: firebaseStateReducer,
   geolocation: geolocationReducer,
   favorites: favoritesReducer,
+  snackbar: snackbarReducer,
 });
 
 const initialState = {};
