@@ -12,7 +12,7 @@
     "material-ui-search-bar": "^0.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-google-button": "^0.3.0",
+    "react-google-login": "^2.9.3",
     "react-icons": "^2.2.5",
     "react-redux": "^5.0.5",
     "react-swipeable-views": "^0.12.3",
