@@ -1,15 +1,15 @@
 // @flow
 
 import React, { Component } from 'react';
+import GoogleLogin from 'react-google-login';
+import PropTypes from 'prop-types';
+
 // $FlowFixMe
 import appStyle from 'style/AppStyles'
 // $FlowFixMe
 import loginImage from 'assets/login.png'
-import GoogleButton from 'react-google-button'
-
-type PropsType = {
-  style: {},
-}
+// $FlowFixMe
+import { Snackbar } from 'components';
 
 const styles = {
   app: {
@@ -40,13 +40,38 @@ const styles = {
     fontSize: appStyle.font.size.h1,
     textAlign: 'center',
   },
-  googleButton: {
+  googleButtonContainer: {
     marginTop: 60,
+  },
+  googleButton: {
+    backgroundColor: 'rgb(255, 255, 255)',
+    color: 'rgba(0, 0, 0, 0.54)',
+    height: 50,
+    width: 240,
+    border: 'none',
+    textAlign: 'center',
+    boxShadow: 'rgba(0, 0, 0, 0.25) 0px 2px 4px 0px',
+    fontSize: 16,
+    display: 'block',
+    borderRadius: '1',
+    transition: 'background-color 0.218s, border-color 0.218s, box-shadow 0.218s',
+    fontFamily: 'Roboto, arial, sans-serif',
+    cursor: 'pointer',
+    padding: 0,
   }
+}
+
+type PropsType = {
+  showSnackbar: (message: string) => void,
 }
 
 export default class Login extends Component {
   props: PropsType;
+
+  responseGoogle = (res: any) => {
+    console.log(res)
+    this.props.showSnackbar("Login SuccessFul")
+  }
 
   render() {
     return (
@@ -57,12 +82,21 @@ export default class Login extends Component {
         <div style={styles.textContainer}>
           Save all your favourite places in one place!
         </div>
-        <div style={styles.googleButton}>
-        <GoogleButton
-          type='light'
-        />
+        <div style={styles.googleButtonContainer}>
+          <GoogleLogin
+            style={styles.googleButton}
+            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+            buttonText="Sign in with Google"
+            onSuccess={this.responseGoogle}
+            onFailure={this.responseGoogle}
+          />
         </div>
+        <Snackbar />
       </div>
     )
   }
+}
+
+Login.propTypes = {
+  showSnackbar: PropTypes.func,
 }
