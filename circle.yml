@@ -5,6 +5,9 @@ general:
 machine:
   node:
     version: 6.10
+test:
+  override:
+    - echo "No tests yet :/"
 deployment:
   heroku:
     branch: master
