@@ -4,9 +4,14 @@ import localForage from 'localforage';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from './reducer';
 import sagas from './saga';
+import createHistory from 'history/createBrowserHistory'
+import { routerMiddleware } from 'react-router-redux'
+
+export const history = createHistory()
+const router = routerMiddleware(history)
 
 const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware];
+const middlewares = [sagaMiddleware, router];
 
 const enhancers = [
   applyMiddleware(...middlewares),
@@ -19,4 +24,4 @@ const store = createStore(rootReducer, undefined, composeEnhancers(...enhancers)
 
 sagaMiddleware.run(sagas);
 
-export default callback => persistStore(store, {storage: localForage}, () => callback(store));
+export const createMyloStore = callback => persistStore(store, {storage: localForage}, () => callback(store));
