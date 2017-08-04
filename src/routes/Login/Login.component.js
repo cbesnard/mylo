@@ -8,8 +8,6 @@ import PropTypes from 'prop-types';
 import appStyle from 'style/AppStyles'
 // $FlowFixMe
 import loginImage from 'assets/login.png'
-// $FlowFixMe
-import { Snackbar } from 'components';
 
 const styles = {
   app: {
@@ -63,13 +61,15 @@ const styles = {
 
 type PropsType = {
   showSnackbar: (message: string) => void,
+  navigateToHome: () => void,
 }
 
 export default class Login extends Component {
   props: PropsType;
 
   responseGoogle = (res: any) => {
-    console.log(res)
+
+    this.props.navigateToHome()
     this.props.showSnackbar("Login SuccessFul")
   }
 
@@ -91,7 +91,6 @@ export default class Login extends Component {
             onFailure={this.responseGoogle}
           />
         </div>
-        <Snackbar />
       </div>
     )
   }
