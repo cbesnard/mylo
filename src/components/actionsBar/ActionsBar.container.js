@@ -1,10 +1,8 @@
 // @flow
 
 import { connect } from 'react-redux';
-// $FlowFixMe
-import { addFavoriteCreator } from 'modules/favorites';
-// $FlowFixMe
-import { selectGeolocation } from 'modules/geolocation';
+import { addFavoriteCreator } from 'Mylo/modules/favorites';
+import { selectGeolocation } from 'Mylo/modules/geolocation';
 import ActionsBar from './ActionsBar.component';
 
 const mapStateToProps = (state: AppStateType) => ({
