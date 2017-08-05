@@ -3,11 +3,12 @@
 import React, { Component } from 'react';
 import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
+import appStyle from 'Mylo/style/AppStyles'
+import loginImage from 'Mylo/assets/login.png'
 
-// $FlowFixMe
-import appStyle from 'style/AppStyles'
-// $FlowFixMe
-import loginImage from 'assets/login.png'
+const GOOGLE_AUTH_ID = process.env.NODE_ENV !== 'production' ?
+  '658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com' :
+  '151939296369-slesjdpgcirmtpljjf941mhjv7p0l7eo.apps.googleusercontent.com';
 
 const styles = {
   app: {
@@ -61,21 +62,22 @@ const styles = {
 
 type PropsType = {
   showSnackbar: (message: string) => void,
+  login: (user, token: string) => void,
   navigateToHome: () => void,
 }
 
 export default class Login extends Component {
   props: PropsType;
 
-  successfulAuthGoogle = (res: any) => {
-    this.props.navigateToHome()
-    this.props.showSnackbar("Login SuccessFul")
-  }
+  successfulAuthGoogle = ({profileObj, accessToken, googleId}) => {
+    this.props.login(profileObj,accessToken, googleId);
+    this.props.navigateToHome();
+    this.props.showSnackbar("Login SuccessFul");
+  };
 
   errorAuthGoogle = (error) => {
-    console.log(error)
-    this.props.showSnackbar("Login Error")
-  }
+    this.props.showSnackbar("Login Error");
+  };
 
   render() {
     return (
@@ -89,7 +91,7 @@ export default class Login extends Component {
         <div style={styles.googleButtonContainer}>
           <GoogleLogin
             style={styles.googleButton}
-            clientId="151939296369-slesjdpgcirmtpljjf941mhjv7p0l7eo.apps.googleusercontent.com"
+            clientId={GOOGLE_AUTH_ID}
             buttonText="Sign in with Google"
             onSuccess={this.successfulAuthGoogle}
             onFailure={this.errorAuthGoogle}
@@ -102,4 +104,4 @@ export default class Login extends Component {
 
 Login.propTypes = {
   showSnackbar: PropTypes.func,
-}
+};

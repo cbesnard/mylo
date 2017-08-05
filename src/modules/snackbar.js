@@ -7,7 +7,7 @@ const actionTypes = {
 
 const initialState: SnackbarType = {
   open: false,
-  message: null,
+  message: '',
 };
 
 export const showSnackbarActionCreator = (message: string) => ({
@@ -20,7 +20,7 @@ export const hideSnackbarActionCreator = (message: string) => ({
 });
 
 export const selectSnackbarState = (state: AppStateType): boolean => state.snackbar.open;
-export const selectSnackbarMessage = (state: AppStateType): ?string => state.snackbar.message;
+export const selectSnackbarMessage = (state: AppStateType): string => state.snackbar.message;
 
 export const snackbarReducer = (
   state: SnackbarType = initialState,

@@ -1,8 +1,7 @@
 // @flow
 
 import { connect } from 'react-redux';
-// $FlowFixMe
-import { refreshGeolocation } from 'modules/geolocation';
+import { refreshGeolocation } from 'Mylo/modules/geolocation';
 import Homepage from './Homepage.component';
 
 const mapDispatchToProps = ({
