@@ -18,6 +18,7 @@ export const loginActionCreator = (user,token: string, googleId: string) => ({
 });
 
 export const isAuthenticated = (state: AppStateType): boolean => !!state.authentication.token ;
+export const selectUser = (state: AppStateType): boolean => state.authentication.user ;
 
 export const authenticationReducer = (
   state: AuthenticationType = initialState,
