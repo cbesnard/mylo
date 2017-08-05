@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-// $FlowFixMe
-import AppStyles from 'style/AppStyles';
+import AppStyles from 'Mylo/style/AppStyles';
 import { map } from 'lodash';
 
 const styles = {

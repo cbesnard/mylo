@@ -2,8 +2,7 @@
 
 import { connect } from 'react-redux';
 import Snackbar from './snackbar.component';
-// $FlowFixMe
-import { selectSnackbarState, selectSnackbarMessage, hideSnackbarActionCreator } from 'modules/snackbar';
+import { selectSnackbarState, selectSnackbarMessage, hideSnackbarActionCreator } from 'Mylo/modules/snackbar';
 
 const mapStateToProps = (state: AppStateType) => ({
   open: selectSnackbarState(state),

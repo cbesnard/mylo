@@ -1,8 +1,7 @@
 // @flow
 
 import { put, call, takeLatest } from 'redux-saga/effects';
-// $FlowFixMe
-import { fetchGeocode } from 'services/api';
+import { fetchGeocode } from 'Mylo/services/api';
 
 const actionTypes = {
   ADD_FAVORITES: {

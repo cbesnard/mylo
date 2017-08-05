@@ -1,8 +1,7 @@
 // @flow
 
 import { connect } from 'react-redux';
-// $FlowFixMe
-import { selectGeolocation } from 'modules/geolocation';
+import { selectGeolocation } from 'Mylo/modules/geolocation';
 import Map from './Map.component';
 
 const mapStateToProps = (state: AppStateType) => ({
