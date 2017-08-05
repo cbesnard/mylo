@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import Snackbar from 'material-ui/Snackbar';
-import PropTypes from 'prop-types';
 
 export default class snackbar extends Component {
 
@@ -16,10 +15,4 @@ export default class snackbar extends Component {
       />
     );
   }
-}
-
-snackbar.propTypes = {
-  hideSnackbar: PropTypes.func,
-  message: PropTypes.string,
-  open: PropTypes.boolean,
 }

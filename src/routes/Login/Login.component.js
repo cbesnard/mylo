@@ -51,7 +51,7 @@ const styles = {
     boxShadow: 'rgba(0, 0, 0, 0.25) 0px 2px 4px 0px',
     fontSize: 16,
     display: 'block',
-    borderRadius: '1',
+    borderRadius: 1,
     transition: 'background-color 0.218s, border-color 0.218s, box-shadow 0.218s',
     fontFamily: 'Roboto, arial, sans-serif',
     cursor: 'pointer',
@@ -67,10 +67,14 @@ type PropsType = {
 export default class Login extends Component {
   props: PropsType;
 
-  responseGoogle = (res: any) => {
-
+  successfulAuthGoogle = (res: any) => {
     this.props.navigateToHome()
     this.props.showSnackbar("Login SuccessFul")
+  }
+
+  errorAuthGoogle = (error) => {
+    console.log(error)
+    this.props.showSnackbar("Login Error")
   }
 
   render() {
@@ -85,10 +89,10 @@ export default class Login extends Component {
         <div style={styles.googleButtonContainer}>
           <GoogleLogin
             style={styles.googleButton}
-            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+            clientId="151939296369-slesjdpgcirmtpljjf941mhjv7p0l7eo.apps.googleusercontent.com"
             buttonText="Sign in with Google"
-            onSuccess={this.responseGoogle}
-            onFailure={this.responseGoogle}
+            onSuccess={this.successfulAuthGoogle}
+            onFailure={this.errorAuthGoogle}
           />
         </div>
       </div>
