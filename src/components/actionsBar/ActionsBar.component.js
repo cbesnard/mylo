@@ -6,8 +6,7 @@ import MapMarkerIcon from 'react-icons/lib/fa/map-marker';
 import SearchIcon from 'react-icons/lib/fa/search';
 import Dialog from 'material-ui/Dialog';
 import SearchBar from 'material-ui-search-bar';
-// $FlowFixMe
-import appStyles from 'style/AppStyles';
+import appStyles from 'Mylo/style/AppStyles';
 
 const styles = {
   icon: {
@@ -29,7 +28,6 @@ type PropsType = {
   addFavorite: ( lat: number, lng: number) => void,
   geolocation: GeolocationType,
 }
-
 
 export default class ActionsBar extends Component {
   props: PropsType;

@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-// $FlowFixMe
-import { Tabs, Header, ActionsBar, CategoryList } from 'components';
+import { Tabs, Header, ActionsBar, CategoryList } from 'Mylo/components';
 
 type PropsType = {
   style: {},
