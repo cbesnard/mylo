@@ -15,10 +15,11 @@ const initialState = {
   map: {}
 };
 
-export const addFavoriteCreator = (lat: number, lng: number) => ({
+export const addFavoriteCreator = (locationName: string, latitude: number, longitude: number) => ({
   type: actionTypes.ADD_FAVORITES.REQUEST,
-  latitude: lat,
-  longitude: lng,
+  locationName,
+  latitude,
+  longitude,
 });
 
 export const selectFavorites = (state: AppStateType): {[id: number]: FavoriteType} => map(state.favorites.map, favorite => favorite);
@@ -41,9 +42,9 @@ export const favoritesReducer = (
   }
 }
 
-const translateGeocodeToFavorite = (geocode): FavoriteType => ({
+const translateGeocodeToFavorite = (locationName: string, geocode): FavoriteType => ({
   id: geocode.place_id,
-  name: 'Test',
+  name: locationName,
   streetNumber: geocode.address_components[0].long_name,
   streetName: geocode.address_components[1].long_name,
   city: geocode.address_components[2].long_name,
@@ -52,11 +53,11 @@ const translateGeocodeToFavorite = (geocode): FavoriteType => ({
 })
 
 export function* addFavorite(action: any): SagaType {
-  const { latitude, longitude } = action;
+  const { locationName, latitude, longitude } = action;
   const geocodeResponse = yield call(() => fetchGeocode(latitude, longitude));
   yield put({
     type: actionTypes.ADD_FAVORITES.SUCCESS,
-    favorite: translateGeocodeToFavorite(geocodeResponse.body.results[0]),
+    favorite: translateGeocodeToFavorite(locationName, geocodeResponse.body.results[0]),
   });
 }
 

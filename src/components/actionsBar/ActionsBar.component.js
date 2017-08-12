@@ -3,9 +3,10 @@
 import React, { Component } from 'react';
 import Fab from 'material-ui/FloatingActionButton';
 import MapMarkerIcon from 'react-icons/lib/fa/map-marker';
+import FlatButton from 'material-ui/FlatButton';
 import SearchIcon from 'react-icons/lib/fa/search';
 import Dialog from 'material-ui/Dialog';
-import SearchBar from 'material-ui-search-bar';
+import TextField from 'material-ui/TextField';
 import appStyles from 'Mylo/style/AppStyles';
 
 const styles = {
@@ -22,10 +23,10 @@ const styles = {
     alignItems: 'flex-end',
     flexDirection: 'row-reverse',
   }
-}
+};
 
 type PropsType = {
-  addFavorite: ( lat: number, lng: number) => void,
+  addFavorite: (name: string, lat: number, lng: number) => void,
   geolocation: GeolocationType,
 }
 
@@ -34,7 +35,22 @@ export default class ActionsBar extends Component {
 
   state = {
     open: false,
+    locationName: ''
   };
+
+  addToFavoriteModalActions = () => ([
+    <FlatButton
+      label="Cancel"
+      primary={true}
+      onTouchTap={this.handleClose}
+    />,
+    <FlatButton
+      label="Add"
+      primary={true}
+      keyboardFocused={true}
+      onTouchTap={this.addCurrentLocationToFavorite}
+    />,
+  ]);
 
   handleOpen = () => {
     this.setState({open: true});
@@ -44,39 +60,39 @@ export default class ActionsBar extends Component {
     this.setState({open: false});
   };
 
-  addCurrentLocationToFavorite = () => (
+  addCurrentLocationToFavorite = () => {
     this.props.addFavorite(
+      this.state.locationName,
       this.props.geolocation.latitude,
       this.props.geolocation.longitude
-    )
-  )
+    );
+    this.handleClose()
+  };
 
   render() {
     return (
       <div style={styles.container}>
         <div style={styles.iconContainer}>
-          <Fab onTouchTap={this.handleOpen}>
+          <Fab>
             <SearchIcon style={styles.icon} />
           </Fab>
         </div>
         <div style={styles.iconContainer}>
-          <Fab onTouchTap={this.addCurrentLocationToFavorite}>
+          <Fab onTouchTap={this.handleOpen}>
             <MapMarkerIcon style={styles.icon} />
           </Fab>
         </div>
         <Dialog
-          title="Search a location"
+          title="Add my position"
           modal={false}
+          actions={this.addToFavoriteModalActions()}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <SearchBar
-            onChange={() => console.log('onChange')}
-            onRequestSearch={() => console.log('onRequestSearch')}
-            style={{
-              margin: '0 auto',
-              maxWidth: 800
-            }}
+          <TextField
+            hintText="Name your position"
+            onChange={(event) => this.setState({locationName: event.target.value})}
+            fullWidth
           />
         </Dialog>
       </div>
