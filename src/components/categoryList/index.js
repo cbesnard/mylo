@@ -6,23 +6,34 @@ import { Category } from './component'
 
 const styles = {
   container: {
-    padding: 10
-  }
-}
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  categoryList: {
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    overflowX: 'auto',
+    margin: 0,
+  },
+};
 
 export default class CategoryList extends Component {
   render(){
     return (
       <div style={styles.container}>
-          <GridList cellHeight={100}>
-            <Category>
+          <GridList cellHeight={90} style={styles.categoryList}>
+            <Category isAllCategory>
               All
             </Category>
-            <div className="category" >
-              <Fab>
-                <SearchIcon />
-              </Fab>
-            </div>
+            <Category color='#80d8ff'>
+              Bar
+            </Category>
+            <Category color='#ffeb59'>
+              Eat
+            </Category>
+            <Fab>
+              <SearchIcon />
+            </Fab>
           </GridList>
       </div>
     );
