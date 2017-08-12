@@ -7,9 +7,9 @@ import myloLogo from 'Mylo/mylo-logo.png';
 
 const styles = {
   logo: {
-    marginTop: 5,
-    height: 33,
-    width: 33,
+    marginTop: 10,
+    height: 25,
+    width: 25,
   },
   avatar: {
     marginTop: 5,

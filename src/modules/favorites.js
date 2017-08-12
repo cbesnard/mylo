@@ -2,6 +2,7 @@
 
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { fetchGeocode } from 'Mylo/services/api';
+import { map } from 'lodash';
 
 const actionTypes = {
   ADD_FAVORITES: {
@@ -20,7 +21,7 @@ export const addFavoriteCreator = (lat: number, lng: number) => ({
   longitude: lng,
 });
 
-export const selectFavorites = (state: AppStateType): {[id: number]: FavoriteType} => state.favorites.map;
+export const selectFavorites = (state: AppStateType): {[id: number]: FavoriteType} => map(state.favorites.map, favorite => favorite);
 
 export const favoritesReducer = (
   state: FavoritesType = initialState,
