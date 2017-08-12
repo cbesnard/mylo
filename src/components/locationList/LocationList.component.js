@@ -48,9 +48,9 @@ export default class LocationList extends Component {
   props: PropsType;
 
   renderFavoritesList = () => (
-    <div>
+    <div style={this.props.style}>
       {this.props.favorites.map(favorite => (
-        <div key={favorite.id} style={this.props.style}>
+        <div key={favorite.id}>
           <div style={styles.favorite}>
             <div style={styles.infos}>
               <div style={Object.assign({}, AppStyles.defaultTextStyle, styles.title)}>{favorite.name}</div>

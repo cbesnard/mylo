@@ -20,6 +20,7 @@ const styles = {
     color: 'black',
     backgroundColor: '#f2F1F1',
     display: 'flex',
+    flexDirection: 'column',
   },
   tabContainer: {
     height: '100%',
