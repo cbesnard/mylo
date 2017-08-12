@@ -3,11 +3,9 @@
 import React, { Component } from 'react';
 import Fab from 'material-ui/FloatingActionButton';
 import MapMarkerIcon from 'react-icons/lib/fa/map-marker';
-import FlatButton from 'material-ui/FlatButton';
 import SearchIcon from 'react-icons/lib/fa/search';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import appStyles from 'Mylo/style/AppStyles';
+import AddLocationModal from './AddLocationModal';
 
 const styles = {
   icon: {
@@ -37,20 +35,6 @@ export default class ActionsBar extends Component {
     open: false,
     locationName: ''
   };
-
-  addToFavoriteModalActions = () => ([
-    <FlatButton
-      label="Cancel"
-      primary={true}
-      onTouchTap={this.handleClose}
-    />,
-    <FlatButton
-      label="Add"
-      primary={true}
-      keyboardFocused={true}
-      onTouchTap={this.addCurrentLocationToFavorite}
-    />,
-  ]);
 
   handleOpen = () => {
     this.setState({open: true});
@@ -82,19 +66,12 @@ export default class ActionsBar extends Component {
             <MapMarkerIcon style={styles.icon} />
           </Fab>
         </div>
-        <Dialog
-          title="Add my position"
-          modal={false}
-          actions={this.addToFavoriteModalActions()}
+        <AddLocationModal
           open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
-          <TextField
-            hintText="Name your position"
-            onChange={(event) => this.setState({locationName: event.target.value})}
-            fullWidth
-          />
-        </Dialog>
+          onClose={this.handleClose}
+          onValueChange={(event) => this.setState({locationName: event.target.value})}
+          onSubmit={this.addCurrentLocationToFavorite}
+        />
       </div>
     );
   }
