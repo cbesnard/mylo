@@ -3,7 +3,7 @@
 const appStyles = {
   colors: {
     white: 'white',
-    mylo: '#2FBA90',
+    mylo: '#00c7b4',
     lightGrey: '#F2F1F1',
     loginGrey: '#EDEDED',
     grey: '#ccc',

@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import AppStyles from 'Mylo/style/AppStyles';
-import { map } from 'lodash';
 
 const styles = {
   favorite: {
@@ -25,9 +24,18 @@ const styles = {
   title: {
     fontSize: 20,
   },
-  address: {
+  emptyContainer: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppStyles.colors.lightGrey,
+    padding: AppStyles.margins.large,
+    textAlign: 'center',
   },
-  distance: {
+  emptyText: {
+    fontFamily: 'Roboto-Thin',
+    fontSize: 28,
   },
 };
 
@@ -40,24 +48,32 @@ export default class LocationList extends Component {
   props: PropsType;
 
   renderFavoritesList = () => (
-    map(this.props.favorites,(favorite => (
-      <div key={favorite.id} style={this.props.style}>
-        <div style={styles.favorite}>
-          <div style={styles.infos}>
-            <div style={Object.assign({}, AppStyles.defaultTextStyle, styles.title)}>{favorite.name}</div>
-            <div style={AppStyles.defaultTextStyle}>{favorite.streetNumber} {favorite.streetName}</div>
-            <div style={AppStyles.defaultTextStyle}>6.3m</div>
+    <div>
+      {this.props.favorites.map(favorite => (
+        <div key={favorite.id} style={this.props.style}>
+          <div style={styles.favorite}>
+            <div style={styles.infos}>
+              <div style={Object.assign({}, AppStyles.defaultTextStyle, styles.title)}>{favorite.name}</div>
+              <div style={AppStyles.defaultTextStyle}>{favorite.streetNumber} {favorite.streetName}</div>
+              <div style={AppStyles.defaultTextStyle}>6.3m</div>
+            </div>
           </div>
         </div>
+      ))}
+    </div>
+  );
+
+  renderEmptyList = () => (
+    <div style={styles.emptyContainer}>
+      <div style={styles.emptyText}>
+        What do you want to add ?
       </div>
-    )))
-  )
+    </div>
+  );
 
   render() {
     return (
-      <div>
-        { this.renderFavoritesList() }
-      </div>
+       this.props.favorites.length > 0 ? this.renderFavoritesList() : this.renderEmptyList()
     );
   }
 }
