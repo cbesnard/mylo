@@ -7,12 +7,13 @@ export default class snackbar extends Component {
 
   render() {
     return (
+    this.props.message ?
       <Snackbar
         open={this.props.open}
         message={this.props.message}
         autoHideDuration={4000}
         onRequestClose={this.props.hideSnackbar}
-      />
+      /> : null
     );
   }
 }
