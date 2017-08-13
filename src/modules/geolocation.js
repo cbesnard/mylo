@@ -1,5 +1,10 @@
 // @flow
 
+import { takeLatest, select, call } from 'redux-saga/effects';
+import { selectFavorites } from './favorites';
+import { fetchDistance } from 'Mylo/services/api';
+import { map } from 'lodash';
+
 const actionTypes = {
   GET_GEOLOCATION: {
     REFRESH_REQUEST: 'GET_GEOLOCATION.REFRESH_REQUEST',
@@ -38,4 +43,21 @@ const translateCoordinates = (coordinates: GeolocationApiType): GeolocationType 
   longitude: coordinates.longitude,
   accuracy: coordinates.accuracy,
   altitude: coordinates.altitude,
-})
+});
+
+const translateToGoogleGeolocation = (geolocation): GoogleGeolocationType => ({
+  latitude: geolocation.latitude,
+  longitude: geolocation.longitude,
+});
+
+export function* refreshDistance(action: any): SagaType {
+  const origin = translateToGoogleGeolocation(action.position);
+  const favoriteList = yield select(selectFavorites);
+  const favoriteLocations = map(favoriteList, favorite => translateToGoogleGeolocation(favorite));
+  const googleResponse = yield call(() => fetchDistance(origin, favoriteLocations));
+  console.log(googleResponse.rows[0].elements);
+}
+
+export function* watchRefreshGeolocationSaga(): SagaType {
+  yield takeLatest(actionTypes.GET_GEOLOCATION.REFRESH_REQUEST, refreshDistance);
+}
