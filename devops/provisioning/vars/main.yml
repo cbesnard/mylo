@@ -1,0 +1,7 @@
+---
+#PUT here your main variable
+project_name: Mylo
+port: 80
+apt_install:
+  - git
+

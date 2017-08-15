@@ -1,0 +1,8 @@
+---
+
+mysql_databases:
+  - name: CHANGE_IT_prod-staging_db_name
+
+mysql_users:
+  - name: CHANGE_IT_prod-staging_user_db
+    password: CHANGE_IT_prod-staging_password_db

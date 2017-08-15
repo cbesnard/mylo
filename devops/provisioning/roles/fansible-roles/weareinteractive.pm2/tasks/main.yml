@@ -1,0 +1,8 @@
+---
+
+- include: install.yml
+  tags:
+    - web
+    - pm2
+    - install
+    - pm2-install
