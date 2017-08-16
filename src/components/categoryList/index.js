@@ -8,6 +8,7 @@ const styles = {
   container: {
     paddingTop: 5,
     paddingBottom: 5,
+    backgroundColor: '#FFF',
   },
   categoryList: {
     flexWrap: 'nowrap',
