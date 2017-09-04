@@ -1,8 +1,7 @@
 // @flow
 
-import { takeLatest, select, call } from 'redux-saga/effects';
+import { takeLatest, select } from 'redux-saga/effects';
 import { selectFavorites } from './favorites';
-import { fetchDistance } from 'Mylo/services/api';
 import { map } from 'lodash';
 
 const actionTypes = {
@@ -54,8 +53,8 @@ export function* refreshDistance(action: any): SagaType {
   const origin = translateToGoogleGeolocation(action.position);
   const favoriteList = yield select(selectFavorites);
   const favoriteLocations = map(favoriteList, favorite => translateToGoogleGeolocation(favorite));
-  const googleResponse = yield call(() => fetchDistance(origin, favoriteLocations));
-  console.log(googleResponse.rows[0].elements);
+  console.log('origin', origin);
+  console.log('favoriteLocations', favoriteLocations);
 }
 
 export function* watchRefreshGeolocationSaga(): SagaType {

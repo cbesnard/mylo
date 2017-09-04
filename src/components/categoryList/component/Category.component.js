@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { lowerCase } from 'lodash';
 
 const CATEGORY_SIZE = 90;
 
@@ -20,12 +21,15 @@ const styles = {
     textTransform: 'uppercase',
     fontSize: 18,
   }
-}
+};
 
 type PropsType = {
   color: string,
+  name: string,
   isAllCategory: boolean,
   children: any,
+  selectedCategory: string,
+  selectCategory: (id: string) => void,
 }
 
 class Category extends Component {
@@ -36,18 +40,26 @@ class Category extends Component {
     isAllCategory: false,
   };
 
+  isCategorySelected = () => (
+      !!this.props.selectedCategory &&
+      !!this.props.name &&
+      lowerCase(this.props.name) === lowerCase(this.props.selectedCategory)
+  );
+
   getCategoryStyle = () => ({
     ...styles.circle,
     ...{
       borderColor: this.props.color,
-      fontFamily: this.props.isAllCategory ? 'Roboto-Medium' : 'Roboto-Light'
+      fontFamily: this.isCategorySelected() ? 'Roboto-Medium' : 'Roboto-Light',
     }
   });
 
+
   render(){
+    const { name, selectCategory } = this.props;
     return (
-      <div style={this.getCategoryStyle()} >
-        <p style={styles.categoryName}>{this.props.children}</p>
+      <div style={this.getCategoryStyle()} onClick={() => selectCategory(name)}>
+        <p style={styles.categoryName}>{name}</p>
       </div>
     );
   }

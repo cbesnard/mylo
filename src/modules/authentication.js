@@ -10,7 +10,7 @@ const initialState: AuthenticationType = {
   googleId: null,
 };
 
-export const loginActionCreator = (user,token: string, googleId: string) => ({
+export const loginActionCreator = (user: any,token: string, googleId: string) => ({
   type: actionTypes.LOGIN,
   user,
   token,
@@ -23,7 +23,7 @@ export const selectUser = (state: AppStateType): boolean => state.authentication
 export const authenticationReducer = (
   state: AuthenticationType = initialState,
   action: any,
-): SnackbarType => {
+): AuthenticationType => {
   switch (action.type) {
     case actionTypes.LOGIN:
       return {

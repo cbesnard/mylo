@@ -13,6 +13,7 @@ const fetchDistance = (origins: googleGeolocationPointType, destinations: google
     .query({
       'origins': `${origins.latitude},${origins.longitude}`,
       'destinations': join(map(destinations, destination => `${destination.latitude},${destination.longitude}`), '|'),
+      'key': 'AIzaSyBiqW4eseCZVw2yROShtAg2R-gYX1AGngo',
     })
 );
 

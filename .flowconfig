@@ -10,6 +10,7 @@ src/flow/
 [options]
 emoji=true
 
+module.name_mapper='^Mylo\(\/?.*\)$' -> '<PROJECT_ROOT>/src/\1'
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe
 suppress_type=$FixMe

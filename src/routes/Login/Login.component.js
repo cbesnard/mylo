@@ -58,11 +58,11 @@ const styles = {
     cursor: 'pointer',
     padding: 0,
   }
-}
+};
 
 type PropsType = {
   showSnackbar: (message: string) => void,
-  login: (user, token: string) => void,
+  login: (user: any, token: string) => void,
   navigateToHome: () => void,
 }
 
@@ -75,7 +75,7 @@ export default class Login extends Component {
     this.props.showSnackbar("Login SuccessFul");
   };
 
-  errorAuthGoogle = (error) => {
+  errorAuthGoogle = () => {
     this.props.showSnackbar("Login Error");
   };
 
