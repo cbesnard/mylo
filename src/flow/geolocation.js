@@ -16,3 +16,8 @@ declare type GeolocationType = {
   latitude: number,
   longitude: number,
 }
+
+declare type GoogleGeolocationType = {
+  latitude: number,
+  longitude: number,
+}

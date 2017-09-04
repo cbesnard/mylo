@@ -2,13 +2,16 @@
 
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { fetchGeocode } from 'Mylo/services/api';
-import { map } from 'lodash';
+import { map, keyBy } from 'lodash';
 
 const actionTypes = {
   ADD_FAVORITES: {
     REQUEST: 'ADD_FAVORITES.REQUEST',
     SUCCESS: 'ADD_FAVORITES.SUCCESS',
   },
+  UPDATE_FAVORITES: {
+    REQUEST: 'UPDATE_FAVORITES.REQUEST',
+  }
 };
 
 const initialState = {
@@ -22,7 +25,12 @@ export const addFavoriteCreator = (locationName: string, latitude: number, longi
   longitude,
 });
 
-export const selectFavorites = (state: AppStateType): {[id: number]: FavoriteType} => map(state.favorites.map, favorite => favorite);
+export const updateFavoriteListCreator = (favoriteList: FavoriteType) => ({
+  type: actionTypes.UPDATE_FAVORITES.REQUEST,
+  favoriteList,
+});
+
+export const selectFavorites = (state: AppStateType): FavoriteType[] => map(state.favorites.map, favorite => favorite);
 
 export const favoritesReducer = (
   state: FavoritesType = initialState,
@@ -35,6 +43,14 @@ export const favoritesReducer = (
         map: {
           ...state.map,
           [action.favorite.id]: action.favorite,
+        },
+      });
+    case actionTypes.UPDATE_FAVORITES.REQUEST:
+      return ({
+        ...state,
+        map: {
+          ...state.map,
+          ...keyBy(action.favoriteList, favorite => favorite.id),
         },
       });
     default:
