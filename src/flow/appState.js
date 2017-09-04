@@ -5,4 +5,5 @@ declare type AppStateType = {
   favorites: FavoritesType,
   snackbar: SnackbarType,
   authentication: AuthenticationType,
+  categories: CategoriesType,
 }
