@@ -78,7 +78,15 @@ class MyloTabs extends Component {
           containerStyle={styles.tabContainer}
           onChangeIndex={this.handleChange}>
           <LocationList style={styles.slide} />
-          <Map style={styles.slide} />
+          <Map
+            style={styles.slide}
+            containerElement={
+              <div style={{ height: `100%` }} />
+            }
+            mapElement={
+              <div style={{ height: `100%` }} />
+            }
+          />
         </SwipeableViews>
       </div>
     );
