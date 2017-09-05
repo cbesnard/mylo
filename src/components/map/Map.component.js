@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+/* eslint-disable no-unused-vars */
+import style from './styles.css';
 
 const googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.27&libraries=places,geometry&key=AIzaSyDQHAzd9koui1ArKcX1lbFfEIxQNe1EkwE";
 
