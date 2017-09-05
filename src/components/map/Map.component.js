@@ -1,29 +1,25 @@
 // @flow
 
-import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
+import React from 'react';
+import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
-type PropsType = {
-  style: {},
-  geolocation: GeolocationType,
-}
+const googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.27&libraries=places,geometry";
 
-export default class Map extends Component {
+const GettingStartedGoogleMap = withGoogleMap(props => {
+  const { geolocation } = props;
+  return (
+    geolocation &&
+    <GoogleMap
+      defaultZoom={13}
+      defaultCenter={{ lat: geolocation.latitude, lng: geolocation.longitude }}
+      // Pass the map reference here as props
+      googleMapURL={googleMapURL}
+    >
+      <Marker
+        position={{ lat: geolocation.latitude, lng: geolocation.longitude }}
+      />
+    </GoogleMap>
+  );
+});
 
-  props: PropsType;
-
-  render() {
-    const { geolocation } = this.props;
-    return (
-      <div style={this.props.style}>
-        {
-          geolocation &&
-          <GoogleMapReact
-            defaultCenter={{lat: geolocation.latitude, lng: geolocation.longitude}}
-            defaultZoom={12}
-          />
-        }
-      </div>
-    );
-  }
-}
+export default GettingStartedGoogleMap
