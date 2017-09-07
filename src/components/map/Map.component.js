@@ -7,8 +7,13 @@ import style from './styles.css';
 
 const googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.27&libraries=places,geometry&key=AIzaSyDQHAzd9koui1ArKcX1lbFfEIxQNe1EkwE";
 
+type propsType = {
+  geolocation: GeolocationType,
+  favorites: FavoriteType[],
+}
+
 const GettingStartedGoogleMap = withGoogleMap(props => {
-  const { geolocation } = props;
+  const { geolocation, favorites } = props;
   return (
     geolocation &&
     <GoogleMap
@@ -20,6 +25,12 @@ const GettingStartedGoogleMap = withGoogleMap(props => {
       <Marker
         position={{ lat: geolocation.latitude, lng: geolocation.longitude }}
       />
+      {favorites.map((favorite: FavoriteType) => (
+        <Marker
+          key={favorite.id}
+          position={{ lat: favorite.latitude, lng: favorite.longitude}}
+        />
+      ))}
     </GoogleMap>
   );
 });
