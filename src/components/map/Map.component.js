@@ -15,7 +15,7 @@ type propsType = {
 const GettingStartedGoogleMap = withGoogleMap(props => {
   const { geolocation, favorites } = props;
   return (
-    geolocation &&
+    (geolocation.latitude && geolocation.longitude) ?
     <GoogleMap
       defaultZoom={13}
       defaultCenter={{ lat: geolocation.latitude, lng: geolocation.longitude }}
@@ -31,7 +31,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => {
           position={{ lat: favorite.latitude, lng: favorite.longitude}}
         />
       ))}
-    </GoogleMap>
+    </GoogleMap> : null
   );
 });
 
