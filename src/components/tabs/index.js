@@ -15,6 +15,9 @@ const styles = {
     display: 'flex',
     flexDirection:'column',
   },
+  innerContainer: {
+    borderBottom: 'solid 1px #d1d5da',
+  },
   slide: {
     height: '100%',
     color: 'black',
@@ -55,7 +58,7 @@ class MyloTabs extends Component {
     const { slideIndex } = this.state;
     return (
       <div style={styles.container}>
-        <div>
+        <div style={styles.innerContainer}>
           <Tabs
             value={slideIndex}
             onChange={this.handleChange}
