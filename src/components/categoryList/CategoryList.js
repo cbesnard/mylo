@@ -18,6 +18,13 @@ const styles = {
     overflowX: 'auto',
     margin: 0,
   },
+  addCategoryContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 };
 
 export default class CategoryList extends Component {
@@ -37,9 +44,11 @@ export default class CategoryList extends Component {
             color='#ffeb59'
             name="eat"
           />
-          <Fab>
-            <SearchIcon />
-          </Fab>
+          <div style={styles.addCategoryContainer}>
+            <Fab>
+              <SearchIcon />
+            </Fab>
+          </div>
         </GridList>
       </div>
     );
