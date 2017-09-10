@@ -7,6 +7,7 @@ const CATEGORY_SIZE = 90;
 
 const styles = {
   circle: {
+    cursor: 'pointer',
     borderWidth: 8,
     borderStyle: 'solid',
     height: CATEGORY_SIZE,
