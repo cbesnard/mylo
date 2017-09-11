@@ -5,7 +5,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import appStyle from 'Mylo/style/AppStyles';
+import AppStyles from 'Mylo/style/AppStyles';
 
 type PropsType = {
   categories: CategoryType[],
@@ -30,7 +30,7 @@ export default class CategoryPicker extends Component {
       <IconMenu
         iconButtonElement={
           <IconButton >
-            <MoreVertIcon color={appStyle.colors.iconGrey} />
+            <MoreVertIcon color={AppStyles.colors.iconGrey} />
           </IconButton>
         }
         maxHeight={272}

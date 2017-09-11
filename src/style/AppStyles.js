@@ -1,10 +1,13 @@
 // @flow
 
+import { red800 } from 'material-ui/styles/colors';
+
 const GRID = 6;
 
 const appStyles = {
   colors: {
     white: 'white',
+    warningRed: red800,
     mylo: '#00c7b4',
     iconGrey: '#777',
     allCategory: '#DBDBDB',
