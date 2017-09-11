@@ -43,8 +43,14 @@ export const pickCategoryForFavoriteCreator = (favoriteId: number, categoryId: n
 export const selectFavorites = (state: AppStateType): FavoriteType[] =>
   map(state.favorites.map, favorite => favorite);
 
-export const selectFavoritesFilterBySelectedCategory = (state: AppStateType): FavoriteType[] =>
-  filter(map(state.favorites.map, favorite => favorite), ['categoryId', selectSelectedCategory(state)]);
+export const selectFavoritesFilterBySelectedCategory = (state: AppStateType): FavoriteType[] => {
+  const selectedCategory = selectSelectedCategory(state);
+  const allFavorites = map(state.favorites.map, favorite => favorite);
+
+  return selectedCategory === 0 ?
+    allFavorites :
+    filter(allFavorites, ['categoryId', selectedCategory]);
+};
 
 export const favoritesReducer = (
   state: FavoritesType = initialState,
