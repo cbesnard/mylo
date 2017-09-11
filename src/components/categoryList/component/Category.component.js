@@ -44,7 +44,7 @@ class Category extends Component {
   getCategoryStyle = () => ({
     ...styles.circle,
     ...{
-      borderColor: !!this.props.category.color ? this.props.category.color : '#DBDBDB',
+      borderColor: this.props.category.color,
       fontFamily: this.isCategorySelected() ? 'Roboto-Medium' : 'Roboto-Light',
     }
   });

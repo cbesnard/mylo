@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Component } from 'react'
-import { Redirect, Route } from 'react-router'
+import React, { Component } from 'react';
+import { Redirect, Route } from 'react-router';
 
 export default class PrivateRoute extends Component {
 

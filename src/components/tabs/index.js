@@ -6,7 +6,7 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import MapIcon from 'react-icons/lib/fa/map-o';
 import ListIcon from 'react-icons/lib/fa/list-ul';
 import appStyles from 'Mylo/style/AppStyles';
-import {LocationList, Map} from 'Mylo/components'
+import {FavoriteList, Map} from 'Mylo/components'
 import './style.css'
 
 const styles = {
@@ -80,7 +80,7 @@ class MyloTabs extends Component {
           style={styles.tabContainer}
           containerStyle={styles.tabContainer}
           onChangeIndex={this.handleChange}>
-          <LocationList style={styles.slide} />
+          <FavoriteList style={styles.slide} />
           <Map
             style={styles.slide}
             containerElement={

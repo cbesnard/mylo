@@ -21,7 +21,6 @@ type PropsType = {
 }
 
 export default class Header extends Component {
-
   props: PropsType;
 
   render() {

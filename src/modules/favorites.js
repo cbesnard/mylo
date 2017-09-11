@@ -11,6 +11,9 @@ const actionTypes = {
   },
   UPDATE_FAVORITES: {
     REQUEST: 'UPDATE_FAVORITES.REQUEST',
+  },
+  PICK_CATEGORY_FOR_FAVORITE: {
+    REQUEST: 'PICK_CATEGORY_FOR_FAVORITE.REQUEST',
   }
 };
 
@@ -28,6 +31,12 @@ export const addFavoriteCreator = (locationName: string, latitude: number, longi
 export const updateFavoriteListCreator = (favoriteList: FavoriteType) => ({
   type: actionTypes.UPDATE_FAVORITES.REQUEST,
   favoriteList,
+});
+
+export const pickCategoryForFavoriteCreator = (favoriteId: number, categoryId: number) => ({
+  type: actionTypes.PICK_CATEGORY_FOR_FAVORITE.REQUEST,
+  favoriteId,
+  categoryId,
 });
 
 export const selectFavorites = (state: AppStateType): FavoriteType[] => map(state.favorites.map, favorite => favorite);
@@ -53,20 +62,32 @@ export const favoritesReducer = (
           ...keyBy(action.favoriteList, favorite => favorite.id),
         },
       });
+    case actionTypes.PICK_CATEGORY_FOR_FAVORITE.REQUEST:
+      return ({
+        ...state,
+        map: {
+          ...state.map,
+          [action.favoriteId]: {
+            ...state.map[action.favoriteId],
+            categoryId: action.categoryId,
+          },
+        },
+      });
     default:
       return state;
   }
-}
+};
 
 const translateGeocodeToFavorite = (locationName: string, geocode): FavoriteType => ({
   id: geocode.place_id,
+  categoryId: 0, // All category
   name: locationName,
   streetNumber: geocode.address_components[0].long_name,
   streetName: geocode.address_components[1].long_name,
   city: geocode.address_components[2].long_name,
   latitude: geocode.geometry.location.lat,
   longitude: geocode.geometry.location.lng,
-})
+});
 
 export function* addFavorite(action: any): SagaType {
   const { locationName, latitude, longitude } = action;
