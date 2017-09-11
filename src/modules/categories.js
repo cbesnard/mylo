@@ -1,5 +1,6 @@
 // @flow
 import randomMC from 'random-material-color';
+import appStyle from 'Mylo/style/AppStyles';
 import { map } from 'lodash';
 
 const actionTypes = {
@@ -22,14 +23,19 @@ const initialState: CategoriesType = {
     0: {
       id: 0,
       name: 'all',
-      color: null
+      color: appStyle.colors.allCategory,
     }
   }
 };
 
-export const selectSelectedCategory = (state: AppStateType): number => state.categories.selected;
+export const selectSelectedCategory = (state: AppStateType): number =>
+  state.categories.selected;
 
-export const selectCategories = (state: AppStateType): string => map(state.categories.map, category => category);
+export const selectCategories = (state: AppStateType): CategoryType[] =>
+  map(state.categories.map, category => category);
+
+export const selectCategoryById = (state: AppStateType, id: number): CategoryType =>
+  state.categories.map[id];
 
 const generateCategory = (id) : CategoryType => ({
   id: id,

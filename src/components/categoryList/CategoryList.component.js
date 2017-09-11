@@ -33,7 +33,6 @@ type PropsType = {
 }
 
 export default class CategoryList extends Component {
-
   props: PropsType;
 
   render(){

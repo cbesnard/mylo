@@ -7,6 +7,7 @@ const appStyles = {
     white: 'white',
     mylo: '#00c7b4',
     iconGrey: '#777',
+    allCategory: '#DBDBDB',
     lightGrey: '#F2F1F1',
     loginGrey: '#EDEDED',
     grey: '#ccc',
