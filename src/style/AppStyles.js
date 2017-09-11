@@ -1,5 +1,7 @@
 // @flow
 
+const GRID = 6;
+
 const appStyles = {
   colors: {
     white: 'white',
@@ -18,9 +20,9 @@ const appStyles = {
     }
   },
   margins: {
-    small: 10,
-    medium: 16,
-    large: 20,
+    small: GRID * 2,
+    medium: GRID * 3,
+    large: GRID * 4,
   },
   defaultTextStyle: {
     color: '#333',

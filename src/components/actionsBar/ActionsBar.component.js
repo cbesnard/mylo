@@ -16,7 +16,7 @@ const styles = {
     marginLeft: appStyles.margins.small,
   },
   container: {
-    padding: appStyles.margins.medium,
+    padding: appStyles.margins.small,
     display: 'flex',
     alignItems: 'flex-end',
     flexDirection: 'row-reverse',
