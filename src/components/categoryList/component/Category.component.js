@@ -1,13 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { lowerCase } from 'lodash';
 
 const CATEGORY_SIZE = 90;
 
 const styles = {
   circle: {
-    cursor: 'pointer',
     borderWidth: 8,
     borderStyle: 'solid',
     height: CATEGORY_SIZE,
@@ -25,8 +23,7 @@ const styles = {
 };
 
 type PropsType = {
-  color: string,
-  name: string,
+  category: CategoryType,
   isAllCategory: boolean,
   children: any,
   selectedCategory: string,
@@ -37,30 +34,27 @@ class Category extends Component {
   props: PropsType;
 
   static defaultProps = {
-    color: '#DBDBDB',
     isAllCategory: false,
   };
 
   isCategorySelected = () => (
-      !!this.props.selectedCategory &&
-      !!this.props.name &&
-      lowerCase(this.props.name) === lowerCase(this.props.selectedCategory)
+      this.props.category.id === this.props.selectedCategory
   );
 
   getCategoryStyle = () => ({
     ...styles.circle,
     ...{
-      borderColor: this.props.color,
+      borderColor: !!this.props.category.color ? this.props.category.color : '#DBDBDB',
       fontFamily: this.isCategorySelected() ? 'Roboto-Medium' : 'Roboto-Light',
     }
   });
 
 
   render(){
-    const { name, selectCategory } = this.props;
+    const { category, selectCategory } = this.props;
     return (
-      <div style={this.getCategoryStyle()} onClick={() => selectCategory(name)}>
-        <p style={styles.categoryName}>{name}</p>
+      <div style={this.getCategoryStyle()} onClick={() => selectCategory(category.id)}>
+        <p style={styles.categoryName}>{category.name}</p>
       </div>
     );
   }
