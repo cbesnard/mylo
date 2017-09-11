@@ -1,8 +1,8 @@
 // @flow
 
 import { connect } from 'react-redux'
-import CategoryList from './CategoryList.component';
 import { addCategoryCreator, selectCategories } from 'Mylo/modules/categories'
+import CategoryList from './CategoryList.component';
 
 const mapStateToProps = (state: AppStateType) => ({
   categories: selectCategories(state),
