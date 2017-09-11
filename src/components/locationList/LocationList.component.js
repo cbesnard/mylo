@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import AppStyles from 'Mylo/style/AppStyles';
+import { CategoryPicker } from './component';
 
 const styles = {
   favorite: {
@@ -15,6 +16,7 @@ const styles = {
     borderLeftColor: AppStyles.colors.grey,
     paddingLeft: 15,
     alignItems: 'center',
+    justifyContent: 'space-between',
     display: 'flex',
     backgroundColor: AppStyles.colors.white,
   },
@@ -23,6 +25,9 @@ const styles = {
   },
   title: {
     fontSize: 20,
+  },
+  categoryPickerContainer: {
+    height: '100%',
   },
   emptyContainer: {
     height: '100%',
@@ -56,6 +61,9 @@ export default class LocationList extends Component {
               <div style={Object.assign({}, AppStyles.defaultTextStyle, styles.title)}>{favorite.name}</div>
               <div style={AppStyles.defaultTextStyle}>{favorite.streetNumber} {favorite.streetName}</div>
               <div style={AppStyles.defaultTextStyle}>6.3m</div>
+            </div>
+            <div style={styles.categoryPickerContainer}>
+              <CategoryPicker />
             </div>
           </div>
         </div>

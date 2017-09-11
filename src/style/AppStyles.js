@@ -4,6 +4,7 @@ const appStyles = {
   colors: {
     white: 'white',
     mylo: '#00c7b4',
+    iconGrey: '#777',
     lightGrey: '#F2F1F1',
     loginGrey: '#EDEDED',
     grey: '#ccc',
