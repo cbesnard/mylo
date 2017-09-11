@@ -1,6 +1,6 @@
 // @flow
 
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { fetchGeocode } from 'Mylo/services/api';
 import { selectSelectedCategory } from 'Mylo/modules/categories';
 import { map, keyBy, filter, omit } from 'lodash';
@@ -102,9 +102,9 @@ export const favoritesReducer = (
   }
 };
 
-const translateGeocodeToFavorite = (locationName: string, geocode): FavoriteType => ({
+const translateGeocodeToFavorite = (locationName: string, geocode, selectedCategory: number): FavoriteType => ({
   id: geocode.place_id,
-  categoryId: 0, // All category
+  categoryId: selectedCategory,
   name: locationName,
   streetNumber: geocode.address_components[0].long_name,
   streetName: geocode.address_components[1].long_name,
@@ -114,11 +114,12 @@ const translateGeocodeToFavorite = (locationName: string, geocode): FavoriteType
 });
 
 export function* addFavorite(action: any): SagaType {
+  const selectedCategory = yield select(selectSelectedCategory);
   const { locationName, latitude, longitude } = action;
   const geocodeResponse = yield call(() => fetchGeocode(latitude, longitude));
   yield put({
     type: actionTypes.ADD_FAVORITE.SUCCESS,
-    favorite: translateGeocodeToFavorite(locationName, geocodeResponse.body.results[0]),
+    favorite: translateGeocodeToFavorite(locationName, geocodeResponse.body.results[0], selectedCategory),
   });
 }
 
