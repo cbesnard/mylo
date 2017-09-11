@@ -27,24 +27,26 @@ const styles = {
   },
 };
 
+type PropsType = {
+  addCategory : () => void,
+  categories : CategoryType[],
+}
+
 export default class CategoryList extends Component {
+
+  props: PropsType;
 
   render(){
     return (
       <div style={styles.container}>
         <GridList cellHeight={90} style={styles.categoryList}>
-          <Category
-            name="all"
-          />
-          <Category
-            color='#80d8ff'
-            name="bar"
-          />
-          <Category
-            color='#ffeb59'
-            name="eat"
-          />
-          <div style={styles.addCategoryContainer}>
+          {this.props.categories.map((category: CategoryType) => (
+            <Category
+              key={category.id}
+              category={category}
+            />
+          ))}
+          <div style={styles.addCategoryContainer} onClick={this.props.addCategory}>
             <Fab>
               <SearchIcon />
             </Fab>
