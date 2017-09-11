@@ -1,6 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
+import IconButton from 'material-ui/IconButton';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import AppStyles from 'Mylo/style/AppStyles';
 import { CategoryPicker } from '../';
 
@@ -25,14 +27,17 @@ const styles = {
   title: {
     fontSize: 20,
   },
-  categoryPickerContainer: {
+  actionsContainer: {
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
 };
 
 type PropsType = {
   favorite: FavoriteType,
   category: CategoryType,
+  deleteFavorite: () => void,
 }
 
 export default class Favorite extends Component {
@@ -45,6 +50,8 @@ export default class Favorite extends Component {
     })
   }
 
+  deleteFavorite = () => this.props.deleteFavorite(this.props.favorite.id);
+
   render() {
     const { favorite, category } = this.props;
 
@@ -56,8 +63,11 @@ export default class Favorite extends Component {
             <div style={AppStyles.defaultTextStyle}>{favorite.streetNumber} {favorite.streetName}</div>
             <div style={AppStyles.defaultTextStyle}>6.3m</div>
           </div>
-          <div style={styles.categoryPickerContainer}>
+          <div style={styles.actionsContainer}>
             <CategoryPicker favoriteId={favorite.id}/>
+            <IconButton onClick={this.deleteFavorite}>
+              <DeleteIcon color={AppStyles.colors.warningRed} />
+            </IconButton>
           </div>
         </div>
       </div>

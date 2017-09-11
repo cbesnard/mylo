@@ -3,15 +3,18 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { fetchGeocode } from 'Mylo/services/api';
 import { selectSelectedCategory } from 'Mylo/modules/categories';
-import { map, keyBy, filter } from 'lodash';
+import { map, keyBy, filter, omit } from 'lodash';
 
 const actionTypes = {
-  ADD_FAVORITES: {
-    REQUEST: 'ADD_FAVORITES.REQUEST',
-    SUCCESS: 'ADD_FAVORITES.SUCCESS',
+  ADD_FAVORITE: {
+    REQUEST: 'ADD_FAVORITE.REQUEST',
+    SUCCESS: 'ADD_FAVORITE.SUCCESS',
   },
-  UPDATE_FAVORITES: {
-    REQUEST: 'UPDATE_FAVORITES.REQUEST',
+  UPDATE_FAVORITE: {
+    REQUEST: 'UPDATE_FAVORITE.REQUEST',
+  },
+  DELETE_FAVORITE: {
+    REQUEST: 'DELETE_FAVORITE.REQUEST',
   },
   PICK_CATEGORY_FOR_FAVORITE: {
     REQUEST: 'PICK_CATEGORY_FOR_FAVORITE.REQUEST',
@@ -23,14 +26,14 @@ const initialState = {
 };
 
 export const addFavoriteCreator = (locationName: string, latitude: number, longitude: number) => ({
-  type: actionTypes.ADD_FAVORITES.REQUEST,
+  type: actionTypes.ADD_FAVORITE.REQUEST,
   locationName,
   latitude,
   longitude,
 });
 
 export const updateFavoriteListCreator = (favoriteList: FavoriteType) => ({
-  type: actionTypes.UPDATE_FAVORITES.REQUEST,
+  type: actionTypes.UPDATE_FAVORITE.REQUEST,
   favoriteList,
 });
 
@@ -38,6 +41,11 @@ export const pickCategoryForFavoriteCreator = (favoriteId: number, categoryId: n
   type: actionTypes.PICK_CATEGORY_FOR_FAVORITE.REQUEST,
   favoriteId,
   categoryId,
+});
+
+export const deleteFavoriteCreator = (favoriteId: number) => ({
+  type: actionTypes.DELETE_FAVORITE.REQUEST,
+  favoriteId,
 });
 
 export const selectFavorites = (state: AppStateType): FavoriteType[] =>
@@ -57,7 +65,7 @@ export const favoritesReducer = (
   action: any,
 ): FavoritesType => {
   switch (action.type) {
-    case actionTypes.ADD_FAVORITES.SUCCESS:
+    case actionTypes.ADD_FAVORITE.SUCCESS:
       return ({
         ...state,
         map: {
@@ -65,7 +73,7 @@ export const favoritesReducer = (
           [action.favorite.id]: action.favorite,
         },
       });
-    case actionTypes.UPDATE_FAVORITES.REQUEST:
+    case actionTypes.UPDATE_FAVORITE.REQUEST:
       return ({
         ...state,
         map: {
@@ -83,6 +91,11 @@ export const favoritesReducer = (
             categoryId: action.categoryId,
           },
         },
+      });
+    case actionTypes.DELETE_FAVORITE.REQUEST:
+      return ({
+        ...state,
+        map: omit(state.map, [action.favoriteId]),
       });
     default:
       return state;
@@ -104,11 +117,11 @@ export function* addFavorite(action: any): SagaType {
   const { locationName, latitude, longitude } = action;
   const geocodeResponse = yield call(() => fetchGeocode(latitude, longitude));
   yield put({
-    type: actionTypes.ADD_FAVORITES.SUCCESS,
+    type: actionTypes.ADD_FAVORITE.SUCCESS,
     favorite: translateGeocodeToFavorite(locationName, geocodeResponse.body.results[0]),
   });
 }
 
 export function* watchAddFavoriteSaga(): SagaType {
-  yield takeLatest(actionTypes.ADD_FAVORITES.REQUEST, addFavorite);
+  yield takeLatest(actionTypes.ADD_FAVORITE.REQUEST, addFavorite);
 }
