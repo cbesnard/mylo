@@ -28,7 +28,7 @@ export default class categoryPicker extends Component {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         {this.props.categories.map((category: CategoryType) => (
-          <MenuItem>
+          <MenuItem key={category.id}>
             <div style={{color: category.color}}>{category.name}</div>
           </MenuItem>
         ))}
